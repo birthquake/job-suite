@@ -72,37 +72,18 @@ body {
 
 /* Hero Section */
 .hero {
-  margin-top: 80px;
-  min-height: calc(100vh - 80px);
+  margin-top: 60px;
+  min-height: calc(100vh - 60px);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding: 2rem;
-}
-
-.hero-glow {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(96, 165, 250, 0.2) 0%, transparent 70%);
-  border-radius: 50%;
-  top: 50%;
-  right: 5%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.hero-content {
-  max-width: 700px;
-  z-index: 1;
-  text-align: center;
-  animation: slideUp 0.8s ease-out;
+  padding: 1.5rem;
 }
 
 .hero-content h1 {
-  font-size: 3.5rem;
+  font-size: 2rem;
   font-weight: 800;
   margin-bottom: 1rem;
   line-height: 1.2;
@@ -113,15 +94,38 @@ body {
 }
 
 .hero-content > p:first-of-type {
-  font-size: 1.3rem;
+  font-size: 1rem;
   color: #cbd5e1;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .hero-subtitle {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #94a3b8;
   line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    padding: 2rem;
+  }
+
+  .hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-content > p:first-of-type {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
 }
 
 /* Tools Section */
