@@ -39,12 +39,6 @@ function LandingPage({ onSelectTool }) {
           <p className="hero-subtitle">
             AI-powered tools that elevate your job application from start to finish
           </p>
-          <button 
-            className="cta-button"
-            onClick={() => onSelectTool('resume')}
-          >
-            Get Started
-          </button>
         </div>
         <div className="hero-glow"></div>
       </section>
@@ -78,19 +72,16 @@ function LandingPage({ onSelectTool }) {
           <div className="step">
             <div className="step-number">1</div>
             <h4>Paste Your Info</h4>
-            <p>Share your resume or job details</p>
           </div>
           <div className="step-connector">→</div>
           <div className="step">
             <div className="step-number">2</div>
             <h4>AI Optimizes</h4>
-            <p>Claude improves clarity and impact</p>
           </div>
           <div className="step-connector">→</div>
           <div className="step">
             <div className="step-number">3</div>
             <h4>Download & Apply</h4>
-            <p>Use your polished application</p>
           </div>
         </div>
       </section>
