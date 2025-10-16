@@ -1,6 +1,24 @@
 import { useState } from 'react'
 import './App.css'
 
+const ResumeIcon = () => (
+  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="6" y="4" width="28" height="32" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+    <line x1="10" y1="10" x2="30" y2="10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <line x1="10" y1="16" x2="30" y2="16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <line x1="10" y1="22" x2="26" y2="22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <line x1="10" y1="28" x2="26" y2="28" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+)
+
+const CoverLetterIcon = () => (
+  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="5" y="6" width="30" height="28" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M5 12H35" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M8 18L20 26L32 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
+
 function LandingPage({ onSelectTool }) {
   return (
     <div className="landing">
@@ -35,14 +53,18 @@ function LandingPage({ onSelectTool }) {
         <h2>Your Application Toolkit</h2>
         <div className="tools-grid">
           <div className="tool-card" onClick={() => onSelectTool('resume')}>
-            <div className="tool-icon">📄</div>
+            <div className="tool-icon-wrapper">
+              <ResumeIcon />
+            </div>
             <h3>Resume Optimizer</h3>
             <p>Transform your resume into an ATS-optimized masterpiece with stronger language and better formatting</p>
             <div className="tool-cta">Start optimizing →</div>
           </div>
 
           <div className="tool-card" onClick={() => onSelectTool('cover-letter')}>
-            <div className="tool-icon">✍️</div>
+            <div className="tool-icon-wrapper">
+              <CoverLetterIcon />
+            </div>
             <h3>Cover Letter Generator</h3>
             <p>Create compelling, personalized cover letters that match the job description and showcase your value</p>
             <div className="tool-cta">Create letter →</div>
@@ -52,19 +74,19 @@ function LandingPage({ onSelectTool }) {
 
       <section className="how-section" id="how">
         <h2>How It Works</h2>
-        <div className="steps">
+        <div className="steps-wrapper">
           <div className="step">
             <div className="step-number">1</div>
             <h4>Paste Your Info</h4>
             <p>Share your resume or job details</p>
           </div>
-          <div className="step-arrow">→</div>
+          <div className="step-connector">→</div>
           <div className="step">
             <div className="step-number">2</div>
             <h4>AI Optimizes</h4>
             <p>Claude improves clarity and impact</p>
           </div>
-          <div className="step-arrow">→</div>
+          <div className="step-connector">→</div>
           <div className="step">
             <div className="step-number">3</div>
             <h4>Download & Apply</h4>
