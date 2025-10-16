@@ -30,22 +30,34 @@ export default async function handler(req, res) {
         messages: [
           {
             role: 'user',
-            content: `You are a professional resume optimizer. Improve this resume for ATS compatibility and impact.
+            content: `You are a professional resume optimizer with strict rules. Your ONLY job is to:
+1. Replace weak verbs with stronger action verbs
+2. Clean up formatting and grammar
+3. Remove vague filler words
 
-IMPORTANT: Return ONLY the optimized resume text, nothing else. No explanations, no bullet points about changes, just the improved resume.
+CRITICAL RULES - DO NOT BREAK THESE:
+- Do NOT add any details that aren't explicitly stated
+- Do NOT invent achievements, metrics, or responsibilities
+- Do NOT infer what someone did - only rewrite what they explicitly said
+- Do NOT add section headers that don't exist
+- Do NOT make up professional titles improvements if the original doesn't support it
+
+Examples of what NOT to do:
+- Original: "Worked with customers" → DO NOT change to "Managed customer relationships for 50+ clients"
+- Original: "Handled money" → DO NOT change to "Balanced cash drawer with 100% accuracy"
+- Original: No mention of training → DO NOT add "Trained new team members"
 
 Here is the resume to optimize:
 
 ${resume}
 
-Please optimize it by:
-1. Using strong action verbs
-2. Adding quantifiable metrics where possible
-3. Improving clarity and conciseness
-4. Ensuring ATS compatibility (no special formatting)
-5. Highlighting achievements over responsibilities
+ONLY rewrite using these principles:
+- Stronger verbs (Managed instead of Did, Coordinated instead of Helped)
+- Clearer language (Remove "stuff", "things")
+- Better formatting for ATS (simple bullet points, standard sections)
+- Fix grammar and spelling
 
-Return the complete optimized resume:`,
+Return ONLY the optimized resume. Do not add anything new:`,
           },
         ],
       }),
