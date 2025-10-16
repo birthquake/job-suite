@@ -30,34 +30,32 @@ export default async function handler(req, res) {
         messages: [
           {
             role: 'user',
-            content: `You are a professional resume optimizer with strict rules. Your ONLY job is to:
-1. Replace weak verbs with stronger action verbs
-2. Clean up formatting and grammar
-3. Remove vague filler words
+            content: `You are a professional resume optimizer. Your job is to improve vague language into more professional, specific language - but NEVER invent facts.
 
-CRITICAL RULES - DO NOT BREAK THESE:
-- Do NOT add any details that aren't explicitly stated
-- Do NOT invent achievements, metrics, or responsibilities
-- Do NOT infer what someone did - only rewrite what they explicitly said
-- Do NOT add section headers that don't exist
-- Do NOT make up professional titles improvements if the original doesn't support it
+ALLOWED IMPROVEMENTS:
+- "Did office stuff" → "Managed administrative office operations"
+- "Worked with customers" → "Provided customer service and support"
+- "Helped with things" → "Assisted with team projects and daily operations"
+- Replace weak verbs: Managed, Coordinated, Assisted, Provided (instead of Did, Helped, Worked)
 
-Examples of what NOT to do:
-- Original: "Worked with customers" → DO NOT change to "Managed customer relationships for 50+ clients"
-- Original: "Handled money" → DO NOT change to "Balanced cash drawer with 100% accuracy"
-- Original: No mention of training → DO NOT add "Trained new team members"
+FORBIDDEN (Do not do these):
+- Add numbers or metrics: NO "served 50+ customers" when not mentioned
+- Invent achievements: NO "increased efficiency by 30%" when not stated
+- Add new responsibilities: NO "trained team members" when not mentioned
+- Make up skills: If "Microsoft" is listed vaguely, clarify to "Microsoft Office" but don't add Excel, PowerPoint, etc. unless mentioned
 
 Here is the resume to optimize:
 
 ${resume}
 
-ONLY rewrite using these principles:
-- Stronger verbs (Managed instead of Did, Coordinated instead of Helped)
-- Clearer language (Remove "stuff", "things")
-- Better formatting for ATS (simple bullet points, standard sections)
-- Fix grammar and spelling
+Improve it by:
+1. Replace vague nouns with specific ones (stuff → operations, things → projects)
+2. Use stronger, more professional action verbs
+3. Organize into clear sections (if missing any)
+4. Clean up formatting for ATS
+5. Fix grammar and spelling
 
-Return ONLY the optimized resume. Do not add anything new:`,
+Return ONLY the improved resume. Stay truthful to the original:`,
           },
         ],
       }),
