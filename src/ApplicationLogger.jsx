@@ -1,122 +1,221 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { AuthContext } from './AuthContext'
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore'
+import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore'
 
-export function Dashboard({ onStartApplication, onSignOut }) {
+export function ApplicationLogger({ onBack, onApplicationCreated }) {
   const { user } = useContext(AuthContext)
-  const [applications, setApplications] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [stats, setStats] = useState({
-    total: 0,
-    callbacks: 0,
-    interviews: 0,
-    offers: 0,
+  const [company, setCompany] = useState('')
+  const [jobTitle, setJobTitle] = useState('')
+  const [jobDescription, setJobDescription] = useState('')
+  const [resume, setResume] = useState('')
+  const [selectedTools, setSelectedTools] = useState({
+    resume: true,
+    coverLetter: true,
+    interviewPrep: false,
+    linkedin: false,
+    jobAnalyzer: false,
   })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [step, setStep] = useState('info')
 
-  useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        const db = getFirestore()
-        const q = query(
-          collection(db, 'applications'),
-          where('userId', '==', user.uid)
-        )
-        const snapshot = await getDocs(q)
-        const apps = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
+  const toggleTool = (tool) => {
+    setSelectedTools((prev) => ({
+      ...prev,
+      [tool]: !prev[tool],
+    }))
+  }
 
-        setApplications(apps)
+  const handleSaveApplication = async (e) => {
+    e.preventDefault()
+    setError('')
 
-        // Calculate stats
-        const callbacks = apps.filter((app) => app.callbackReceived).length
-        const interviews = apps.filter((app) => app.status === 'interviewed').length
-        const offers = apps.filter((app) => app.status === 'offer').length
-
-        setStats({
-          total: apps.length,
-          callbacks,
-          interviews,
-          offers,
-        })
-      } catch (err) {
-        console.error('Error fetching applications:', err)
-      } finally {
-        setLoading(false)
-      }
+    if (!company.trim() || !jobTitle.trim() || !jobDescription.trim() || !resume.trim()) {
+      setError('Please fill in all fields')
+      return
     }
 
-    fetchApplications()
-  }, [user])
+    if (!Object.values(selectedTools).some((v) => v)) {
+      setError('Please select at least one tool')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const db = getFirestore()
+      const applicationData = {
+        userId: user.uid,
+        company,
+        jobTitle,
+        jobDescription,
+        resume,
+        toolsSelected: Object.keys(selectedTools).filter((k) => selectedTools[k]),
+        status: 'applied',
+        callbackReceived: false,
+        dateApplied: new Date().toISOString(),
+        createdAt: serverTimestamp(),
+      }
+
+      await addDoc(collection(db, 'applications'), applicationData)
+      onApplicationCreated()
+      setStep('info')
+      setCompany('')
+      setJobTitle('')
+      setJobDescription('')
+      setResume('')
+    } catch (err) {
+      setError('Failed to save application: ' + err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h1>elevaitr Dashboard</h1>
-        <div className="dashboard-actions">
-          <button onClick={onStartApplication} className="btn-primary">
-            + New Application
-          </button>
-          <button onClick={onSignOut} className="btn-secondary">
-            Sign Out
-          </button>
-        </div>
+    <div className="logger-container">
+      <div className="logger-header">
+        <button className="back-button" onClick={onBack}>← Back</button>
+        <h2>New Application</h2>
+        <div style={{ width: '60px' }}></div>
       </div>
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-number">{stats.total}</div>
-          <div className="stat-label">Total Applications</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-number">{stats.callbacks}</div>
-          <div className="stat-label">Callbacks</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-number">{stats.interviews}</div>
-          <div className="stat-label">Interviews</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-number">{stats.offers}</div>
-          <div className="stat-label">Offers</div>
-        </div>
-      </div>
-
-      <div className="applications-section">
-        <h2>Your Applications</h2>
-        {loading ? (
-          <p className="loading-text">Loading...</p>
-        ) : applications.length === 0 ? (
-          <div className="empty-state">
-            <p>No applications yet.</p>
-            <p>Click "New Application" to get started!</p>
-          </div>
-        ) : (
-          <div className="applications-table">
-            <div className="table-header">
-              <div className="col-company">Company</div>
-              <div className="col-position">Position</div>
-              <div className="col-date">Date Applied</div>
-              <div className="col-status">Status</div>
-              <div className="col-callback">Callback</div>
+      {step === 'info' ? (
+        <div className="logger-content">
+          <h3>Application Details</h3>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              if (company && jobTitle && jobDescription && resume) {
+                setStep('tools')
+              } else {
+                setError('Please fill in all fields')
+              }
+            }}
+          >
+            <div className="form-group">
+              <label>Company Name</label>
+              <input
+                type="text"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                placeholder="e.g., Google, Microsoft, Startup XYZ"
+                className="form-input"
+                required
+              />
             </div>
-            {applications.map((app) => (
-              <div key={app.id} className="table-row">
-                <div className="col-company">{app.company}</div>
-                <div className="col-position">{app.jobTitle}</div>
-                <div className="col-date">
-                  {new Date(app.dateApplied).toLocaleDateString()}
-                </div>
-                <div className="col-status">{app.status || 'Applied'}</div>
-                <div className="col-callback">
-                  {app.callbackReceived ? '✓' : '-'}
-                </div>
-              </div>
-            ))}
+
+            <div className="form-group">
+              <label>Job Title</label>
+              <input
+                type="text"
+                value={jobTitle}
+                onChange={(e) => setJobTitle(e.target.value)}
+                placeholder="e.g., Product Manager, Software Engineer"
+                className="form-input"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Job Description</label>
+              <textarea
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+                placeholder="Paste the full job description here..."
+                className="form-textarea"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Your Resume</label>
+              <textarea
+                value={resume}
+                onChange={(e) => setResume(e.target.value)}
+                placeholder="Paste your resume here..."
+                className="form-textarea"
+                required
+              />
+            </div>
+
+            {error && <div className="form-error">{error}</div>}
+
+            <button type="submit" className="btn-primary">
+              Next: Select Tools
+            </button>
+          </form>
+        </div>
+      ) : (
+        <div className="logger-content">
+          <h3>Select Tools to Generate</h3>
+          <p className="tool-instruction">Choose which tools you'd like to use for this application</p>
+
+          <div className="tools-checklist">
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={selectedTools.resume}
+                onChange={() => toggleTool('resume')}
+              />
+              <span className="checkbox-label">Resume Optimizer</span>
+            </label>
+
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={selectedTools.coverLetter}
+                onChange={() => toggleTool('coverLetter')}
+              />
+              <span className="checkbox-label">Cover Letter Generator</span>
+            </label>
+
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={selectedTools.interviewPrep}
+                onChange={() => toggleTool('interviewPrep')}
+              />
+              <span className="checkbox-label">Interview Prep</span>
+            </label>
+
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={selectedTools.linkedin}
+                onChange={() => toggleTool('linkedin')}
+              />
+              <span className="checkbox-label">LinkedIn Optimizer</span>
+            </label>
+
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                checked={selectedTools.jobAnalyzer}
+                onChange={() => toggleTool('jobAnalyzer')}
+              />
+              <span className="checkbox-label">Job Analyzer</span>
+            </label>
           </div>
-        )}
-      </div>
+
+          {error && <div className="form-error">{error}</div>}
+
+          <div className="button-group">
+            <button
+              onClick={() => setStep('info')}
+              className="btn-secondary"
+            >
+              Back
+            </button>
+            <button
+              onClick={handleSaveApplication}
+              disabled={loading}
+              className="btn-primary"
+            >
+              {loading ? 'Creating...' : 'Create Application'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
