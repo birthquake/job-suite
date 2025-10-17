@@ -1,6 +1,8 @@
 import { useState, useContext } from 'react'
 import { AuthContext } from './AuthContext'
 import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore'
+import { checkUsageAllowed, incrementUsage } from './usageUtils'
+import { Paywall } from './Paywall'
 
 export function ApplicationLogger({ onBack, onApplicationCreated }) {
   const { user } = useContext(AuthContext)
@@ -17,7 +19,9 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [step, setStep] = useState('info') // 'info' or 'tools'
+  const [step, setStep] = useState('info')
+  const [usageStatus, setUsageStatus] = useState(null)
+  const [showPaywall, setShowPaywall] = useState(false)
 
   const toggleTool = (tool) => {
     setSelectedTools((prev) => ({
@@ -43,31 +47,43 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
     setLoading(true)
 
     try {
-      // Call package generator API to get all outputs
-      const toolsList = Object.keys(selectedTools).filter((k) => selectedTools[k])
-      
-      const packageResponse = await fetch('/api/generate-application-package', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobDescription, resume, tools: toolsList }),
-      })
+      // Check if user can create more applications
+      const usage = await checkUsageAllowed(user.uid)
+      setUsageStatus(usage)
 
-      if (!packageResponse.ok) {
-        throw new Error('Failed to generate package outputs')
+      if (!usage.allowed) {
+        setShowPaywall(true)
+        setLoading(false)
+        return
       }
 
-      const packageData = await packageResponse.json()
-
-      // Save application with outputs
       const db = getFirestore()
+      
+      // Call the API to generate all tool outputs
+      const generateResponse = await fetch('/api/generate-application-package', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jobDescription,
+          resume,
+          tools: Object.keys(selectedTools).filter((k) => selectedTools[k]),
+        }),
+      })
+
+      if (!generateResponse.ok) {
+        throw new Error('Failed to generate package')
+      }
+
+      const outputs = await generateResponse.json()
+
       const applicationData = {
         userId: user.uid,
         company,
         jobTitle,
         jobDescription,
         resume,
-        toolsSelected: toolsList,
-        outputs: packageData.outputs,
+        toolsSelected: Object.keys(selectedTools).filter((k) => selectedTools[k]),
+        outputs: outputs,
         status: 'applied',
         callbackReceived: false,
         dateApplied: new Date().toISOString(),
@@ -75,6 +91,12 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
       }
 
       await addDoc(collection(db, 'applications'), applicationData)
+      
+      // Increment usage for free tier users
+      if (usage.tier === 'free') {
+        await incrementUsage(user.uid)
+      }
+
       onApplicationCreated()
       setStep('info')
       setCompany('')
@@ -82,10 +104,27 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
       setJobDescription('')
       setResume('')
     } catch (err) {
-      setError('Failed to save application: ' + err.message)
+      setError('Failed to create application: ' + err.message)
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleUpgrade = (plan) => {
+    // For now, redirect to Lemonsqueezy
+    // We'll add this in the next step
+    window.location.href = plan === 'subscription' 
+      ? 'https://elevaitr.lemonsqueezy.com/checkout/monthly'
+      : 'https://elevaitr.lemonsqueezy.com/checkout/pay-per-use'
+  }
+
+  if (showPaywall) {
+    return (
+      <div className="logger-container">
+        <button className="back-button" onClick={() => setShowPaywall(false)}>← Back</button>
+        <Paywall onUpgrade={handleUpgrade} />
+      </div>
+    )
   }
 
   return (
@@ -115,7 +154,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 type="text"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
-                placeholder="e.g., Google, Microsoft, Startup XYZ"
+                placeholder="e.g., Google, Microsoft"
                 className="form-input"
                 required
               />
@@ -127,7 +166,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 type="text"
                 value={jobTitle}
                 onChange={(e) => setJobTitle(e.target.value)}
-                placeholder="e.g., Product Manager, Software Engineer"
+                placeholder="e.g., Product Manager"
                 className="form-input"
                 required
               />
@@ -138,7 +177,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
               <textarea
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
-                placeholder="Paste the full job description here..."
+                placeholder="Paste the full job description..."
                 className="form-textarea"
                 required
               />
@@ -149,7 +188,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
               <textarea
                 value={resume}
                 onChange={(e) => setResume(e.target.value)}
-                placeholder="Paste your resume here..."
+                placeholder="Paste your resume..."
                 className="form-textarea"
                 required
               />
@@ -165,7 +204,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
       ) : (
         <div className="logger-content">
           <h3>Select Tools to Generate</h3>
-          <p className="tool-instruction">Choose which tools you'd like to use for this application</p>
+          <p className="tool-instruction">Choose which tools you'd like to use</p>
 
           <div className="tools-checklist">
             <label className="checkbox-item">
@@ -174,7 +213,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.resume}
                 onChange={() => toggleTool('resume')}
               />
-              <span className="checkbox-label">Resume Optimizer</span>
+              <span>Resume Optimizer</span>
             </label>
 
             <label className="checkbox-item">
@@ -183,7 +222,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.coverLetter}
                 onChange={() => toggleTool('coverLetter')}
               />
-              <span className="checkbox-label">Cover Letter Generator</span>
+              <span>Cover Letter Generator</span>
             </label>
 
             <label className="checkbox-item">
@@ -192,7 +231,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.interviewPrep}
                 onChange={() => toggleTool('interviewPrep')}
               />
-              <span className="checkbox-label">Interview Prep</span>
+              <span>Interview Prep</span>
             </label>
 
             <label className="checkbox-item">
@@ -201,7 +240,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.linkedin}
                 onChange={() => toggleTool('linkedin')}
               />
-              <span className="checkbox-label">LinkedIn Optimizer</span>
+              <span>LinkedIn Optimizer</span>
             </label>
 
             <label className="checkbox-item">
@@ -210,17 +249,14 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.jobAnalyzer}
                 onChange={() => toggleTool('jobAnalyzer')}
               />
-              <span className="checkbox-label">Job Analyzer</span>
+              <span>Job Analyzer</span>
             </label>
           </div>
 
           {error && <div className="form-error">{error}</div>}
 
           <div className="button-group">
-            <button
-              onClick={() => setStep('info')}
-              className="btn-secondary"
-            >
+            <button onClick={() => setStep('info')} className="btn-secondary">
               Back
             </button>
             <button
