@@ -326,6 +326,127 @@ export default function App() {
       {currentPage === 'cover-letter' && (
         <CoverLetterGenerator onBack={() => setCurrentPage('landing')} />
       )}
+      {currentPage === 'interview-prep' && (
+        <InterviewPrep onBack={() => setCurrentPage('landing')} />
+      )}
+    </div>
+  )
+}
+
+function InterviewPrep({ onBack }) {
+  const [jobDescription, setJobDescription] = useState('')
+  const [resume, setResume] = useState('')
+  const [interviewPrep, setInterviewPrep] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const handleGenerate = async () => {
+    if (!jobDescription.trim() || !resume.trim()) {
+      setError('Please provide both job description and resume')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+    setInterviewPrep('')
+
+    try {
+      const response = await fetch('/api/generate-interview-prep', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ jobDescription, resume }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to generate interview prep')
+      }
+
+      const data = await response.json()
+      setInterviewPrep(data.interviewPrep)
+    } catch (err) {
+      setError(err.message || 'Something went wrong')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleDownload = () => {
+    const element = document.createElement('a')
+    const file = new Blob([interviewPrep], { type: 'text/plain' })
+    element.href = URL.createObjectURL(file)
+    element.download = 'interview-prep.txt'
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+  }
+
+  return (
+    <div className="tool-container">
+      <div className="tool-header">
+        <button className="back-button" onClick={onBack}>← Back</button>
+        <h2>Interview Prep</h2>
+        <div style={{ width: '60px' }}></div>
+      </div>
+
+      {!interviewPrep ? (
+        <div className="tool-content input-section">
+          <h3>Prepare for Your Interview</h3>
+          <p className="section-description">Paste the job description and your resume, and we'll generate likely interview questions with answer frameworks</p>
+          
+          <div className="input-group">
+            <label>Job Description</label>
+            <textarea
+              value={jobDescription}
+              onChange={(e) => setJobDescription(e.target.value)}
+              placeholder="Paste the job description here..."
+              className="resume-input"
+            />
+          </div>
+
+          <div className="input-group">
+            <label>Your Resume</label>
+            <textarea
+              value={resume}
+              onChange={(e) => setResume(e.target.value)}
+              placeholder="Paste your resume here..."
+              className="resume-input"
+            />
+          </div>
+
+          <button
+            onClick={handleGenerate}
+            disabled={loading}
+            className="optimize-button"
+          >
+            {loading ? 'Generating...' : 'Generate Interview Questions'}
+          </button>
+          {error && <div className="error">{error}</div>}
+        </div>
+      ) : (
+        <div className="tool-content results-section">
+          <h3>Your Interview Prep Guide</h3>
+          <div className="result-box">
+            <p>{interviewPrep}</p>
+          </div>
+          <div className="button-group">
+            <button onClick={handleDownload} className="download-button">
+              ⬇ Download Guide
+            </button>
+            <button
+              onClick={() => {
+                setInterviewPrep('')
+                setJobDescription('')
+                setResume('')
+              }}
+              className="optimize-again-button"
+            >
+              Create Another
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
