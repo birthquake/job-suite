@@ -17,7 +17,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [step, setStep] = useState('info')
+  const [step, setStep] = useState('info') // 'info' or 'tools'
 
   const toggleTool = (tool) => {
     setSelectedTools((prev) => ({
@@ -43,6 +43,22 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
     setLoading(true)
 
     try {
+      // Call package generator API to get all outputs
+      const toolsList = Object.keys(selectedTools).filter((k) => selectedTools[k])
+      
+      const packageResponse = await fetch('/api/generate-application-package', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobDescription, resume, tools: toolsList }),
+      })
+
+      if (!packageResponse.ok) {
+        throw new Error('Failed to generate package outputs')
+      }
+
+      const packageData = await packageResponse.json()
+
+      // Save application with outputs
       const db = getFirestore()
       const applicationData = {
         userId: user.uid,
@@ -50,7 +66,8 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
         jobTitle,
         jobDescription,
         resume,
-        toolsSelected: Object.keys(selectedTools).filter((k) => selectedTools[k]),
+        toolsSelected: toolsList,
+        outputs: packageData.outputs,
         status: 'applied',
         callbackReceived: false,
         dateApplied: new Date().toISOString(),
