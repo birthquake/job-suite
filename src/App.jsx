@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { AuthContext } from './AuthContext'
+import { LoginPage, SignUpPage } from './AuthPages'
 import './App.css'
 
 const ResumeIcon = () => (
@@ -513,11 +515,25 @@ function JobAnalyzer({ onBack }) {
 }
 
 export default function App() {
+  const { user, loading, signOut } = useContext(AuthContext)
   const [currentPage, setCurrentPage] = useState('landing')
+  const [authPage, setAuthPage] = useState('login') // 'login' or 'signup'
+
+  if (loading) {
+    return <div className="loading-container"><p>Loading...</p></div>
+  }
+
+  if (!user) {
+    return authPage === 'login' ? (
+      <LoginPage onSignUpClick={() => setAuthPage('signup')} />
+    ) : (
+      <SignUpPage onLoginClick={() => setAuthPage('login')} />
+    )
+  }
 
   return (
     <div className="app">
-      {currentPage === 'landing' && <LandingPage onSelectTool={setCurrentPage} />}
+      {currentPage === 'landing' && <LandingPage onSelectTool={setCurrentPage} user={user} signOut={signOut} />}
       {currentPage === 'resume' && <ResumeOptimizer onBack={() => setCurrentPage('landing')} />}
       {currentPage === 'cover-letter' && <CoverLetterGenerator onBack={() => setCurrentPage('landing')} />}
       {currentPage === 'interview-prep' && <InterviewPrep onBack={() => setCurrentPage('landing')} />}
