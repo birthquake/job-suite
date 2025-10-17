@@ -1,6 +1,8 @@
 import { useState, useContext } from 'react'
 import { AuthContext } from './AuthContext'
 import { LoginPage, SignUpPage } from './AuthPages'
+import { Dashboard } from './Dashboard'
+import { ApplicationLogger } from './ApplicationLogger'
 import './App.css'
 
 const ResumeIcon = () => (
@@ -21,13 +23,14 @@ const CoverLetterIcon = () => (
   </svg>
 )
 
-function LandingPage({ onSelectTool }) {
+function LandingPage({ onSelectTool, onGoToDashboard }) {
   return (
     <div className="landing">
       <nav className="navbar">
         <div className="nav-container">
           <div className="logo">elevaitr</div>
           <div className="nav-links">
+            <button onClick={onGoToDashboard} className="nav-link-btn">Dashboard</button>
             <a href="#tools">Tools</a>
             <a href="#how">How it works</a>
           </div>
@@ -517,7 +520,7 @@ function JobAnalyzer({ onBack }) {
 export default function App() {
   const { user, loading, signOut } = useContext(AuthContext)
   const [currentPage, setCurrentPage] = useState('landing')
-  const [authPage, setAuthPage] = useState('login') // 'login' or 'signup'
+  const [authPage, setAuthPage] = useState('login')
 
   if (loading) {
     return <div className="loading-container"><p>Loading...</p></div>
@@ -531,9 +534,19 @@ export default function App() {
     )
   }
 
+  // User is logged in
+  if (currentPage === 'dashboard') {
+    return <Dashboard onStartApplication={() => setCurrentPage('new-application')} onSignOut={signOut} />
+  }
+
+  if (currentPage === 'new-application') {
+    return <ApplicationLogger onBack={() => setCurrentPage('dashboard')} onApplicationCreated={() => setCurrentPage('dashboard')} />
+  }
+
+  // Tool pages
   return (
     <div className="app">
-      {currentPage === 'landing' && <LandingPage onSelectTool={setCurrentPage} user={user} signOut={signOut} />}
+      {currentPage === 'landing' && <LandingPage onSelectTool={setCurrentPage} onGoToDashboard={() => setCurrentPage('dashboard')} />}
       {currentPage === 'resume' && <ResumeOptimizer onBack={() => setCurrentPage('landing')} />}
       {currentPage === 'cover-letter' && <CoverLetterGenerator onBack={() => setCurrentPage('landing')} />}
       {currentPage === 'interview-prep' && <InterviewPrep onBack={() => setCurrentPage('landing')} />}
