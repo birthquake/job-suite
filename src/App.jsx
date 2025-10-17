@@ -61,8 +61,8 @@ function JobAnalyzerIcon() {
   )
 }
 
-// Landing Page
-function LandingPage({ onSelectTool }) {
+// Landing Page (for unauthenticated users)
+function LandingPage() {
   return (
     <div className="landing">
       <section className="hero-section">
@@ -74,35 +74,35 @@ function LandingPage({ onSelectTool }) {
       <section className="tools-section">
         <h2>Your Application Toolkit</h2>
         <div className="tools-grid">
-          <div className="tool-card" onClick={() => onSelectTool('resume')}>
+          <div className="tool-card">
             <div className="tool-icon"><ResumeIcon /></div>
             <h3>Resume Optimizer</h3>
             <p>Improve your resume for ATS and recruiter impact</p>
             <div className="tool-cta">Optimize resume →</div>
           </div>
 
-          <div className="tool-card" onClick={() => onSelectTool('cover-letter')}>
+          <div className="tool-card">
             <div className="tool-icon"><CoverLetterIcon /></div>
             <h3>Cover Letter Generator</h3>
             <p>Create personalized cover letters for each role</p>
             <div className="tool-cta">Generate letter →</div>
           </div>
 
-          <div className="tool-card" onClick={() => onSelectTool('interview-prep')}>
+          <div className="tool-card">
             <div className="tool-icon"><InterviewPrepIcon /></div>
             <h3>Interview Prep</h3>
             <p>Get tailored interview questions and answers</p>
             <div className="tool-cta">Prepare →</div>
           </div>
 
-          <div className="tool-card" onClick={() => onSelectTool('linkedin')}>
+          <div className="tool-card">
             <div className="tool-icon"><LinkedInIcon /></div>
             <h3>LinkedIn Optimizer</h3>
             <p>Make your profile stand out to recruiters</p>
             <div className="tool-cta">Optimize profile →</div>
           </div>
 
-          <div className="tool-card" onClick={() => onSelectTool('job-analyzer')}>
+          <div className="tool-card">
             <div className="tool-icon"><JobAnalyzerIcon /></div>
             <h3>Job Analyzer</h3>
             <p>Understand job requirements and keywords</p>
@@ -138,407 +138,45 @@ function LandingPage({ onSelectTool }) {
   )
 }
 
-// Resume Optimizer
-function ResumeOptimizer({ onBack }) {
-  const [resume, setResume] = useState('')
-  const [optimized, setOptimized] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleOptimize = async () => {
-    if (!resume.trim()) {
-      setError('Please paste your resume')
-      return
-    }
-
-    setLoading(true)
-    setError('')
-    setOptimized('')
-
-    try {
-      const response = await fetch('/api/optimize-resume', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ resume }),
-      })
-
-      if (!response.ok) throw new Error('Failed to optimize resume')
-
-      const data = await response.json()
-      setOptimized(data.optimized)
-    } catch (err) {
-      setError('Error: ' + err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <div className="tool-page">
-      <button className="back-button" onClick={onBack}>← Back</button>
-      <h2>Resume Optimizer</h2>
-      <div className="tool-container">
-        <div className="tool-input">
-          <textarea
-            value={resume}
-            onChange={(e) => setResume(e.target.value)}
-            placeholder="Paste your resume here..."
-            className="tool-textarea"
-          />
-          <button onClick={handleOptimize} disabled={loading} className="btn-primary">
-            {loading ? 'Optimizing...' : 'Optimize Resume'}
-          </button>
-        </div>
-
-        <div className="tool-output">
-          {error && <div className="error-message">{error}</div>}
-          {optimized && (
-            <div className="output-box">
-              <textarea value={optimized} readOnly className="tool-textarea" />
-              <button
-                onClick={() => navigator.clipboard.writeText(optimized)}
-                className="btn-secondary"
-              >
-                Copy to Clipboard
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// Cover Letter Generator
-function CoverLetterGenerator({ onBack }) {
-  const [jobDescription, setJobDescription] = useState('')
-  const [resume, setResume] = useState('')
-  const [coverLetter, setCoverLetter] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleGenerate = async () => {
-    if (!jobDescription.trim() || !resume.trim()) {
-      setError('Please provide both job description and resume')
-      return
-    }
-
-    setLoading(true)
-    setError('')
-    setCoverLetter('')
-
-    try {
-      const response = await fetch('/api/generate-cover-letter', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobDescription, resume }),
-      })
-
-      if (!response.ok) throw new Error('Failed to generate cover letter')
-
-      const data = await response.json()
-      setCoverLetter(data.coverLetter)
-    } catch (err) {
-      setError('Error: ' + err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <div className="tool-page">
-      <button className="back-button" onClick={onBack}>← Back</button>
-      <h2>Cover Letter Generator</h2>
-      <div className="tool-container">
-        <div className="tool-input">
-          <textarea
-            value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
-            placeholder="Paste job description..."
-            className="tool-textarea"
-          />
-          <textarea
-            value={resume}
-            onChange={(e) => setResume(e.target.value)}
-            placeholder="Paste your resume..."
-            className="tool-textarea"
-          />
-          <button onClick={handleGenerate} disabled={loading} className="btn-primary">
-            {loading ? 'Generating...' : 'Generate Cover Letter'}
-          </button>
-        </div>
-
-        <div className="tool-output">
-          {error && <div className="error-message">{error}</div>}
-          {coverLetter && (
-            <div className="output-box">
-              <textarea value={coverLetter} readOnly className="tool-textarea" />
-              <button
-                onClick={() => navigator.clipboard.writeText(coverLetter)}
-                className="btn-secondary"
-              >
-                Copy to Clipboard
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// Interview Prep
-function InterviewPrep({ onBack }) {
-  const [jobDescription, setJobDescription] = useState('')
-  const [resume, setResume] = useState('')
-  const [questions, setQuestions] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleGenerate = async () => {
-    if (!jobDescription.trim() || !resume.trim()) {
-      setError('Please provide both job description and resume')
-      return
-    }
-
-    setLoading(true)
-    setError('')
-    setQuestions('')
-
-    try {
-      const response = await fetch('/api/generate-interview-prep', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobDescription, resume }),
-      })
-
-      if (!response.ok) throw new Error('Failed to generate questions')
-
-      const data = await response.json()
-      setQuestions(data.questions)
-    } catch (err) {
-      setError('Error: ' + err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <div className="tool-page">
-      <button className="back-button" onClick={onBack}>← Back</button>
-      <h2>Interview Prep</h2>
-      <div className="tool-container">
-        <div className="tool-input">
-          <textarea
-            value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
-            placeholder="Paste job description..."
-            className="tool-textarea"
-          />
-          <textarea
-            value={resume}
-            onChange={(e) => setResume(e.target.value)}
-            placeholder="Paste your resume..."
-            className="tool-textarea"
-          />
-          <button onClick={handleGenerate} disabled={loading} className="btn-primary">
-            {loading ? 'Generating...' : 'Generate Questions'}
-          </button>
-        </div>
-
-        <div className="tool-output">
-          {error && <div className="error-message">{error}</div>}
-          {questions && (
-            <div className="output-box">
-              <textarea value={questions} readOnly className="tool-textarea" />
-              <button
-                onClick={() => navigator.clipboard.writeText(questions)}
-                className="btn-secondary"
-              >
-                Copy to Clipboard
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// LinkedIn Optimizer
-function LinkedInOptimizer({ onBack }) {
-  const [profile, setProfile] = useState('')
-  const [optimized, setOptimized] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleOptimize = async () => {
-    if (!profile.trim()) {
-      setError('Please paste your LinkedIn profile')
-      return
-    }
-
-    setLoading(true)
-    setError('')
-    setOptimized('')
-
-    try {
-      const response = await fetch('/api/optimize-linkedin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ linkedinProfile: profile }),
-      })
-
-      if (!response.ok) throw new Error('Failed to optimize profile')
-
-      const data = await response.json()
-      setOptimized(data.optimized)
-    } catch (err) {
-      setError('Error: ' + err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <div className="tool-page">
-      <button className="back-button" onClick={onBack}>← Back</button>
-      <h2>LinkedIn Optimizer</h2>
-      <div className="tool-container">
-        <div className="tool-input">
-          <textarea
-            value={profile}
-            onChange={(e) => setProfile(e.target.value)}
-            placeholder="Paste your LinkedIn profile text..."
-            className="tool-textarea"
-          />
-          <button onClick={handleOptimize} disabled={loading} className="btn-primary">
-            {loading ? 'Optimizing...' : 'Optimize Profile'}
-          </button>
-        </div>
-
-        <div className="tool-output">
-          {error && <div className="error-message">{error}</div>}
-          {optimized && (
-            <div className="output-box">
-              <textarea value={optimized} readOnly className="tool-textarea" />
-              <button
-                onClick={() => navigator.clipboard.writeText(optimized)}
-                className="btn-secondary"
-              >
-                Copy to Clipboard
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// Job Analyzer
-function JobAnalyzer({ onBack }) {
-  const [jobDescription, setJobDescription] = useState('')
-  const [analysis, setAnalysis] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleAnalyze = async () => {
-    if (!jobDescription.trim()) {
-      setError('Please paste a job description')
-      return
-    }
-
-    setLoading(true)
-    setError('')
-    setAnalysis('')
-
-    try {
-      const response = await fetch('/api/analyze-job-description', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jobDescription }),
-      })
-
-      if (!response.ok) throw new Error('Failed to analyze job')
-
-      const data = await response.json()
-      setAnalysis(data.analysis)
-    } catch (err) {
-      setError('Error: ' + err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <div className="tool-page">
-      <button className="back-button" onClick={onBack}>← Back</button>
-      <h2>Job Analyzer</h2>
-      <div className="tool-container">
-        <div className="tool-input">
-          <textarea
-            value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
-            placeholder="Paste job description..."
-            className="tool-textarea"
-          />
-          <button onClick={handleAnalyze} disabled={loading} className="btn-primary">
-            {loading ? 'Analyzing...' : 'Analyze Job'}
-          </button>
-        </div>
-
-        <div className="tool-output">
-          {error && <div className="error-message">{error}</div>}
-          {analysis && (
-            <div className="output-box">
-              <textarea value={analysis} readOnly className="tool-textarea" />
-              <button
-                onClick={() => navigator.clipboard.writeText(analysis)}
-                className="btn-secondary"
-              >
-                Copy to Clipboard
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
 // Main App Component
 export default function App() {
   const { user, loading } = useContext(AuthContext)
-  const [currentPage, setCurrentPage] = useState('landing')
+  const [currentPage, setCurrentPage] = useState('dashboard')
   const [authPage, setAuthPage] = useState('login')
 
   if (loading) {
     return <div className="loading-container"><p>Loading...</p></div>
   }
 
+  // Not logged in - show landing page + auth
   if (!user) {
-    return authPage === 'login' ? (
-      <LoginPage onSignUpClick={() => setAuthPage('signup')} />
-    ) : (
-      <SignUpPage onLoginClick={() => setAuthPage('login')} />
+    return (
+      <>
+        <LandingPage />
+        {authPage === 'login' ? (
+          <LoginPage onSignUpClick={() => setAuthPage('signup')} />
+        ) : (
+          <SignUpPage onLoginClick={() => setAuthPage('login')} />
+        )}
+      </>
     )
   }
 
-  // User is logged in
+  // User is logged in - application workflow
   return (
     <div className="app-wrapper">
       <Navbar currentPage={currentPage} onNavigate={setCurrentPage} />
       
       <div className="app">
-        {currentPage === 'dashboard' && <Dashboard onStartApplication={() => setCurrentPage('new-application')} onSignOut={() => {}} />}
-        {currentPage === 'new-application' && <ApplicationLogger onBack={() => setCurrentPage('dashboard')} onApplicationCreated={() => setCurrentPage('dashboard')} />}
-        {currentPage === 'landing' && <LandingPage onSelectTool={setCurrentPage} />}
-        {currentPage === 'resume' && <ResumeOptimizer onBack={() => setCurrentPage('landing')} />}
-        {currentPage === 'cover-letter' && <CoverLetterGenerator onBack={() => setCurrentPage('landing')} />}
-        {currentPage === 'interview-prep' && <InterviewPrep onBack={() => setCurrentPage('landing')} />}
-        {currentPage === 'linkedin' && <LinkedInOptimizer onBack={() => setCurrentPage('landing')} />}
-        {currentPage === 'job-analyzer' && <JobAnalyzer onBack={() => setCurrentPage('landing')} />}
+        {currentPage === 'dashboard' && (
+          <Dashboard onStartApplication={() => setCurrentPage('new-application')} />
+        )}
+        {currentPage === 'new-application' && (
+          <ApplicationLogger 
+            onBack={() => setCurrentPage('dashboard')} 
+            onApplicationCreated={() => setCurrentPage('dashboard')} 
+          />
+        )}
       </div>
     </div>
   )
