@@ -1,92 +1,97 @@
-import jsPDF from 'jspdf'
+import { jsPDF } from 'jspdf'
 
-export function generateApplicationPDF(application) {
-  const pdf = new jsPDF({
-    orientation: 'portrait',
-    unit: 'mm',
-    format: 'a4',
-  })
-
-  let yPosition = 20
-  const pageHeight = pdf.internal.pageSize.getHeight()
+export function generateApplicationPackagePDF(application) {
+  const doc = new jsPDF()
+  const pageWidth = doc.internal.pageSize.getWidth()
+  const pageHeight = doc.internal.pageSize.getHeight()
   const margin = 15
-  const maxWidth = 180
+  const contentWidth = pageWidth - 2 * margin
+  let yPosition = margin
 
-  // Helper function to add text with wrapping
-  const addWrappedText = (text, fontSize, isBold, maxW = maxWidth) => {
-    pdf.setFontSize(fontSize)
+  // Helper function to add text with automatic line breaking
+  const addWrappedText = (text, fontSize, isBold = false, color = [0, 0, 0]) => {
+    doc.setFontSize(fontSize)
+    doc.setTextColor(...color)
     if (isBold) {
-      pdf.setFont(undefined, 'bold')
+      doc.setFont(undefined, 'bold')
     } else {
-      pdf.setFont(undefined, 'normal')
+      doc.setFont(undefined, 'normal')
     }
 
-    const lines = pdf.splitTextToSize(text, maxW)
+    const lines = doc.splitTextToSize(text, contentWidth)
     lines.forEach((line) => {
-      if (yPosition > pageHeight - 20) {
-        pdf.addPage()
-        yPosition = 20
+      if (yPosition > pageHeight - margin) {
+        doc.addPage()
+        yPosition = margin
       }
-      pdf.text(line, margin, yPosition)
-      yPosition += 7
+      doc.text(line, margin, yPosition)
+      yPosition += 5
     })
   }
 
-  // Add header
-  addWrappedText(`${application.company} - ${application.jobTitle}`, 16, true)
-  addWrappedText(`Applied: ${new Date(application.dateApplied).toLocaleDateString()}`, 10, false)
+  // Helper function to add a section
+  const addSection = (title) => {
+    yPosition += 5
+    if (yPosition > pageHeight - margin - 10) {
+      doc.addPage()
+      yPosition = margin
+    }
+    addWrappedText(title, 14, true, [59, 130, 246])
+    yPosition += 2
+  }
+
+  // Header
+  addWrappedText('elevaitr Application Package', 16, true, [59, 130, 246])
+  yPosition += 3
+
+  // Application Details
+  addWrappedText(`${application.company} - ${application.jobTitle}`, 12, true)
+  addWrappedText(`Applied: ${new Date(application.dateApplied).toLocaleDateString()}`, 10, false, [100, 100, 100])
   yPosition += 5
 
-  // Add each output section
+  // Job Description
+  if (application.jobDescription) {
+    addSection('Job Description')
+    addWrappedText(application.jobDescription, 10, false)
+  }
+
+  // Resume
   if (application.outputs?.resume) {
-    pdf.setDrawColor(96, 165, 250)
-    pdf.setLineWidth(0.5)
-    pdf.line(margin, yPosition, maxWidth + margin, yPosition)
-    yPosition += 5
-
-    addWrappedText('OPTIMIZED RESUME', 14, true)
-    yPosition += 3
-    addWrappedText(application.outputs.resume, 9, false)
-    yPosition += 10
+    addSection('Optimized Resume')
+    addWrappedText(application.outputs.resume, 10, false)
   }
 
+  // Cover Letter
   if (application.outputs?.coverLetter) {
-    pdf.setDrawColor(96, 165, 250)
-    pdf.setLineWidth(0.5)
-    pdf.line(margin, yPosition, maxWidth + margin, yPosition)
-    yPosition += 5
-
-    addWrappedText('COVER LETTER', 14, true)
-    yPosition += 3
-    addWrappedText(application.outputs.coverLetter, 9, false)
-    yPosition += 10
+    addSection('Cover Letter')
+    addWrappedText(application.outputs.coverLetter, 10, false)
   }
 
+  // Interview Prep
   if (application.outputs?.interviewPrep) {
-    pdf.setDrawColor(96, 165, 250)
-    pdf.setLineWidth(0.5)
-    pdf.line(margin, yPosition, maxWidth + margin, yPosition)
-    yPosition += 5
-
-    addWrappedText('INTERVIEW PREP', 14, true)
-    yPosition += 3
-    addWrappedText(application.outputs.interviewPrep, 9, false)
-    yPosition += 10
+    addSection('Interview Preparation')
+    addWrappedText(application.outputs.interviewPrep, 10, false)
   }
 
-  if (application.outputs?.jobAnalyzer) {
-    pdf.setDrawColor(96, 165, 250)
-    pdf.setLineWidth(0.5)
-    pdf.line(margin, yPosition, maxWidth + margin, yPosition)
-    yPosition += 5
-
-    addWrappedText('JOB ANALYSIS', 14, true)
-    yPosition += 3
-    addWrappedText(application.outputs.jobAnalyzer, 9, false)
-    yPosition += 10
+  // LinkedIn Profile
+  if (application.outputs?.linkedin) {
+    addSection('LinkedIn Profile Optimization')
+    addWrappedText(application.outputs.linkedin, 10, false)
   }
 
-  // Download
-  const filename = `${application.company}-${application.jobTitle}-package.pdf`
-  pdf.save(filename)
+  // Job Analysis
+  if (application.outputs?.jobAnalysis) {
+    addSection('Job Analysis')
+    addWrappedText(application.outputs.jobAnalysis, 10, false)
+  }
+
+  // Footer
+  yPosition = pageHeight - 10
+  doc.setFontSize(8)
+  doc.setTextColor(150, 150, 150)
+  doc.text('Generated by elevaitr - Elevate Your Job Search', margin, yPosition)
+
+  // Save the PDF
+  const filename = `${application.company}-${application.jobTitle}-${new Date().toISOString().split('T')[0]}.pdf`
+  doc.save(filename)
 }
