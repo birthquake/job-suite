@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { AuthContext } from './AuthContext'
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore'
+import { generateApplicationPDF } from './PDFGenerator'
 
 export function Dashboard({ onStartApplication, onSignOut }) {
   const { user } = useContext(AuthContext)
@@ -100,6 +101,7 @@ export function Dashboard({ onStartApplication, onSignOut }) {
               <div className="col-date">Date Applied</div>
               <div className="col-status">Status</div>
               <div className="col-callback">Callback</div>
+              <div className="col-action">Action</div>
             </div>
             {applications.map((app) => (
               <div key={app.id} className="table-row">
@@ -111,6 +113,14 @@ export function Dashboard({ onStartApplication, onSignOut }) {
                 <div className="col-status">{app.status || 'Applied'}</div>
                 <div className="col-callback">
                   {app.callbackReceived ? '✓' : '-'}
+                </div>
+                <div className="col-action">
+                  <button 
+                    onClick={() => generateApplicationPDF(app)}
+                    className="download-link"
+                  >
+                    ⬇ Package
+                  </button>
                 </div>
               </div>
             ))}
