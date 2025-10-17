@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react'
 import { AuthContext } from './AuthContext'
 import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore'
 import { getUserTier } from './usageUtils'
+import { generateApplicationPackagePDF } from './PDFGenerator'
 
 export function Dashboard({ onStartApplication }) {
   const { user } = useContext(AuthContext)
