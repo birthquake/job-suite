@@ -9,7 +9,7 @@ import './App.css'
 // SVG Icons
 function ResumeIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
       <polyline points="14 2 14 8 20 8" />
       <line x1="12" y1="11" x2="12" y2="17" />
@@ -20,10 +20,43 @@ function ResumeIcon() {
 
 function CoverLetterIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
       <line x1="8" y1="8" x2="16" y2="8" />
       <line x1="8" y1="12" x2="16" y2="12" />
+      <line x1="8" y1="16" x2="14" y2="16" />
+    </svg>
+  )
+}
+
+function InterviewPrepIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+      <line x1="9" y1="9" x2="9" y2="9.01" />
+      <line x1="15" y1="9" x2="15" y2="9.01" />
+    </svg>
+  )
+}
+
+function LinkedInIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  )
+}
+
+function JobAnalyzerIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 21H3V3h18v18z" />
+      <path d="M3 12h18" />
+      <path d="M12 3v18" />
+      <circle cx="12" cy="12" r="2" />
     </svg>
   )
 }
@@ -34,7 +67,8 @@ function LandingPage({ onSelectTool }) {
     <div className="landing">
       <section className="hero-section">
         <h1>Land Your Dream Job</h1>
-        <p>Complete AI-powered job application suite. Optimize your resume, cover letter, and more.</p>
+        <p>Professional resume and cover letter in minutes</p>
+        <p style={{ marginTop: '0.5rem', fontSize: '1.1rem' }}>AI-powered tools that elevate your job application from start to finish</p>
       </section>
 
       <section className="tools-section">
@@ -55,21 +89,21 @@ function LandingPage({ onSelectTool }) {
           </div>
 
           <div className="tool-card" onClick={() => onSelectTool('interview-prep')}>
-            <div className="tool-icon">📋</div>
+            <div className="tool-icon"><InterviewPrepIcon /></div>
             <h3>Interview Prep</h3>
             <p>Get tailored interview questions and answers</p>
             <div className="tool-cta">Prepare →</div>
           </div>
 
           <div className="tool-card" onClick={() => onSelectTool('linkedin')}>
-            <div className="tool-icon">💼</div>
+            <div className="tool-icon"><LinkedInIcon /></div>
             <h3>LinkedIn Optimizer</h3>
             <p>Make your profile stand out to recruiters</p>
             <div className="tool-cta">Optimize profile →</div>
           </div>
 
           <div className="tool-card" onClick={() => onSelectTool('job-analyzer')}>
-            <div className="tool-icon">🔍</div>
+            <div className="tool-icon"><JobAnalyzerIcon /></div>
             <h3>Job Analyzer</h3>
             <p>Understand job requirements and keywords</p>
             <div className="tool-cta">Analyze job →</div>
