@@ -51,9 +51,12 @@ export function Dashboard({ onStartApplication }) {
   }
 
   const handleDownloadPackage = async (app) => {
-    // Placeholder for PDF generation
-    console.log('Downloading package for:', app.company, app.jobTitle)
-    // TODO: Implement PDF generation
+    try {
+      generateApplicationPackagePDF(app)
+    } catch (error) {
+      console.error('Error generating PDF:', error)
+      alert('Failed to generate PDF. Please try again.')
+    }
   }
 
   if (loading) {
