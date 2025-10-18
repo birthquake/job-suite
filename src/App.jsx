@@ -63,75 +63,154 @@ function JobAnalyzerIcon() {
 
 // Landing Page (for unauthenticated users)
 function LandingPage() {
+  const { user } = useContext(AuthContext)
+
+  // Only show landing page if not logged in
+  if (user) return null
+
   return (
     <div className="landing">
-      <section className="hero-section">
-        <h1>Land Your Dream Job</h1>
-        <p>Professional resume and cover letter in minutes</p>
-        <p style={{ marginTop: '0.5rem', fontSize: '1.1rem' }}>AI-powered tools that elevate your job application from start to finish</p>
+      {/* Hero Section */}
+      <section className="hero-section" style={{ paddingTop: '8rem', paddingBottom: '6rem' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', fontWeight: '700', lineHeight: '1.1' }}>
+            Land Your Dream Job
+          </h1>
+          <p style={{ fontSize: '1.25rem', color: '#d1d5db', marginBottom: '1rem', lineHeight: '1.6' }}>
+            Professional application materials in minutes, not hours
+          </p>
+          <p style={{ fontSize: '1.1rem', color: '#9ca3af', marginBottom: '2.5rem', lineHeight: '1.6' }}>
+            AI-powered tools that elevate your job search from start to finish
+          </p>
+          <a
+            href="#tools"
+            style={{
+              display: 'inline-block',
+              background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
+              color: 'white',
+              padding: '1rem 2.5rem',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              fontWeight: '600',
+              fontSize: '1.1rem',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 12px rgba(96, 165, 250, 0.3)'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.transform = 'translateY(-2px)'
+              e.target.style.boxShadow = '0 8px 20px rgba(96, 165, 250, 0.4)'
+            }}
+            onMouseOut={(e) => {
+              e.target.style.transform = 'translateY(0)'
+              e.target.style.boxShadow = '0 4px 12px rgba(96, 165, 250, 0.3)'
+            }}
+          >
+            Get Started Free
+          </a>
+        </div>
       </section>
 
-      <section className="tools-section">
-        <h2>Your Application Toolkit</h2>
+      {/* Tools Section */}
+      <section className="tools-section" id="tools" style={{ paddingTop: '4rem', paddingBottom: '4rem' }}>
+        <h2 style={{ marginBottom: '3rem' }}>Your Application Toolkit</h2>
         <div className="tools-grid">
           <div className="tool-card">
             <div className="tool-icon"><ResumeIcon /></div>
             <h3>Resume Optimizer</h3>
             <p>Improve your resume for ATS and recruiter impact</p>
-            <div className="tool-cta">Optimize resume →</div>
+            <div className="tool-cta">Learn more →</div>
           </div>
 
           <div className="tool-card">
             <div className="tool-icon"><CoverLetterIcon /></div>
             <h3>Cover Letter Generator</h3>
             <p>Create personalized cover letters for each role</p>
-            <div className="tool-cta">Generate letter →</div>
+            <div className="tool-cta">Learn more →</div>
           </div>
 
           <div className="tool-card">
             <div className="tool-icon"><InterviewPrepIcon /></div>
             <h3>Interview Prep</h3>
             <p>Get tailored interview questions and answers</p>
-            <div className="tool-cta">Prepare →</div>
+            <div className="tool-cta">Learn more →</div>
           </div>
 
           <div className="tool-card">
             <div className="tool-icon"><LinkedInIcon /></div>
             <h3>LinkedIn Optimizer</h3>
             <p>Make your profile stand out to recruiters</p>
-            <div className="tool-cta">Optimize profile →</div>
+            <div className="tool-cta">Learn more →</div>
           </div>
 
           <div className="tool-card">
             <div className="tool-icon"><JobAnalyzerIcon /></div>
             <h3>Job Analyzer</h3>
             <p>Understand job requirements and keywords</p>
-            <div className="tool-cta">Analyze job →</div>
+            <div className="tool-cta">Learn more →</div>
           </div>
         </div>
       </section>
 
-      <section className="how-section" id="how">
-        <h2>How It Works</h2>
+      {/* How It Works Section */}
+      <section className="how-section" id="how" style={{ marginTop: '4rem', marginBottom: '4rem' }}>
+        <h2 style={{ marginBottom: '3rem' }}>How It Works</h2>
         <div className="steps-wrapper">
           <div className="step">
             <div className="step-number">1</div>
-            <h3>Paste Your Info</h3>
+            <h3 style={{ marginTop: '1rem' }}>Paste Your Info</h3>
+            <p style={{ fontSize: '0.9rem', color: '#9ca3af', marginTop: '0.5rem', maxWidth: '150px' }}>
+              Job description and resume
+            </p>
           </div>
           <div className="step-connector">→</div>
           <div className="step">
             <div className="step-number">2</div>
-            <h3>AI Optimizes</h3>
+            <h3 style={{ marginTop: '1rem' }}>AI Optimizes</h3>
+            <p style={{ fontSize: '0.9rem', color: '#9ca3af', marginTop: '0.5rem', maxWidth: '150px' }}>
+              15-30 seconds
+            </p>
           </div>
           <div className="step-connector">→</div>
           <div className="step">
             <div className="step-number">3</div>
-            <h3>Download & Apply</h3>
+            <h3 style={{ marginTop: '1rem' }}>Download & Apply</h3>
+            <p style={{ fontSize: '0.9rem', color: '#9ca3af', marginTop: '0.5rem', maxWidth: '150px' }}>
+              One complete PDF
+            </p>
           </div>
+        </div>
+
+        <div style={{ marginTop: '3rem', textAlign: 'center' }}>
+          <a
+            href="#signup"
+            style={{
+              display: 'inline-block',
+              background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
+              color: 'white',
+              padding: '1rem 2.5rem',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              fontWeight: '600',
+              fontSize: '1.1rem',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 12px rgba(96, 165, 250, 0.3)'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.transform = 'translateY(-2px)'
+              e.target.style.boxShadow = '0 8px 20px rgba(96, 165, 250, 0.4)'
+            }}
+            onMouseOut={(e) => {
+              e.target.style.transform = 'translateY(0)'
+              e.target.style.boxShadow = '0 4px 12px rgba(96, 165, 250, 0.3)'
+            }}
+          >
+            Start Free Today
+          </a>
         </div>
       </section>
 
-      <footer className="footer">
+      {/* Footer */}
+      <footer className="footer" style={{ marginTop: '6rem', paddingTop: '2rem' }}>
         <p>elevaitr © 2025 • Elevate your job search</p>
       </footer>
     </div>
