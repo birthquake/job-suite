@@ -8,8 +8,18 @@ export function generateApplicationPackagePDF(application) {
   const contentWidth = pageWidth - 2 * margin
   let yPosition = margin
 
+  // Color scheme
+  const colors = {
+    primary: [96, 165, 250],      // Blue (#60a5fa)
+    dark: [15, 20, 25],           // Dark background
+    text: [30, 30, 30],           // Dark text
+    lightText: [100, 100, 100],   // Gray text
+    divider: [200, 200, 200],     // Light gray
+    accentBg: [245, 248, 255]     // Very light blue background
+  }
+
   // Helper function to add text with automatic line breaking
-  const addWrappedText = (text, fontSize, isBold = false, color = [0, 0, 0]) => {
+  const addWrappedText = (text, fontSize, isBold = false, color = colors.text) => {
     doc.setFontSize(fontSize)
     doc.setTextColor(...color)
     if (isBold) {
@@ -19,7 +29,7 @@ export function generateApplicationPackagePDF(application) {
     }
     const lines = doc.splitTextToSize(text, contentWidth)
     lines.forEach((line) => {
-      if (yPosition > pageHeight - margin) {
+      if (yPosition > pageHeight - margin - 5) {
         doc.addPage()
         yPosition = margin
       }
@@ -28,65 +38,103 @@ export function generateApplicationPackagePDF(application) {
     })
   }
 
-  // Helper function to add a section with page break
+  // Helper function to add a section with improved design
   const addSection = (title, startNewPage = false) => {
     if (startNewPage) {
       doc.addPage()
-      yPosition = margin
+      yPosition = margin + 5
     } else {
-      yPosition += 5
-      if (yPosition > pageHeight - margin - 10) {
-        doc.addPage()
-        yPosition = margin
-      }
+      yPosition += 8
     }
-    addWrappedText(title, 14, true, [59, 130, 246])
-    yPosition += 2
+
+    // Section background
+    doc.setFillColor(...colors.accentBg)
+    doc.rect(margin - 2, yPosition - 4, contentWidth + 4, 8, 'F')
+
+    // Section title
+    doc.setFontSize(14)
+    doc.setFont(undefined, 'bold')
+    doc.setTextColor(...colors.primary)
+    doc.text(title, margin, yPosition + 2)
+
+    // Divider line below title
+    doc.setDrawColor(...colors.divider)
+    doc.setLineWidth(0.5)
+    doc.line(margin, yPosition + 5, pageWidth - margin, yPosition + 5)
+
+    yPosition += 8
   }
 
-  // Cover Page
-  addWrappedText('elevaitr Application Package', 16, true, [59, 130, 246])
-  yPosition += 3
-  addWrappedText(`${application.company} - ${application.jobTitle}`, 12, true)
-  addWrappedText(`Applied: ${new Date(application.dateApplied).toLocaleDateString()}`, 10, false, [100, 100, 100])
-  yPosition += 5
+  // ========== COVER PAGE ==========
+  doc.setFontSize(24)
+  doc.setFont(undefined, 'bold')
+  doc.setTextColor(...colors.primary)
+  doc.text('elevaitr', margin, yPosition)
+  yPosition += 10
 
-  // Job Description
+  doc.setFontSize(12)
+  doc.setFont(undefined, 'bold')
+  doc.setTextColor(...colors.text)
+  doc.text(`${application.company} — ${application.jobTitle}`, margin, yPosition)
+  yPosition += 6
+
+  doc.setFontSize(10)
+  doc.setFont(undefined, 'normal')
+  doc.setTextColor(...colors.lightText)
+  doc.text(`Application Package • Generated ${new Date(application.dateApplied).toLocaleDateString()}`, margin, yPosition)
+  
+  // Divider
+  doc.setDrawColor(...colors.divider)
+  doc.setLineWidth(1)
+  yPosition += 10
+  doc.line(margin, yPosition, pageWidth - margin, yPosition)
+  yPosition += 10
+
+  // ========== JOB DESCRIPTION ==========
   if (application.jobDescription) {
-    addSection('Job Description')
-    addWrappedText(application.jobDescription, 10, false)
+    addSection('Job Description', false)
+    addWrappedText(application.jobDescription, 10, false, colors.text)
   }
 
-  // Resume - SAME PAGE (flows naturally)
+  // ========== RESUME ==========
   if (application.outputs?.resume) {
     addSection('Optimized Resume', false)
-    addWrappedText(application.outputs.resume, 10, false)
+    addWrappedText(application.outputs.resume, 10, false, colors.text)
   }
 
-  // Cover Letter - NEW PAGE
+  // ========== COVER LETTER ==========
   if (application.outputs?.coverLetter) {
     addSection('Cover Letter', true)
-    addWrappedText(application.outputs.coverLetter, 10, false)
+    addWrappedText(application.outputs.coverLetter, 10, false, colors.text)
   }
 
-  // Interview Prep - NEW PAGE
+  // ========== INTERVIEW PREP ==========
   if (application.outputs?.interviewPrep) {
     addSection('Interview Preparation', true)
-    addWrappedText(application.outputs.interviewPrep, 10, false)
+    addWrappedText(application.outputs.interviewPrep, 10, false, colors.text)
   }
 
-  // LinkedIn Profile - NEW PAGE
+  // ========== LINKEDIN ==========
   if (application.outputs?.linkedin || application.outputs?.linkedinProfile) {
     const linkedinContent = application.outputs.linkedin || application.outputs.linkedinProfile
     addSection('LinkedIn Profile Optimization', true)
-    addWrappedText(linkedinContent, 10, false)
+    addWrappedText(linkedinContent, 10, false, colors.text)
   }
 
-  // Footer
-  yPosition = pageHeight - 10
+  // ========== FOOTER ==========
   doc.setFontSize(8)
-  doc.setTextColor(150, 150, 150)
-  doc.text('Generated by elevaitr - Elevate Your Job Search', margin, yPosition)
+  doc.setTextColor(...colors.lightText)
+  doc.text('elevaitr • AI-Powered Job Application Platform', margin, pageHeight - 8)
+  doc.text(`Generated on ${new Date().toLocaleString()}`, margin, pageHeight - 4)
+
+  // Right-aligned page number
+  const pageCount = doc.getNumberOfPages()
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i)
+    doc.setFontSize(8)
+    doc.setTextColor(...colors.lightText)
+    doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin - 15, pageHeight - 8, { align: 'right' })
+  }
 
   // Save the PDF
   const filename = `${application.company}-${application.jobTitle}-${new Date().toISOString().split('T')[0]}.pdf`
