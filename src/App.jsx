@@ -129,19 +129,7 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* Stat Icon Container */
-.stat-icon-container {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1rem;
-  transition: var(--transition-smooth);
-}
-
-/* How It Works Section */}
+      {/* How It Works Section */}
       <section className="how-section" id="how" style={{ marginTop: '4rem', marginBottom: '4rem' }}>
         <h2 style={{ marginBottom: '3rem' }}>How It Works</h2>
         <div className="steps-wrapper">
@@ -429,7 +417,7 @@ function PricingSection() {
           
           <div style={{ marginBottom: '2rem' }}>
             <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Do I need a credit card for the free tier?</h4>
-            <p style={{ color: 'var(--text-muted)', margin: 0 }}>No credit card required. Start with 3 free applications per month.</p>
+            <p style={{ color: 'var(--text-muted)', margin: 0 }}>No credit card required. Start with 3 free applications.</p>
           </div>
           
           <div style={{ marginBottom: '2rem' }}>
@@ -469,7 +457,6 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
         animation: 'fadeIn 0.3s ease-out'
       }}
       onClick={(e) => {
-        // Close modal if clicking outside the modal box
         if (e.target === e.currentTarget) {
           onClose()
         }
