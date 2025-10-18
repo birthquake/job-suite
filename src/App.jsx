@@ -209,11 +209,251 @@ function LandingPage() {
         </div>
       </section>
 
+      {/* Pricing Section */}
+      <PricingSection />
+
       {/* Footer */}
       <footer className="footer" style={{ marginTop: '6rem', paddingTop: '2rem' }}>
         <p>elevaitr © 2025 • Elevate your job search</p>
       </footer>
     </div>
+  )
+}
+
+// Pricing Section Component
+function PricingSection() {
+  return (
+    <section id="pricing" className="pricing-page" style={{ 
+      maxWidth: '1200px', 
+      margin: '4rem auto', 
+      padding: '0 2rem'
+    }}>
+      <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+        <h2 style={{ 
+          fontSize: '2.5rem', 
+          marginBottom: '1rem', 
+          color: 'var(--text-primary)'
+        }}>
+          Simple, Transparent Pricing
+        </h2>
+        <p style={{ 
+          fontSize: '1.1rem', 
+          color: 'var(--text-muted)', 
+          maxWidth: '600px', 
+          margin: '0 auto'
+        }}>
+          Choose the plan that works for you. Upgrade or downgrade anytime.
+        </p>
+      </div>
+
+      {/* Pricing Cards */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '2rem',
+        marginBottom: '4rem'
+      }}>
+        {/* Free Tier */}
+        <div className="price-card" style={{
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+          <h3 style={{ marginTop: 0 }}>Free</h3>
+          <div className="price" style={{ fontSize: '2rem', margin: '1.5rem 0' }}>
+            $0<span className="period" style={{ fontSize: '1rem' }}>/month</span>
+          </div>
+          <p className="price-desc">Perfect for getting started</p>
+          
+          <div style={{
+            flex: 1,
+            textAlign: 'left',
+            marginBottom: '1.5rem'
+          }}>
+            <ul style={{
+              listStyle: 'none',
+              padding: 0,
+              margin: 0,
+              color: 'var(--text-secondary)',
+              fontSize: '0.95rem',
+              lineHeight: '1.8'
+            }}>
+              <li>✓ 3 applications/month</li>
+              <li>✓ All 5 tools included</li>
+              <li>✓ Single PDF downloads</li>
+              <li>✓ Community support</li>
+              <li>✗ No priority support</li>
+            </ul>
+          </div>
+          
+          <button style={{
+            width: '100%',
+            padding: '0.75rem',
+            background: 'var(--bg-tertiary)',
+            color: 'var(--text-secondary)',
+            border: '2px solid var(--border-light)',
+            borderRadius: '6px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseOver={(e) => {
+            e.target.style.borderColor = '#60a5fa'
+            e.target.style.color = '#60a5fa'
+          }}
+          onMouseOut={(e) => {
+            e.target.style.borderColor = 'var(--border-light)'
+            e.target.style.color = 'var(--text-secondary)'
+          }}>
+            Get Started
+          </button>
+        </div>
+
+        {/* Pay Per Use Tier */}
+        <div className="price-card" style={{
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+          <h3 style={{ marginTop: 0 }}>Pay Per Use</h3>
+          <div className="price" style={{ fontSize: '2rem', margin: '1.5rem 0' }}>
+            $2.99<span className="period" style={{ fontSize: '1rem' }}>/app</span>
+          </div>
+          <p className="price-desc">Pay only for what you use</p>
+          
+          <div style={{
+            flex: 1,
+            textAlign: 'left',
+            marginBottom: '1.5rem'
+          }}>
+            <ul style={{
+              listStyle: 'none',
+              padding: 0,
+              margin: 0,
+              color: 'var(--text-secondary)',
+              fontSize: '0.95rem',
+              lineHeight: '1.8'
+            }}>
+              <li>✓ $2.99 per application</li>
+              <li>✓ All 5 tools included</li>
+              <li>✓ No monthly commitment</li>
+              <li>✓ Priority support</li>
+              <li>✓ Cancel anytime</li>
+            </ul>
+          </div>
+          
+          <button style={{
+            width: '100%',
+            padding: '0.75rem',
+            background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 12px rgba(96, 165, 250, 0.2)'
+          }}
+          onMouseOver={(e) => {
+            e.target.style.transform = 'translateY(-2px)'
+            e.target.style.boxShadow = '0 8px 20px rgba(96, 165, 250, 0.3)'
+          }}
+          onMouseOut={(e) => {
+            e.target.style.transform = 'translateY(0)'
+            e.target.style.boxShadow = '0 4px 12px rgba(96, 165, 250, 0.2)'
+          }}>
+            Get Started
+          </button>
+        </div>
+
+        {/* Monthly Subscription Tier */}
+        <div className="price-card featured" style={{
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+          <div className="badge">BEST VALUE</div>
+          <h3 style={{ marginTop: '1rem' }}>Monthly Subscription</h3>
+          <div className="price" style={{ fontSize: '2rem', margin: '1.5rem 0' }}>
+            $4.99<span className="period" style={{ fontSize: '1rem' }}>/month</span>
+          </div>
+          <p className="price-desc">Unlimited applications</p>
+          
+          <div style={{
+            flex: 1,
+            textAlign: 'left',
+            marginBottom: '1.5rem'
+          }}>
+            <ul style={{
+              listStyle: 'none',
+              padding: 0,
+              margin: 0,
+              color: 'var(--text-secondary)',
+              fontSize: '0.95rem',
+              lineHeight: '1.8'
+            }}>
+              <li>✓ Unlimited applications</li>
+              <li>✓ All 5 tools included</li>
+              <li>✓ Priority support</li>
+              <li>✓ Cancel anytime</li>
+              <li>✓ Best value (save $35/year)</li>
+            </ul>
+          </div>
+          
+          <button className="upgrade-btn featured-btn" style={{
+            width: '100%',
+            padding: '0.75rem',
+            background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 12px rgba(96, 165, 250, 0.2)'
+          }}
+          onMouseOver={(e) => {
+            e.target.style.transform = 'translateY(-2px)'
+            e.target.style.boxShadow = '0 8px 20px rgba(96, 165, 250, 0.3)'
+          }}
+          onMouseOut={(e) => {
+            e.target.style.transform = 'translateY(0)'
+            e.target.style.boxShadow = '0 4px 12px rgba(96, 165, 250, 0.2)'
+          }}>
+            Subscribe Now
+          </button>
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div style={{
+        background: 'var(--bg-secondary)',
+        borderRadius: '12px',
+        padding: '2rem',
+        border: '1px solid var(--border-light)'
+      }}>
+        <h3 style={{ textAlign: 'center', marginTop: 0 }}>Frequently Asked Questions</h3>
+        
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '2rem' }}>
+            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Can I change plans anytime?</h4>
+            <p style={{ color: 'var(--text-muted)', margin: 0 }}>Yes. Upgrade, downgrade, or cancel your subscription anytime with no penalty.</p>
+          </div>
+          
+          <div style={{ marginBottom: '2rem' }}>
+            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Do I need a credit card for the free tier?</h4>
+            <p style={{ color: 'var(--text-muted)', margin: 0 }}>No credit card required. Start with 3 free applications per month.</p>
+          </div>
+          
+          <div style={{ marginBottom: '2rem' }}>
+            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>What happens if I exceed my free applications?</h4>
+            <p style={{ color: 'var(--text-muted)', margin: 0 }}>You'll be prompted to upgrade. Your applications and progress are saved—no data loss.</p>
+          </div>
+          
+          <div>
+            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Is there a refund policy?</h4>
+            <p style={{ color: 'var(--text-muted)', margin: 0 }}>We offer a 7-day money-back guarantee on all paid plans. No questions asked.</p>
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }
 
