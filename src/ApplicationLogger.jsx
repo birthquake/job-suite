@@ -15,7 +15,6 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
     coverLetter: true,
     interviewPrep: false,
     linkedin: false,
-    jobAnalyzer: false,
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -203,8 +202,10 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
         </div>
       ) : (
         <div className="logger-content">
-          <h3>Select Tools to Generate</h3>
-          <p className="tool-instruction">Choose which tools you'd like to use</p>
+          <h3>Select Your Package Tools</h3>
+          <p className="tool-instruction">
+            Select the tools you'd like to include in your application package. All selected tools will be combined into a single PDF.
+          </p>
 
           <div className="tools-checklist">
             <label className="checkbox-item">
@@ -213,7 +214,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.resume}
                 onChange={() => toggleTool('resume')}
               />
-              <span>Resume Optimizer</span>
+              <span>Resume (ATS-optimized)</span>
             </label>
 
             <label className="checkbox-item">
@@ -222,7 +223,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.coverLetter}
                 onChange={() => toggleTool('coverLetter')}
               />
-              <span>Cover Letter Generator</span>
+              <span>Cover Letter (customized)</span>
             </label>
 
             <label className="checkbox-item">
@@ -231,7 +232,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.interviewPrep}
                 onChange={() => toggleTool('interviewPrep')}
               />
-              <span>Interview Prep</span>
+              <span>Interview Prep (10 Q&A)</span>
             </label>
 
             <label className="checkbox-item">
@@ -240,16 +241,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.linkedin}
                 onChange={() => toggleTool('linkedin')}
               />
-              <span>LinkedIn Optimizer</span>
-            </label>
-
-            <label className="checkbox-item">
-              <input
-                type="checkbox"
-                checked={selectedTools.jobAnalyzer}
-                onChange={() => toggleTool('jobAnalyzer')}
-              />
-              <span>Job Analyzer</span>
+              <span>LinkedIn (headline & summary)</span>
             </label>
           </div>
 
