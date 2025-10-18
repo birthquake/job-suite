@@ -238,7 +238,7 @@ function PricingSection() {
         }}>
           <h3 style={{ marginTop: 0 }}>Free</h3>
           <div className="price" style={{ fontSize: '2rem', margin: '1.5rem 0' }}>
-            $0<span className="period" style={{ fontSize: '1rem' }}>/month</span>
+            $0
           </div>
           <p className="price-desc">3-application trial</p>
           
@@ -258,8 +258,6 @@ function PricingSection() {
               <li>✓ 3 applications total</li>
               <li>✓ All 4 tools included</li>
               <li>✓ Single PDF downloads</li>
-              <li>✓ Community support</li>
-              <li>✗ No priority support</li>
             </ul>
           </div>
           
@@ -313,7 +311,6 @@ function PricingSection() {
               <li>✓ $2.99 per application</li>
               <li>✓ All 4 tools included</li>
               <li>✓ No monthly commitment</li>
-              <li>✓ Priority support</li>
               <li>✓ Cancel anytime</li>
             </ul>
           </div>
@@ -369,7 +366,6 @@ function PricingSection() {
             }}>
               <li>✓ Unlimited applications</li>
               <li>✓ All 4 tools included</li>
-              <li>✓ Priority support</li>
               <li>✓ Cancel anytime</li>
               <li>✓ Best value</li>
             </ul>
