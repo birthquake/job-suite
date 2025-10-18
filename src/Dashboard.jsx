@@ -52,53 +52,43 @@ export function Dashboard({ onStartApplication }) {
   }
 
   const handleDownloadPackage = async (appId) => {
+    console.log('=== DOWNLOAD STARTED ===')
+    console.log('App ID:', appId)
+    
     try {
       setDownloadingId(appId)
+      console.log('Set downloading state')
+      
       const db = getFirestore()
+      console.log('Got Firestore instance')
       
       // Fetch fresh data from Firebase to ensure we have all outputs
       const docRef = doc(db, 'applications', appId)
+      console.log('Created doc reference:', docRef)
+      
       const docSnap = await getDoc(docRef)
+      console.log('Got doc snapshot, exists:', docSnap.exists())
       
       if (!docSnap.exists()) {
-        throw new Error('Application not found')
+        throw new Error('Application document not found in Firebase')
       }
 
       const appData = docSnap.data()
-      console.log('Full application data from Firebase:', appData)
-      console.log('Outputs structure:', appData.outputs)
+      console.log('=== FULL APP DATA ===', appData)
+      console.log('=== OUTPUTS FIELD ===', appData.outputs)
 
-      // Verify outputs exist and are populated
-      if (!appData.outputs) {
-        throw new Error('No outputs found for this application')
-      }
-
-      // Check if outputs are nested in another outputs property (fix for potential double-nesting)
-      let outputs = appData.outputs
-      if (outputs.outputs && !outputs.resume && !outputs.coverLetter) {
-        outputs = outputs.outputs
-        console.log('Detected nested outputs, using flattened version:', outputs)
-      }
-
-      // Create normalized application object for PDF generator
-      const normalizedApp = {
-        ...appData,
-        outputs: outputs
-      }
-
-      console.log('Normalized app object to send to PDF generator:', normalizedApp)
-
-      // Verify at least some outputs exist
-      const hasOutputs = outputs.resume || outputs.coverLetter || outputs.interviewPrep || outputs.linkedin || outputs.jobAnalyzer
-      if (!hasOutputs) {
-        console.warn('Warning: No individual outputs found', outputs)
-      }
-
-      generateApplicationPackagePDF(normalizedApp)
+      // Just pass the app data directly with all fields
+      console.log('Calling PDF generator with:', appData)
+      generateApplicationPackagePDF(appData)
+      console.log('PDF generator called successfully')
+      
     } catch (error) {
-      console.error('Error generating PDF:', error)
+      console.error('=== ERROR IN DOWNLOAD ===', error)
+      console.error('Error message:', error.message)
+      console.error('Error stack:', error.stack)
       alert(`Failed to generate PDF: ${error.message}`)
     } finally {
+      console.log('=== DOWNLOAD COMPLETED ===')
       setDownloadingId(null)
     }
   }
