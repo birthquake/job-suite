@@ -938,6 +938,18 @@ button {
   letter-spacing: 0.5px;
 }
 
+/* ===== PHASE 3: Stat Icons ===== */
+.stat-icon-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  transition: var(--transition-smooth);
+}
+
 /* Application Logger */
 .logger-container {
   max-width: 600px;
