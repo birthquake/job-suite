@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { AuthContext } from './AuthContext'
-import { getFirestore, collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore'
+import { getFirestore, collection, query, where, getDocs, updateDoc, doc, getDoc } from 'firebase/firestore'
 import { getUserTier } from './usageUtils'
 import { generateApplicationPackagePDF } from './PDFGenerator'
 
@@ -9,6 +9,7 @@ export function Dashboard({ onStartApplication }) {
   const [applications, setApplications] = useState([])
   const [loading, setLoading] = useState(true)
   const [userTier, setUserTier] = useState('free')
+  const [downloadingId, setDownloadingId] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,12 +51,55 @@ export function Dashboard({ onStartApplication }) {
     }
   }
 
-  const handleDownloadPackage = async (app) => {
+  const handleDownloadPackage = async (appId) => {
     try {
-      generateApplicationPackagePDF(app)
+      setDownloadingId(appId)
+      const db = getFirestore()
+      
+      // Fetch fresh data from Firebase to ensure we have all outputs
+      const docRef = doc(db, 'applications', appId)
+      const docSnap = await getDoc(docRef)
+      
+      if (!docSnap.exists()) {
+        throw new Error('Application not found')
+      }
+
+      const appData = docSnap.data()
+      console.log('Full application data from Firebase:', appData)
+      console.log('Outputs structure:', appData.outputs)
+
+      // Verify outputs exist and are populated
+      if (!appData.outputs) {
+        throw new Error('No outputs found for this application')
+      }
+
+      // Check if outputs are nested in another outputs property (fix for potential double-nesting)
+      let outputs = appData.outputs
+      if (outputs.outputs && !outputs.resume && !outputs.coverLetter) {
+        outputs = outputs.outputs
+        console.log('Detected nested outputs, using flattened version:', outputs)
+      }
+
+      // Create normalized application object for PDF generator
+      const normalizedApp = {
+        ...appData,
+        outputs: outputs
+      }
+
+      console.log('Normalized app object to send to PDF generator:', normalizedApp)
+
+      // Verify at least some outputs exist
+      const hasOutputs = outputs.resume || outputs.coverLetter || outputs.interviewPrep || outputs.linkedin || outputs.jobAnalyzer
+      if (!hasOutputs) {
+        console.warn('Warning: No individual outputs found', outputs)
+      }
+
+      generateApplicationPackagePDF(normalizedApp)
     } catch (error) {
       console.error('Error generating PDF:', error)
-      alert('Failed to generate PDF. Please try again.')
+      alert(`Failed to generate PDF: ${error.message}`)
+    } finally {
+      setDownloadingId(null)
     }
   }
 
@@ -289,10 +333,15 @@ export function Dashboard({ onStartApplication }) {
                 </div>
                 <div className="table-cell">
                   <button
-                    onClick={() => handleDownloadPackage(app)}
+                    onClick={() => handleDownloadPackage(app.id)}
+                    disabled={downloadingId === app.id}
                     className="download-btn"
+                    style={{
+                      opacity: downloadingId === app.id ? 0.6 : 1,
+                      cursor: downloadingId === app.id ? 'not-allowed' : 'pointer'
+                    }}
                   >
-                    ⬇ Package
+                    {downloadingId === app.id ? '⟳ Generating...' : '⬇ Package'}
                   </button>
                 </div>
               </div>
