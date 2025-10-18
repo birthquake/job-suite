@@ -2,7 +2,7 @@ import { useContext, useState } from 'react'
 import { AuthContext } from './AuthContext'
 import { Help } from './Help'
 
-export function Navbar() {
+export function Navbar({ onSignInClick }) {
   const { user, signOut } = useContext(AuthContext)
   const [showHelp, setShowHelp] = useState(false)
 
@@ -62,31 +62,62 @@ export function Navbar() {
           Help
         </button>
 
-        {/* User email */}
-        <span style={{
-          color: '#9ca3af',
-          fontSize: '0.95rem'
-        }}>
-          {user?.email}
-        </span>
+        {/* Conditional: Sign In or User Info + Sign Out */}
+        {!user ? (
+          <button
+            onClick={onSignInClick}
+            style={{
+              background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '0.5rem 1.25rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '0.95rem',
+              fontWeight: '600',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 2px 6px rgba(96, 165, 250, 0.2)'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.transform = 'translateY(-1px)'
+              e.target.style.boxShadow = '0 4px 12px rgba(96, 165, 250, 0.3)'
+            }}
+            onMouseOut={(e) => {
+              e.target.style.transform = 'translateY(0)'
+              e.target.style.boxShadow = '0 2px 6px rgba(96, 165, 250, 0.2)'
+            }}
+          >
+            Sign In
+          </button>
+        ) : (
+          <>
+            {/* User email */}
+            <span style={{
+              color: '#9ca3af',
+              fontSize: '0.95rem'
+            }}>
+              {user?.email}
+            </span>
 
-        {/* Sign out button */}
-        <button
-          onClick={signOut}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#9ca3af',
-            cursor: 'pointer',
-            fontSize: '0.95rem',
-            transition: 'color 0.2s ease',
-            padding: 0
-          }}
-          onMouseOver={(e) => e.target.style.color = '#ef4444'}
-          onMouseOut={(e) => e.target.style.color = '#9ca3af'}
-        >
-          Sign Out
-        </button>
+            {/* Sign out button */}
+            <button
+              onClick={signOut}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#9ca3af',
+                cursor: 'pointer',
+                fontSize: '0.95rem',
+                transition: 'color 0.2s ease',
+                padding: 0
+              }}
+              onMouseOver={(e) => e.target.style.color = '#ef4444'}
+              onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+            >
+              Sign Out
+            </button>
+          </>
+        )}
       </div>
     </nav>
   )
