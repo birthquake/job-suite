@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
+import { FileText, MessageSquare, CheckCircle, Hourglass } from 'lucide-react'
 import { AuthContext } from './AuthContext'
 import { getFirestore, collection, query, where, getDocs, updateDoc, doc, getDoc } from 'firebase/firestore'
 import { getUserTier } from './usageUtils'
@@ -11,6 +12,7 @@ export function Dashboard({ onStartApplication }) {
   const [userTier, setUserTier] = useState('free')
   const [downloadingId, setDownloadingId] = useState(null)
   const [sortDirection, setSortDirection] = useState('desc') // 'asc' or 'desc'
+  const [displayedStats, setDisplayedStats] = useState({ apps: 0, callbacks: 0, pending: 0 })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,6 +41,40 @@ export function Dashboard({ onStartApplication }) {
 
     fetchData()
   }, [user])
+
+  // Animate stat counters on mount
+  useEffect(() => {
+    const totalApps = applications.length
+    const callbacks = applications.filter((a) => a.callbackReceived).length
+    const pending = applications.filter((a) => a.status === 'applied').length
+
+    const animationDuration = 600
+    const steps = 30
+    const stepDuration = animationDuration / steps
+
+    let currentStep = 0
+    const interval = setInterval(() => {
+      currentStep++
+      const progress = currentStep / steps
+
+      setDisplayedStats({
+        apps: Math.floor(totalApps * progress),
+        callbacks: Math.floor(callbacks * progress),
+        pending: Math.floor(pending * progress)
+      })
+
+      if (currentStep >= steps) {
+        setDisplayedStats({
+          apps: totalApps,
+          callbacks: callbacks,
+          pending: pending
+        })
+        clearInterval(interval)
+      }
+    }, stepDuration)
+
+    return () => clearInterval(interval)
+  }, [applications])
 
   const handleUpdateStatus = async (appId, status) => {
     try {
@@ -146,6 +182,7 @@ export function Dashboard({ onStartApplication }) {
   const totalApps = applications.length
   const callbacks = applications.filter((a) => a.callbackReceived).length
   const successRate = totalApps > 0 ? Math.round((callbacks / totalApps) * 100) : 0
+  const pending = applications.filter((a) => a.status === 'applied').length
 
   return (
     <div className="dashboard-container">
@@ -165,20 +202,39 @@ export function Dashboard({ onStartApplication }) {
       {/* Stats */}
       <div className="usage-stats">
         <div className="stats-row">
+          {/* Total Applications */}
           <div className="stat-item">
-            <div className="stat-value">{totalApps}</div>
+            <div className="stat-icon-container" style={{ background: 'rgba(96, 165, 250, 0.1)' }}>
+              <FileText size={24} color="#60a5fa" strokeWidth={1.5} />
+            </div>
+            <div className="stat-value">{displayedStats.apps}</div>
             <div className="stat-label">Total Applications</div>
           </div>
+
+          {/* Callbacks */}
           <div className="stat-item">
-            <div className="stat-value">{callbacks}</div>
+            <div className="stat-icon-container" style={{ background: 'rgba(34, 197, 94, 0.1)' }}>
+              <MessageSquare size={24} color="#22c55e" strokeWidth={1.5} />
+            </div>
+            <div className="stat-value">{displayedStats.callbacks}</div>
             <div className="stat-label">Callbacks</div>
           </div>
+
+          {/* Success Rate */}
           <div className="stat-item">
+            <div className="stat-icon-container" style={{ background: 'rgba(168, 85, 247, 0.1)' }}>
+              <CheckCircle size={24} color="#a855f7" strokeWidth={1.5} />
+            </div>
             <div className="stat-value">{successRate}%</div>
             <div className="stat-label">Success Rate</div>
           </div>
+
+          {/* Pending Responses */}
           <div className="stat-item">
-            <div className="stat-value">{applications.filter((a) => a.status === 'applied').length}</div>
+            <div className="stat-icon-container" style={{ background: 'rgba(251, 146, 60, 0.1)' }}>
+              <Hourglass size={24} color="#fb923c" strokeWidth={1.5} />
+            </div>
+            <div className="stat-value">{displayedStats.pending}</div>
             <div className="stat-label">Pending Responses</div>
           </div>
         </div>
