@@ -10,6 +10,7 @@ export function Dashboard({ onStartApplication }) {
   const [loading, setLoading] = useState(true)
   const [userTier, setUserTier] = useState('free')
   const [downloadingId, setDownloadingId] = useState(null)
+  const [sortDirection, setSortDirection] = useState('desc') // 'asc' or 'desc'
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,6 +50,24 @@ export function Dashboard({ onStartApplication }) {
     } catch (error) {
       console.error('Error updating status:', error)
     }
+  }
+
+  const handleSortByDate = () => {
+    setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')
+  }
+
+  const getSortedApplications = () => {
+    const sorted = [...applications].sort((a, b) => {
+      const dateA = new Date(a.dateApplied)
+      const dateB = new Date(b.dateApplied)
+      
+      if (sortDirection === 'asc') {
+        return dateA - dateB
+      } else {
+        return dateB - dateA
+      }
+    })
+    return sorted
   }
 
   const handleDownloadPackage = async (appId) => {
@@ -179,85 +198,28 @@ export function Dashboard({ onStartApplication }) {
               marginBottom: '2rem'
             }}>
               {/* Step 1 */}
-              <div style={{
-                background: '#1a1f2e',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                border: '2px solid #1a1f2e'
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  marginBottom: '1rem',
-                  margin: '0 auto 1rem'
-                }}>
-                  1
-                </div>
-                <h4 style={{ color: '#ffffff', marginBottom: '0.5rem' }}>Create Application</h4>
-                <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>
+              <div className="step-card">
+                <div className="step-card-number">1</div>
+                <h4>Create Application</h4>
+                <p>
                   Paste the job description and your resume
                 </p>
               </div>
 
               {/* Step 2 */}
-              <div style={{
-                background: '#1a1f2e',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                border: '2px solid #1a1f2e'
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  marginBottom: '1rem',
-                  margin: '0 auto 1rem'
-                }}>
-                  2
-                </div>
-                <h4 style={{ color: '#ffffff', marginBottom: '0.5rem' }}>Select Tools</h4>
-                <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>
+              <div className="step-card">
+                <div className="step-card-number">2</div>
+                <h4>Select Tools</h4>
+                <p>
                   Choose resume, cover letter, interview prep, and more
                 </p>
               </div>
 
               {/* Step 3 */}
-              <div style={{
-                background: '#1a1f2e',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                border: '2px solid #1a1f2e'
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  marginBottom: '1rem',
-                  margin: '0 auto 1rem'
-                }}>
-                  3
-                </div>
-                <h4 style={{ color: '#ffffff', marginBottom: '0.5rem' }}>Download Package</h4>
-                <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>
+              <div className="step-card">
+                <div className="step-card-number">3</div>
+                <h4>Download Package</h4>
+                <p>
                   Get all your materials in one complete package
                 </p>
               </div>
@@ -296,13 +258,30 @@ export function Dashboard({ onStartApplication }) {
           <div className="applications-table">
             <div className="table-header">
               <div>Company & Role</div>
-              <div>Date Applied</div>
+              <div 
+                onClick={handleSortByDate}
+                style={{
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  userSelect: 'none',
+                  transition: 'color 0.2s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.color = '#60a5fa'}
+                onMouseLeave={(e) => e.currentTarget.style.color = '#ffffff'}
+              >
+                Date Applied
+                <span style={{ fontSize: '0.9rem', opacity: 0.7 }}>
+                  {sortDirection === 'desc' ? '↓' : '↑'}
+                </span>
+              </div>
               <div>Status</div>
               <div>Tools Used</div>
               <div>Actions</div>
             </div>
 
-            {applications.map((app) => (
+            {getSortedApplications().map((app) => (
               <div key={app.id} className="table-row">
                 <div className="table-cell">
                   <div style={{ fontWeight: '600' }}>{app.company}</div>
