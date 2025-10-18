@@ -44,8 +44,8 @@ export function Dashboard({ onStartApplication }) {
     try {
       const db = getFirestore()
       
-      // Determine if this status counts as a callback
-      const callbackReceived = status !== 'applied'
+      // Only count "interviewed" and "offer" as successful callbacks
+      const callbackReceived = status === 'interviewed' || status === 'offer'
       
       // Update Firebase
       await updateDoc(doc(db, 'applications', appId), { 
