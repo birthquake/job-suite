@@ -222,40 +222,51 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
   if (!isOpen) return null
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background: 'rgba(10, 14, 23, 0.7)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000,
-      backdropFilter: 'blur(10px)',
-      WebkitBackdropFilter: 'blur(10px)',
-      animation: 'fadeIn 0.3s ease-out'
-    }}>
+    <div 
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(10, 14, 23, 0.7)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        animation: 'fadeIn 0.3s ease-out'
+      }}
+      onClick={(e) => {
+        // Close modal if clicking outside the modal box
+        if (e.target === e.currentTarget) {
+          onClose()
+        }
+      }}
+    >
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
         }
       `}</style>
-      <div style={{
-        background: 'rgba(15, 20, 25, 0.8)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderRadius: '12px',
-        padding: '2rem',
-        width: '100%',
-        maxWidth: '400px',
-        position: 'relative',
-        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-        border: '1px solid rgba(96, 165, 250, 0.1)',
-        transition: 'all 0.3s ease'
-      }}>
+      <div 
+        style={{
+          background: 'rgba(15, 20, 25, 0.8)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          borderRadius: '12px',
+          padding: '2rem',
+          width: '100%',
+          maxWidth: '400px',
+          position: 'relative',
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
+          border: '1px solid rgba(96, 165, 250, 0.1)',
+          transition: 'all 0.3s ease'
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -321,13 +332,6 @@ function AppContent() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
-
-  // Default to light mode on landing page
-  useEffect(() => {
-    if (!user) {
-      localStorage.setItem('elevaitr-theme', 'light')
-    }
-  }, [user])
 
   // Close auth modal when user state changes
   useEffect(() => {
