@@ -110,8 +110,6 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
   }
 
   const handleUpgrade = (plan) => {
-    // For now, redirect to Lemonsqueezy
-    // We'll add this in the next step
     window.location.href = plan === 'subscription' 
       ? 'https://elevaitr.lemonsqueezy.com/checkout/monthly'
       : 'https://elevaitr.lemonsqueezy.com/checkout/pay-per-use'
@@ -204,7 +202,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
         <div className="logger-content">
           <h3>Select Your Package Tools</h3>
           <p className="tool-instruction">
-            Select the tools you'd like to include in your application package. All selected tools will be combined into a single PDF. This will take a few moments to process.
+            Select the tools you'd like to include in your application package. All selected tools will be combined into a single PDF.
           </p>
 
           <div className="tools-checklist">
@@ -214,7 +212,12 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.resume}
                 onChange={() => toggleTool('resume')}
               />
-              <span>Resume (ATS-optimized)</span>
+              <div>
+                <span style={{ fontWeight: '600', display: 'block' }}>Resume (ATS-optimized)</span>
+                <p style={{ fontSize: '0.85rem', color: '#9ca3af', marginTop: '0.25rem', marginBottom: 0 }}>
+                  Enhances your existing experience with stronger language and ATS compatibility. Won't fabricate achievements.
+                </p>
+              </div>
             </label>
 
             <label className="checkbox-item">
@@ -223,7 +226,12 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.coverLetter}
                 onChange={() => toggleTool('coverLetter')}
               />
-              <span>Cover Letter (customized)</span>
+              <div>
+                <span style={{ fontWeight: '600', display: 'block' }}>Cover Letter (customized)</span>
+                <p style={{ fontSize: '0.85rem', color: '#9ca3af', marginTop: '0.25rem', marginBottom: 0 }}>
+                  Creates a personalized letter based on your actual resume. Works best with relevant experience for the role.
+                </p>
+              </div>
             </label>
 
             <label className="checkbox-item">
@@ -232,7 +240,12 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.interviewPrep}
                 onChange={() => toggleTool('interviewPrep')}
               />
-              <span>Interview Prep (10 Q&A)</span>
+              <div>
+                <span style={{ fontWeight: '600', display: 'block' }}>Interview Prep (10 Q&A)</span>
+                <p style={{ fontSize: '0.85rem', color: '#9ca3af', marginTop: '0.25rem', marginBottom: 0 }}>
+                  Generates realistic interview questions with talking points grounded in your actual experience.
+                </p>
+              </div>
             </label>
 
             <label className="checkbox-item">
@@ -241,7 +254,12 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
                 checked={selectedTools.linkedin}
                 onChange={() => toggleTool('linkedin')}
               />
-              <span>LinkedIn (headline & summary)</span>
+              <div>
+                <span style={{ fontWeight: '600', display: 'block' }}>LinkedIn (headline & summary)</span>
+                <p style={{ fontSize: '0.85rem', color: '#9ca3af', marginTop: '0.25rem', marginBottom: 0 }}>
+                  Tailored profile copy for this specific opportunity. Uses only information from your resume.
+                </p>
+              </div>
             </label>
           </div>
 
