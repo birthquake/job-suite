@@ -278,6 +278,59 @@ button {
   }
 }
 
+/* ===== CARD POLISH: Step Cards (Empty State) ===== */
+.step-card {
+  background: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 2px solid #2d3748;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-subtle);
+}
+
+.step-card:hover {
+  border-color: #60a5fa;
+  background: linear-gradient(135deg, #1f2a3d 0%, #1a1f2e 100%);
+  box-shadow: 0 8px 20px rgba(96, 165, 250, 0.12);
+  transform: var(--lift-small);
+}
+
+.step-card-number {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-subtle);
+}
+
+.step-card:hover .step-card-number {
+  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+  transform: scale(1.05);
+}
+
+.step-card h4 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.step-card p {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
 /* Footer */
 .footer {
   text-align: center;
