@@ -43,9 +43,19 @@ export function Dashboard({ onStartApplication }) {
   const handleUpdateStatus = async (appId, status) => {
     try {
       const db = getFirestore()
-      await updateDoc(doc(db, 'applications', appId), { status })
+      
+      // Determine if this status counts as a callback
+      const callbackReceived = status !== 'applied'
+      
+      // Update Firebase
+      await updateDoc(doc(db, 'applications', appId), { 
+        status,
+        callbackReceived
+      })
+      
+      // Update local state
       setApplications((prev) =>
-        prev.map((app) => (app.id === appId ? { ...app, status } : app))
+        prev.map((app) => (app.id === appId ? { ...app, status, callbackReceived } : app))
       )
     } catch (error) {
       console.error('Error updating status:', error)
