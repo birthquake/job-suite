@@ -22,8 +22,16 @@ export function Navbar() {
       alignItems: 'center',
       zIndex: 100
     }}>
-      {/* Logo */}
-      <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#60a5fa' }}>
+      {/* Logo - Gradient Text */}
+      <div style={{
+        fontSize: '1.5rem',
+        fontWeight: '700',
+        background: 'linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+        letterSpacing: '-0.5px'
+      }}>
         elevaitr
       </div>
 
