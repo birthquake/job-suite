@@ -420,11 +420,6 @@ function PricingSection() {
             <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>What happens if I exceed my free applications?</h4>
             <p style={{ color: 'var(--text-muted)', margin: 0 }}>You'll be prompted to upgrade. Your applications and progress are saved—no data loss.</p>
           </div>
-          
-          <div>
-            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Is there a refund policy?</h4>
-            <p style={{ color: 'var(--text-muted)', margin: 0 }}>We offer a 7-day money-back guarantee on all paid plans. No questions asked.</p>
-          </div>
         </div>
       </div>
     </section>
