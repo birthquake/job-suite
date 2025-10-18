@@ -47,7 +47,18 @@ export function Help({ onBack }) {
   ]
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0e17', color: '#e5e7eb', padding: '2rem' }}>
+    <div style={{ 
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      overflowY: 'auto',
+      background: '#0a0e17',
+      color: '#e5e7eb',
+      padding: '2rem',
+      zIndex: 50
+    }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
           <button
