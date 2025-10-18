@@ -19,6 +19,21 @@ button {
   font-family: inherit;
 }
 
+/* ===== CARD POLISH: Shadow System ===== */
+:root {
+  /* Shadow layers for depth */
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-emphasized: 0 8px 24px rgba(0, 0, 0, 0.45);
+  
+  /* Hover lift effect */
+  --lift-small: translateY(-2px);
+  --lift-medium: translateY(-4px);
+  
+  /* Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* App Wrapper */
 .app-wrapper {
   min-height: 100vh;
@@ -150,14 +165,15 @@ button {
   border-radius: 12px;
   padding: 1.5rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-smooth);
   text-align: center;
+  box-shadow: var(--shadow-subtle);
 }
 
 .tool-card:hover {
   border-color: #60a5fa;
   box-shadow: 0 10px 30px rgba(96, 165, 250, 0.15);
-  transform: translateY(-4px);
+  transform: var(--lift-medium);
   background: #1a1f2e;
 }
 
@@ -367,11 +383,11 @@ button {
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.2s ease;
+  transition: var(--transition-smooth);
 }
 
 .btn-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
+  transform: var(--lift-small);
   box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
 }
 
@@ -388,7 +404,7 @@ button {
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.2s ease;
+  transition: var(--transition-smooth);
 }
 
 .btn-secondary:hover {
@@ -469,11 +485,11 @@ button {
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.2s ease;
+  transition: var(--transition-smooth);
 }
 
 .auth-button:hover:not(:disabled) {
-  transform: translateY(-2px);
+  transform: var(--lift-small);
   box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
 }
 
@@ -510,7 +526,7 @@ button {
   color: #93c5fd;
 }
 
-/* Dashboard */
+/* ===== CARD POLISH: Dashboard Stats Cards ===== */
 .dashboard-container {
   max-width: 1000px;
   margin: 2rem auto;
@@ -537,11 +553,11 @@ button {
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.2s ease;
+  transition: var(--transition-smooth);
 }
 
 .new-app-btn:hover {
-  transform: translateY(-2px);
+  transform: var(--lift-small);
   box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
 }
 
@@ -550,6 +566,7 @@ button {
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid #1a1f2e;
+  box-shadow: var(--shadow-subtle);
 }
 
 .table-header {
@@ -562,12 +579,17 @@ button {
   border-bottom: 2px solid #2d3748;
 }
 
+/* ===== CARD POLISH: Table Row Cards ===== */
 .table-row {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr 1fr 0.8fr;
   padding: 1rem;
   border-bottom: 1px solid #1a1f2e;
   align-items: center;
+  transition: var(--transition-smooth);
+  border-radius: 8px;
+  margin: 0.5rem 0.5rem;
+  padding: 1rem 0.75rem;
 }
 
 .table-row:last-child {
@@ -575,7 +597,9 @@ button {
 }
 
 .table-row:hover {
-  background: #1a1f2e;
+  background: rgba(96, 165, 250, 0.05);
+  box-shadow: inset 0 0 8px rgba(96, 165, 250, 0.1);
+  border-radius: 8px;
 }
 
 .table-cell {
@@ -597,12 +621,19 @@ button {
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 600;
-  transition: all 0.2s ease;
+  transition: var(--transition-smooth);
 }
 
-.download-btn:hover {
+.download-btn:hover:not(:disabled) {
   background: #60a5fa;
   color: #0a0e17;
+  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
+  transform: var(--lift-small);
+}
+
+.download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .empty-state {
@@ -617,33 +648,75 @@ button {
   margin-bottom: 0.5rem;
 }
 
+/* ===== CARD POLISH: Stats Cards ===== */
 .usage-stats {
   background: #0f1419;
-  padding: 1.5rem;
+  padding: 2rem;
   border-radius: 12px;
   margin-top: 2rem;
   border: 1px solid #1a1f2e;
+  box-shadow: var(--shadow-subtle);
 }
 
 .stats-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .stat-item {
   text-align: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+  border-radius: 10px;
+  border: 1px solid #2d3748;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-subtle);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.stat-item:hover {
+  border-color: #60a5fa;
+  box-shadow: 0 8px 20px rgba(96, 165, 250, 0.1);
+  transform: var(--lift-small);
+}
+
+.stat-item:hover::before {
+  opacity: 1;
 }
 
 .stat-value {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: #60a5fa;
+  margin-bottom: 0.5rem;
+  transition: var(--transition-smooth);
+}
+
+.stat-item:hover .stat-value {
+  color: #93c5fd;
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.2);
 }
 
 .stat-label {
   color: #9ca3af;
   font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 /* Application Logger */
@@ -654,6 +727,7 @@ button {
   background: #0f1419;
   border-radius: 12px;
   border: 1px solid #1a1f2e;
+  box-shadow: var(--shadow-subtle);
 }
 
 .logger-header {
@@ -697,7 +771,7 @@ button {
   border-radius: 8px;
   font-family: inherit;
   font-size: 1rem;
-  transition: border-color 0.2s ease;
+  transition: var(--transition-smooth);
   background: #0a0e17;
   color: #ffffff;
 }
@@ -706,6 +780,7 @@ button {
 .form-textarea:focus {
   outline: none;
   border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
 }
 
 .form-input::placeholder,
@@ -733,6 +808,7 @@ button {
   margin-bottom: 1.5rem;
 }
 
+/* ===== CARD POLISH: Tool Selection Cards ===== */
 .tools-checklist {
   display: flex;
   flex-direction: column;
@@ -742,16 +818,22 @@ button {
 
 .checkbox-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
   cursor: pointer;
-  padding: 0.75rem;
-  border-radius: 8px;
-  transition: background 0.2s ease;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  border: 2px solid #2d3748;
+  background: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-subtle);
 }
 
 .checkbox-item:hover {
-  background: #1a1f2e;
+  border-color: #60a5fa;
+  background: linear-gradient(135deg, #1f2a3d 0%, #1a1f2e 100%);
+  box-shadow: 0 6px 16px rgba(96, 165, 250, 0.12);
+  transform: var(--lift-small);
 }
 
 .checkbox-item input {
@@ -759,11 +841,31 @@ button {
   width: 18px;
   height: 18px;
   accent-color: #60a5fa;
+  margin-top: 2px;
+  flex-shrink: 0;
+  transition: var(--transition-smooth);
+}
+
+.checkbox-item input:hover {
+  filter: brightness(1.2);
+}
+
+.checkbox-item input:checked {
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
 }
 
 .checkbox-item span {
   color: #e5e7eb;
   font-weight: 500;
+  display: block;
+}
+
+.checkbox-item p {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0;
+  line-height: 1.5;
 }
 
 /* Paywall */
@@ -832,24 +934,32 @@ button {
   }
 }
 
+/* ===== CARD POLISH: Price Cards ===== */
 .price-card {
   border: 2px solid #1a1f2e;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 1.5rem;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: var(--transition-smooth);
   background: #0a0e17;
+  box-shadow: var(--shadow-subtle);
 }
 
 .price-card:hover {
   border-color: #60a5fa;
-  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.15);
+  box-shadow: 0 8px 24px rgba(96, 165, 250, 0.15);
+  transform: var(--lift-small);
 }
 
 .price-card.featured {
   border-color: #60a5fa;
   background: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
   position: relative;
+  box-shadow: 0 12px 32px rgba(96, 165, 250, 0.2);
+}
+
+.price-card.featured:hover {
+  box-shadow: 0 16px 40px rgba(96, 165, 250, 0.25);
 }
 
 .price-card .badge {
@@ -863,6 +973,7 @@ button {
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
+  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
 }
 
 .price-card h3 {
@@ -898,11 +1009,12 @@ button {
   color: #e5e7eb;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-smooth);
 }
 
 .upgrade-btn:hover:not(:disabled) {
   background: #2d3748;
+  transform: var(--lift-small);
 }
 
 .upgrade-btn:disabled {
@@ -917,6 +1029,7 @@ button {
 
 .upgrade-btn.featured-btn:hover:not(:disabled) {
   box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+  transform: var(--lift-small);
 }
 
 .paywall-footer {
@@ -996,5 +1109,14 @@ button {
 
   .tool-container {
     grid-template-columns: 1fr;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .checkbox-item {
+    padding: 0.75rem 1rem;
   }
 }
