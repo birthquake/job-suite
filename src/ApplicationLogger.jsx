@@ -204,7 +204,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
         <div className="logger-content">
           <h3>Select Your Package Tools</h3>
           <p className="tool-instruction">
-            Select the tools you'd like to include in your application package. All selected tools will be combined into a single PDF.
+            Select the tools you'd like to include in your application package. All selected tools will be combined into a single PDF. This will take a few moments to process.
           </p>
 
           <div className="tools-checklist">
