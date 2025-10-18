@@ -122,6 +122,7 @@ CRITICAL RULES:
 - Only suggest answers based on what's in the resume
 - Do NOT fabricate experience or skills
 - Focus on realistic questions that interviewers would actually ask
+- Make answer guidance practical and conversational
 
 Job Description:
 ${jobDescription}
@@ -129,23 +130,56 @@ ${jobDescription}
 Resume:
 ${resume}
 
-Generate exactly 10 interview questions with answer frameworks.
+Generate exactly 10 interview questions with suggested talking points for answers.
 
 Format as:
 Question 1: [question]
-Answer: [framework]
+Key Points to Mention: [practical points the candidate should discuss based on their resume]
 
 Question 2: [question]
-Answer: [framework]
+Key Points to Mention: [practical points]
 
 ...and so on for all 10 questions.
 
-Return the questions and frameworks only:`,
+Return the questions and talking points only:`,
         },
       ])
       outputs.interviewPrep = result
     } catch (err) {
       errors.interviewPrep = 'Failed to generate interview prep'
+    }
+  }
+
+  if (tools.includes('linkedin')) {
+    try {
+      const result = await callClaude([
+        {
+          role: 'user',
+          content: `You are a LinkedIn profile optimization expert. Analyze this resume and suggest a compelling LinkedIn profile summary and headline that aligns with the job target.
+
+CRITICAL RULES:
+- Only use information from the provided resume
+- Do NOT invent skills, experiences, or achievements
+- Make it authentic and compelling
+- Focus on what would appeal to recruiters for this type of role
+
+Job Target (from Job Description):
+${jobDescription}
+
+Resume:
+${resume}
+
+Provide:
+1. LinkedIn Headline (120 characters max)
+2. Professional Summary (2-3 sentences, 200 words max)
+3. 3-5 key skills to highlight on profile
+
+Return only these three components:`,
+        },
+      ])
+      outputs.linkedin = result
+    } catch (err) {
+      errors.linkedin = 'Failed to optimize LinkedIn profile'
     }
   }
 
