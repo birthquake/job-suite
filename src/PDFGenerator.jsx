@@ -17,7 +17,6 @@ export function generateApplicationPackagePDF(application) {
     } else {
       doc.setFont(undefined, 'normal')
     }
-
     const lines = doc.splitTextToSize(text, contentWidth)
     lines.forEach((line) => {
       if (yPosition > pageHeight - margin) {
@@ -29,22 +28,25 @@ export function generateApplicationPackagePDF(application) {
     })
   }
 
-  // Helper function to add a section
-  const addSection = (title) => {
-    yPosition += 5
-    if (yPosition > pageHeight - margin - 10) {
+  // Helper function to add a section with page break
+  const addSection = (title, startNewPage = false) => {
+    if (startNewPage) {
       doc.addPage()
       yPosition = margin
+    } else {
+      yPosition += 5
+      if (yPosition > pageHeight - margin - 10) {
+        doc.addPage()
+        yPosition = margin
+      }
     }
     addWrappedText(title, 14, true, [59, 130, 246])
     yPosition += 2
   }
 
-  // Header
+  // Cover Page
   addWrappedText('elevaitr Application Package', 16, true, [59, 130, 246])
   yPosition += 3
-
-  // Application Details
   addWrappedText(`${application.company} - ${application.jobTitle}`, 12, true)
   addWrappedText(`Applied: ${new Date(application.dateApplied).toLocaleDateString()}`, 10, false, [100, 100, 100])
   yPosition += 5
@@ -55,34 +57,36 @@ export function generateApplicationPackagePDF(application) {
     addWrappedText(application.jobDescription, 10, false)
   }
 
-  // Resume
+  // Resume - NEW PAGE
   if (application.outputs?.resume) {
-    addSection('Optimized Resume')
+    addSection('Optimized Resume', true)
     addWrappedText(application.outputs.resume, 10, false)
   }
 
-  // Cover Letter
+  // Cover Letter - NEW PAGE
   if (application.outputs?.coverLetter) {
-    addSection('Cover Letter')
+    addSection('Cover Letter', true)
     addWrappedText(application.outputs.coverLetter, 10, false)
   }
 
-  // Interview Prep
+  // Interview Prep - NEW PAGE
   if (application.outputs?.interviewPrep) {
-    addSection('Interview Preparation')
+    addSection('Interview Preparation', true)
     addWrappedText(application.outputs.interviewPrep, 10, false)
   }
 
-  // LinkedIn Profile
-  if (application.outputs?.linkedin) {
-    addSection('LinkedIn Profile Optimization')
-    addWrappedText(application.outputs.linkedin, 10, false)
+  // LinkedIn Profile - NEW PAGE
+  if (application.outputs?.linkedin || application.outputs?.linkedinProfile) {
+    const linkedinContent = application.outputs.linkedin || application.outputs.linkedinProfile
+    addSection('LinkedIn Profile Optimization', true)
+    addWrappedText(linkedinContent, 10, false)
   }
 
-  // Job Analysis
-  if (application.outputs?.jobAnalysis) {
-    addSection('Job Analysis')
-    addWrappedText(application.outputs.jobAnalysis, 10, false)
+  // Job Analysis - NEW PAGE
+  if (application.outputs?.jobAnalysis || application.outputs?.jobAnalyzer) {
+    const analysisContent = application.outputs.jobAnalysis || application.outputs.jobAnalyzer
+    addSection('Job Analysis', true)
+    addWrappedText(analysisContent, 10, false)
   }
 
   // Footer
