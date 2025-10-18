@@ -217,26 +217,104 @@ function LandingPage() {
   )
 }
 
+// Auth Modal Component
+function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
+  if (!isOpen) return null
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'rgba(10, 14, 23, 0.9)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000,
+      backdropFilter: 'blur(4px)'
+    }}>
+      <div style={{
+        background: '#0f1419',
+        borderRadius: '12px',
+        padding: '2rem',
+        width: '100%',
+        maxWidth: '400px',
+        position: 'relative',
+        boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
+        border: '1px solid #1a1f2e'
+      }}>
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: '1.5rem',
+            right: '1.5rem',
+            background: 'none',
+            border: 'none',
+            color: '#9ca3af',
+            cursor: 'pointer',
+            fontSize: '1.5rem',
+            transition: 'color 0.2s ease',
+            padding: 0
+          }}
+          onMouseOver={(e) => e.target.style.color = '#ef4444'}
+          onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+        >
+          ✕
+        </button>
+
+        {/* Gradient Logo */}
+        <div style={{
+          textAlign: 'center',
+          marginBottom: '2rem',
+          fontSize: '1.5rem',
+          fontWeight: '700',
+          background: 'linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          letterSpacing: '-0.5px'
+        }}>
+          elevaitr
+        </div>
+
+        {/* Auth Form */}
+        {authPage === 'login' ? (
+          <LoginPage onSignUpClick={() => onAuthPageChange('signup')} />
+        ) : (
+          <SignUpPage onLoginClick={() => onAuthPageChange('login')} />
+        )}
+      </div>
+    </div>
+  )
+}
+
 // Main App Component
 export default function App() {
   const { user, loading } = useContext(AuthContext)
   const [currentPage, setCurrentPage] = useState('dashboard')
   const [authPage, setAuthPage] = useState('login')
+  const [showAuthModal, setShowAuthModal] = useState(false)
 
   if (loading) {
     return <div className="loading-container"><p>Loading...</p></div>
   }
 
-  // Not logged in - show landing page + auth
+  // Not logged in - show landing page with navbar and auth modal
   if (!user) {
     return (
       <>
+        <Navbar onSignInClick={() => setShowAuthModal(true)} />
         <LandingPage />
-        {authPage === 'login' ? (
-          <LoginPage onSignUpClick={() => setAuthPage('signup')} />
-        ) : (
-          <SignUpPage onLoginClick={() => setAuthPage('login')} />
-        )}
+        <AuthModal
+          isOpen={showAuthModal}
+          authPage={authPage}
+          onAuthPageChange={setAuthPage}
+          onClose={() => setShowAuthModal(false)}
+        />
       </>
     )
   }
@@ -244,7 +322,7 @@ export default function App() {
   // User is logged in - application workflow
   return (
     <div className="app-wrapper">
-      <Navbar currentPage={currentPage} onNavigate={setCurrentPage} />
+      <Navbar />
       
       <div className="app">
         {currentPage === 'dashboard' && (
