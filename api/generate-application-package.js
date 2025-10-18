@@ -18,6 +18,21 @@ export default async function handler(req, res) {
   const outputs = {}
   const errors = {}
 
+  // Helper function to normalize text (remove extra line breaks and whitespace)
+  const normalizeText = (text) => {
+    return text
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0)
+      .join('\n')
+      .replace(/\s+/g, ' ')
+      .trim()
+  }
+
+  // Normalize inputs
+  const normalizedJobDescription = normalizeText(jobDescription)
+  const normalizedResume = normalizeText(resume)
+
   // Helper function to call Claude
   const callClaude = async (messages) => {
     try {
@@ -64,7 +79,7 @@ CRITICAL RULES:
 
 Here is the resume:
 
-${resume}
+${normalizedResume}
 
 Return ONLY the optimized resume text:`,
         },
@@ -89,10 +104,10 @@ CRITICAL RULES:
 - Only use information explicitly stated in the resume
 
 Job Description:
-${jobDescription}
+${normalizedJobDescription}
 
 Resume:
-${resume}
+${normalizedResume}
 
 Write a professional cover letter that:
 1. Opens with genuine interest in the specific role
@@ -125,10 +140,10 @@ CRITICAL RULES:
 - Make answer guidance practical and conversational
 
 Job Description:
-${jobDescription}
+${normalizedJobDescription}
 
 Resume:
-${resume}
+${normalizedResume}
 
 Generate exactly 10 interview questions with suggested talking points for answers.
 
@@ -164,10 +179,10 @@ CRITICAL RULES:
 - Focus on what would appeal to recruiters for this type of role
 
 Job Target (from Job Description):
-${jobDescription}
+${normalizedJobDescription}
 
 Resume:
-${resume}
+${normalizedResume}
 
 Provide:
 1. LinkedIn Headline (120 characters max)
@@ -191,7 +206,7 @@ Return only these three components:`,
           content: `Analyze this job posting and break it down into strategic insights.
 
 Job Description:
-${jobDescription}
+${normalizedJobDescription}
 
 Analyze and provide:
 
