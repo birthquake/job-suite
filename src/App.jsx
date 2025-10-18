@@ -228,22 +228,33 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
       left: 0,
       right: 0,
       bottom: 0,
-      background: 'rgba(10, 14, 23, 0.9)',
+      background: 'rgba(10, 14, 23, 0.7)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 1000,
-      backdropFilter: 'blur(4px)'
+      backdropFilter: 'blur(10px)',
+      WebkitBackdropFilter: 'blur(10px)',
+      animation: 'fadeIn 0.3s ease-out'
     }}>
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
       <div style={{
-        background: 'var(--bg-secondary)',
+        background: 'rgba(15, 20, 25, 0.8)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
         borderRadius: '12px',
         padding: '2rem',
         width: '100%',
         maxWidth: '400px',
         position: 'relative',
         boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-        border: '1px solid var(--border-light)'
+        border: '1px solid rgba(96, 165, 250, 0.1)',
+        transition: 'all 0.3s ease'
       }}>
         {/* Close Button */}
         <button
@@ -257,11 +268,17 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
             color: 'var(--text-muted)',
             cursor: 'pointer',
             fontSize: '1.5rem',
-            transition: 'color 0.2s ease',
+            transition: 'all 0.2s ease',
             padding: 0
           }}
-          onMouseOver={(e) => e.target.style.color = '#ef4444'}
-          onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
+          onMouseOver={(e) => {
+            e.target.style.color = '#ef4444'
+            e.target.style.transform = 'scale(1.1)'
+          }}
+          onMouseOut={(e) => {
+            e.target.style.color = 'var(--text-muted)'
+            e.target.style.transform = 'scale(1)'
+          }}
         >
           ✕
         </button>
