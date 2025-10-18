@@ -129,7 +129,19 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* How It Works Section */}
+      {/* Stat Icon Container */
+.stat-icon-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  transition: var(--transition-smooth);
+}
+
+/* How It Works Section */}
       <section className="how-section" id="how" style={{ marginTop: '4rem', marginBottom: '4rem' }}>
         <h2 style={{ marginBottom: '3rem' }}>How It Works</h2>
         <div className="steps-wrapper">
