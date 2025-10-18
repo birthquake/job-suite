@@ -1,357 +1,101 @@
-import { useState, useContext, useEffect } from 'react'
-import { AuthContext } from './AuthContext'
-import { getFirestore, collection, query, where, getDocs, updateDoc, doc, getDoc } from 'firebase/firestore'
-import { getUserTier } from './usageUtils'
-import { generateApplicationPackagePDF } from './PDFGenerator'
+import { jsPDF } from 'jspdf'
 
-export function Dashboard({ onStartApplication }) {
-  const { user } = useContext(AuthContext)
-  const [applications, setApplications] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [userTier, setUserTier] = useState('free')
-  const [downloadingId, setDownloadingId] = useState(null)
+export function generateApplicationPackagePDF(application) {
+  const doc = new jsPDF()
+  const pageWidth = doc.internal.pageSize.getWidth()
+  const pageHeight = doc.internal.pageSize.getHeight()
+  const margin = 15
+  const contentWidth = pageWidth - 2 * margin
+  let yPosition = margin
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user) return
-
-      try {
-        // Fetch user tier
-        const tier = await getUserTier(user.uid)
-        setUserTier(tier)
-
-        // Fetch applications
-        const db = getFirestore()
-        const q = query(collection(db, 'applications'), where('userId', '==', user.uid))
-        const querySnapshot = await getDocs(q)
-        const apps = []
-        querySnapshot.forEach((doc) => {
-          apps.push({ id: doc.id, ...doc.data() })
-        })
-        setApplications(apps)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        setLoading(false)
+  // Helper function to add text with automatic line breaking
+  const addWrappedText = (text, fontSize, isBold = false, color = [0, 0, 0]) => {
+    doc.setFontSize(fontSize)
+    doc.setTextColor(...color)
+    if (isBold) {
+      doc.setFont(undefined, 'bold')
+    } else {
+      doc.setFont(undefined, 'normal')
+    }
+    const lines = doc.splitTextToSize(text, contentWidth)
+    lines.forEach((line) => {
+      if (yPosition > pageHeight - margin) {
+        doc.addPage()
+        yPosition = margin
       }
-    }
-
-    fetchData()
-  }, [user])
-
-  const handleUpdateStatus = async (appId, status) => {
-    try {
-      const db = getFirestore()
-      await updateDoc(doc(db, 'applications', appId), { status })
-      setApplications((prev) =>
-        prev.map((app) => (app.id === appId ? { ...app, status } : app))
-      )
-    } catch (error) {
-      console.error('Error updating status:', error)
-    }
+      doc.text(line, margin, yPosition)
+      yPosition += 5
+    })
   }
 
-  const handleDownloadPackage = async (appId) => {
-    console.log('=== DOWNLOAD STARTED ===')
-    console.log('App ID:', appId)
-    
-    try {
-      setDownloadingId(appId)
-      console.log('Set downloading state')
-      
-      const db = getFirestore()
-      console.log('Got Firestore instance')
-      
-      // Fetch fresh data from Firebase to ensure we have all outputs
-      const docRef = doc(db, 'applications', appId)
-      console.log('Created doc reference:', docRef)
-      
-      const docSnap = await getDoc(docRef)
-      console.log('Got doc snapshot, exists:', docSnap.exists())
-      
-      if (!docSnap.exists()) {
-        throw new Error('Application document not found in Firebase')
+  // Helper function to add a section with page break
+  const addSection = (title, startNewPage = false) => {
+    if (startNewPage) {
+      doc.addPage()
+      yPosition = margin
+    } else {
+      yPosition += 5
+      if (yPosition > pageHeight - margin - 10) {
+        doc.addPage()
+        yPosition = margin
       }
-
-      const appData = docSnap.data()
-      console.log('=== FULL APP DATA ===', appData)
-      console.log('=== OUTPUTS FIELD ===', appData.outputs)
-
-      // Fix double-nesting: outputs.outputs contains the actual content
-      let normalizedOutputs = appData.outputs
-      if (appData.outputs?.outputs && typeof appData.outputs.outputs === 'object') {
-        normalizedOutputs = appData.outputs.outputs
-        console.log('Flattened nested outputs structure')
-      }
-
-      // Create final app object with flattened outputs
-      const finalAppData = {
-        ...appData,
-        outputs: normalizedOutputs
-      }
-
-      console.log('=== FINAL APP DATA FOR PDF ===', finalAppData)
-      console.log('Calling PDF generator with:', finalAppData)
-      generateApplicationPackagePDF(finalAppData)
-      console.log('PDF generator called successfully')
-      
-    } catch (error) {
-      console.error('=== ERROR IN DOWNLOAD ===', error)
-      console.error('Error message:', error.message)
-      console.error('Error stack:', error.stack)
-      alert(`Failed to generate PDF: ${error.message}`)
-    } finally {
-      console.log('=== DOWNLOAD COMPLETED ===')
-      setDownloadingId(null)
     }
+    addWrappedText(title, 14, true, [59, 130, 246])
+    yPosition += 2
   }
 
-  if (loading) {
-    return (
-      <div className="dashboard-container">
-        <p>Loading your dashboard...</p>
-      </div>
-    )
+  // Cover Page
+  addWrappedText('elevaitr Application Package', 16, true, [59, 130, 246])
+  yPosition += 3
+  addWrappedText(`${application.company} - ${application.jobTitle}`, 12, true)
+  addWrappedText(`Applied: ${new Date(application.dateApplied).toLocaleDateString()}`, 10, false, [100, 100, 100])
+  yPosition += 5
+
+  // Job Description
+  if (application.jobDescription) {
+    addSection('Job Description')
+    addWrappedText(application.jobDescription, 10, false)
   }
 
-  const totalApps = applications.length
-  const callbacks = applications.filter((a) => a.callbackReceived).length
-  const successRate = totalApps > 0 ? Math.round((callbacks / totalApps) * 100) : 0
+  // Resume - NEW PAGE
+  if (application.outputs?.resume) {
+    addSection('Optimized Resume', true)
+    addWrappedText(application.outputs.resume, 10, false)
+  }
 
-  return (
-    <div className="dashboard-container">
-      {/* Header */}
-      <div className="dashboard-header">
-        <div>
-          <h2>elevaitr Dashboard</h2>
-          <p style={{ color: '#9ca3af', fontSize: '0.95rem', marginTop: '0.25rem' }}>
-            {userTier === 'premium' ? '✓ Premium' : 'Free tier'}
-          </p>
-        </div>
-        <button className="new-app-btn" onClick={onStartApplication}>
-          + New Application
-        </button>
-      </div>
+  // Cover Letter - NEW PAGE
+  if (application.outputs?.coverLetter) {
+    addSection('Cover Letter', true)
+    addWrappedText(application.outputs.coverLetter, 10, false)
+  }
 
-      {/* Stats */}
-      <div className="usage-stats">
-        <div className="stats-row">
-          <div className="stat-item">
-            <div className="stat-value">{totalApps}</div>
-            <div className="stat-label">Total Applications</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-value">{callbacks}</div>
-            <div className="stat-label">Callbacks</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-value">{successRate}%</div>
-            <div className="stat-label">Success Rate</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-value">{applications.filter((a) => a.status === 'applied').length}</div>
-            <div className="stat-label">Pending Responses</div>
-          </div>
-        </div>
-      </div>
+  // Interview Prep - NEW PAGE
+  if (application.outputs?.interviewPrep) {
+    addSection('Interview Preparation', true)
+    addWrappedText(application.outputs.interviewPrep, 10, false)
+  }
 
-      {/* Empty State - Getting Started */}
-      {totalApps === 0 ? (
-        <div style={{ marginTop: '2rem' }}>
-          <div style={{
-            background: '#0f1419',
-            border: '1px solid #1a1f2e',
-            borderRadius: '12px',
-            padding: '2rem',
-            textAlign: 'center'
-          }}>
-            <h3 style={{ fontSize: '1.3rem', marginBottom: '1rem', color: '#ffffff' }}>
-              Getting Started with elevaitr
-            </h3>
-            <p style={{ color: '#9ca3af', marginBottom: '2rem', lineHeight: '1.6' }}>
-              Ready to elevate your job applications? Here's how it works:
-            </p>
+  // LinkedIn Profile - NEW PAGE
+  if (application.outputs?.linkedin || application.outputs?.linkedinProfile) {
+    const linkedinContent = application.outputs.linkedin || application.outputs.linkedinProfile
+    addSection('LinkedIn Profile Optimization', true)
+    addWrappedText(linkedinContent, 10, false)
+  }
 
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '1.5rem',
-              marginBottom: '2rem'
-            }}>
-              {/* Step 1 */}
-              <div style={{
-                background: '#1a1f2e',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                border: '2px solid #1a1f2e'
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  marginBottom: '1rem',
-                  margin: '0 auto 1rem'
-                }}>
-                  1
-                </div>
-                <h4 style={{ color: '#ffffff', marginBottom: '0.5rem' }}>Create Application</h4>
-                <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>
-                  Paste the job description and your resume
-                </p>
-              </div>
+  // Job Analysis - NEW PAGE
+  if (application.outputs?.jobAnalysis || application.outputs?.jobAnalyzer) {
+    const analysisContent = application.outputs.jobAnalysis || application.outputs.jobAnalyzer
+    addSection('Job Analysis', true)
+    addWrappedText(analysisContent, 10, false)
+  }
 
-              {/* Step 2 */}
-              <div style={{
-                background: '#1a1f2e',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                border: '2px solid #1a1f2e'
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  marginBottom: '1rem',
-                  margin: '0 auto 1rem'
-                }}>
-                  2
-                </div>
-                <h4 style={{ color: '#ffffff', marginBottom: '0.5rem' }}>Select Tools</h4>
-                <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>
-                  Choose resume, cover letter, interview prep, and more
-                </p>
-              </div>
+  // Footer
+  yPosition = pageHeight - 10
+  doc.setFontSize(8)
+  doc.setTextColor(150, 150, 150)
+  doc.text('Generated by elevaitr - Elevate Your Job Search', margin, yPosition)
 
-              {/* Step 3 */}
-              <div style={{
-                background: '#1a1f2e',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                border: '2px solid #1a1f2e'
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: 'bold',
-                  marginBottom: '1rem',
-                  margin: '0 auto 1rem'
-                }}>
-                  3
-                </div>
-                <h4 style={{ color: '#ffffff', marginBottom: '0.5rem' }}>Download Package</h4>
-                <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>
-                  Get all your materials in one complete package
-                </p>
-              </div>
-            </div>
-
-            <button 
-              onClick={onStartApplication}
-              style={{
-                background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-                color: 'white',
-                border: 'none',
-                padding: '0.75rem 2rem',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                fontSize: '1rem',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseOver={(e) => {
-                e.target.style.transform = 'translateY(-2px)'
-                e.target.style.boxShadow = '0 4px 12px rgba(96, 165, 250, 0.3)'
-              }}
-              onMouseOut={(e) => {
-                e.target.style.transform = 'translateY(0)'
-                e.target.style.boxShadow = 'none'
-              }}
-            >
-              Create Your First Application
-            </button>
-          </div>
-        </div>
-      ) : (
-        <>
-          {/* Applications Table */}
-          <h3 style={{ marginTop: '2rem', marginBottom: '1rem', color: '#ffffff' }}>Your Applications</h3>
-          <div className="applications-table">
-            <div className="table-header">
-              <div>Company & Role</div>
-              <div>Date Applied</div>
-              <div>Status</div>
-              <div>Tools Used</div>
-              <div>Actions</div>
-            </div>
-
-            {applications.map((app) => (
-              <div key={app.id} className="table-row">
-                <div className="table-cell">
-                  <div style={{ fontWeight: '600' }}>{app.company}</div>
-                  <div style={{ fontSize: '0.9rem', color: '#9ca3af' }}>{app.jobTitle}</div>
-                </div>
-                <div className="table-cell date">
-                  {new Date(app.dateApplied).toLocaleDateString()}
-                </div>
-                <div className="table-cell">
-                  <select
-                    value={app.status}
-                    onChange={(e) => handleUpdateStatus(app.id, e.target.value)}
-                    style={{
-                      background: '#1a1f2e',
-                      color: '#e5e7eb',
-                      border: '1px solid #2d3748',
-                      padding: '0.5rem',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontSize: '0.9rem'
-                    }}
-                  >
-                    <option value="applied">Applied</option>
-                    <option value="interviewed">Interviewed</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="offer">Offer</option>
-                  </select>
-                </div>
-                <div className="table-cell" style={{ fontSize: '0.85rem' }}>
-                  {app.toolsSelected?.join(', ')}
-                </div>
-                <div className="table-cell">
-                  <button
-                    onClick={() => handleDownloadPackage(app.id)}
-                    disabled={downloadingId === app.id}
-                    className="download-btn"
-                    style={{
-                      opacity: downloadingId === app.id ? 0.6 : 1,
-                      cursor: downloadingId === app.id ? 'not-allowed' : 'pointer'
-                    }}
-                  >
-                    {downloadingId === app.id ? '⟳ Generating...' : '⬇ Package'}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  )
+  // Save the PDF
+  const filename = `${application.company}-${application.jobTitle}-${new Date().toISOString().split('T')[0]}.pdf`
+  doc.save(filename)
 }
