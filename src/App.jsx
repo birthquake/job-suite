@@ -304,6 +304,11 @@ export default function App() {
     setShowAuthModal(false)
   }, [user])
 
+  // Scroll to top on page changes
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [user, currentPage])
+
   if (loading) {
     return <div className="loading-container"><p>Loading...</p></div>
   }
