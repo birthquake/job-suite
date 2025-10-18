@@ -3,7 +3,7 @@ import { AuthContext } from './AuthContext'
 import { Help } from './Help'
 
 export function Navbar() {
-  const { user, logout } = useContext(AuthContext)
+  const { user, signOut } = useContext(AuthContext)
   const [showHelp, setShowHelp] = useState(false)
 
   if (showHelp) {
@@ -72,7 +72,7 @@ export function Navbar() {
 
         {/* Sign out button */}
         <button
-          onClick={logout}
+          onClick={signOut}
           style={{
             background: 'none',
             border: 'none',
