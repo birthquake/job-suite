@@ -118,7 +118,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
       : 'https://elevaitr.lemonsqueezy.com/checkout/pay-per-use'
   }
 
-  // Loading overlay component
+  // Loading overlay component with micro-interactions
   const LoadingOverlay = () => (
     <div style={{
       position: 'fixed',
@@ -126,67 +126,90 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
       left: 0,
       right: 0,
       bottom: 0,
-      background: 'rgba(10, 14, 23, 0.9)',
+      background: 'rgba(10, 14, 23, 0.95)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 1000,
-      backdropFilter: 'blur(4px)'
+      backdropFilter: 'blur(8px)',
+      animation: 'fadeIn 0.3s ease-out'
     }}>
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        @keyframes progressPulse {
+          0% { transform: scaleX(0); transform-origin: left; }
+          50% { transform: scaleX(1); }
+          100% { transform: scaleX(0); transform-origin: right; }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
       <div style={{
-        textAlign: 'center'
+        textAlign: 'center',
+        maxWidth: '400px'
       }}>
         {/* Spinner */}
         <div style={{
-          width: '50px',
-          height: '50px',
-          margin: '0 auto 1.5rem',
-          border: '3px solid rgba(96, 165, 250, 0.2)',
-          borderTop: '3px solid #60a5fa',
+          width: '56px',
+          height: '56px',
+          margin: '0 auto 2rem',
+          border: '4px solid rgba(96, 165, 250, 0.15)',
+          borderTop: '4px solid #60a5fa',
           borderRadius: '50%',
-          animation: 'spin 1s linear infinite',
-          '@keyframes spin': {
-            '0%': { transform: 'rotate(0deg)' },
-            '100%': { transform: 'rotate(360deg)' }
-          }
-        }}>
-          <style>{`
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          `}</style>
-        </div>
+          animation: 'spin 1.2s linear infinite'
+        }}></div>
 
         {/* Loading message */}
         <h3 style={{
           color: '#ffffff',
-          fontSize: '1.25rem',
+          fontSize: '1.35rem',
           fontWeight: '600',
-          margin: '0 0 0.5rem',
-          letterSpacing: '0.5px'
+          margin: '0 0 0.75rem',
+          letterSpacing: '0.3px'
         }}>
-          Creating your package...
+          Creating your package
         </h3>
 
         {/* Subtext */}
         <p style={{
           color: '#9ca3af',
           fontSize: '0.95rem',
-          margin: '0.5rem 0 0',
-          maxWidth: '300px'
+          margin: '0.75rem 0 1.5rem',
+          lineHeight: '1.5'
         }}>
           Generating optimized resume, cover letter, interview prep, and LinkedIn profile
         </p>
+
+        {/* Progress indicator */}
+        <div style={{
+          width: '100%',
+          height: '3px',
+          background: 'rgba(96, 165, 250, 0.1)',
+          borderRadius: '2px',
+          overflow: 'hidden',
+          marginBottom: '1.5rem'
+        }}>
+          <div style={{
+            height: '100%',
+            background: 'linear-gradient(90deg, #60a5fa, #3b82f6)',
+            width: '100%',
+            animation: 'progressPulse 2s ease-in-out infinite'
+          }}></div>
+        </div>
 
         {/* Estimated time */}
         <p style={{
           color: '#6b7280',
           fontSize: '0.85rem',
-          margin: '1rem 0 0',
+          margin: '0',
           fontStyle: 'italic'
         }}>
-          This typically takes 15-30 seconds
+          Usually takes 15-30 seconds
         </p>
       </div>
     </div>
