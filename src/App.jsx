@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { AuthContext } from './AuthContext'
+import { ThemeContext, ThemeProvider } from './ThemeContext'
 import { LoginPage, SignUpPage } from './AuthPages'
 import { Navbar } from './Navbar'
 import { Dashboard } from './Dashboard'
@@ -292,22 +293,25 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
   )
 }
 
-// Main App Component
-export default function App() {
+// App Component with Theme and Auth
+function AppContent() {
   const { user, loading } = useContext(AuthContext)
+  const { theme } = useContext(ThemeContext)
   const [currentPage, setCurrentPage] = useState('dashboard')
   const [authPage, setAuthPage] = useState('login')
   const [showAuthModal, setShowAuthModal] = useState(false)
 
-  // Close auth modal when user state changes (login or logout)
+  // Set theme attribute on document root
   useEffect(() => {
-    setShowAuthModal(false)
-  }, [user])
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
 
-  // Scroll to top on page changes
+  // Default to light mode on landing page, dark mode when logged in
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [user, currentPage])
+    if (!user) {
+      localStorage.setItem('elevaitr-theme', 'light')
+    }
+  }, [user])
 
   if (loading) {
     return <div className="loading-container"><p>Loading...</p></div>
