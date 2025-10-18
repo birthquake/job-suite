@@ -39,6 +39,10 @@ export function Help({ onBack }) {
     {
       question: "Can I edit the outputs after generation?",
       answer: "You can view, save, and use the outputs from your PDF. If you want to modify and regenerate, update your resume or job description, then create a new application with the same parameters."
+    },
+    {
+      question: "Do I need a specific job posting?",
+      answer: "You need to provide a job description for each application, but it doesn't have to be from a real posting. You can use a sample job description, a template, or a general role description that matches your target position. The more specific your job description, the better tailored your package will be."
     }
   ]
 
@@ -226,7 +230,7 @@ export function Help({ onBack }) {
             We're here to help. Reach out to our support team.
           </p>
           <a
-            href="mailto:rashiedtyre@gmail.com"
+            href="mailto:support@elevaitr.com"
             style={{
               display: 'inline-block',
               background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
