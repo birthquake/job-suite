@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { AuthContext } from './AuthContext'
 import { LoginPage, SignUpPage } from './AuthPages'
 import { Navbar } from './Navbar'
@@ -298,6 +298,11 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState('dashboard')
   const [authPage, setAuthPage] = useState('login')
   const [showAuthModal, setShowAuthModal] = useState(false)
+
+  // Close auth modal when user state changes (login or logout)
+  useEffect(() => {
+    setShowAuthModal(false)
+  }, [user])
 
   if (loading) {
     return <div className="loading-container"><p>Loading...</p></div>
