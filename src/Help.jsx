@@ -226,7 +226,7 @@ export function Help({ onBack }) {
             We're here to help. Reach out to our support team.
           </p>
           <a
-            href="mailto:support@elevaitr.com"
+            href="mailto:rashiedtyre@gmail.com"
             style={{
               display: 'inline-block',
               background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
