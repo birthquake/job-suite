@@ -1,36 +1,84 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { AuthContext } from './AuthContext'
+import { Help } from './Help'
 
-export function Navbar({ currentPage, onNavigate }) {
-  const { user, signOut } = useContext(AuthContext)
+export function Navbar() {
+  const { user, logout } = useContext(AuthContext)
+  const [showHelp, setShowHelp] = useState(false)
 
-  const handleLogo = () => {
-    if (user) {
-      onNavigate('dashboard')
-    } else {
-      onNavigate('landing')
-    }
-  }
-
-  const handleSignOut = async () => {
-    await signOut()
+  if (showHelp) {
+    return <Help onBack={() => setShowHelp(false)} />
   }
 
   return (
-    <nav className="navbar">
-      <div className="navbar-content">
-        <button onClick={handleLogo} className="navbar-logo">
-          elevaitr
+    <nav style={{
+      position: 'sticky',
+      top: 0,
+      background: '#0a0e17',
+      borderBottom: '1px solid #1a1f2e',
+      padding: '1rem 2rem',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      zIndex: 100
+    }}>
+      {/* Logo */}
+      <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#60a5fa' }}>
+        elevaitr
+      </div>
+
+      {/* Center - empty for spacing */}
+      <div></div>
+
+      {/* Right side - User info and buttons */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1.5rem'
+      }}>
+        {/* Help button */}
+        <button
+          onClick={() => setShowHelp(true)}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#9ca3af',
+            cursor: 'pointer',
+            fontSize: '0.95rem',
+            transition: 'color 0.2s ease',
+            padding: 0
+          }}
+          onMouseOver={(e) => e.target.style.color = '#60a5fa'}
+          onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+        >
+          Help
         </button>
 
-        {user && (
-          <div className="navbar-right">
-            <span className="navbar-email">{user.email}</span>
-            <button onClick={handleSignOut} className="navbar-logout">
-              Sign Out
-            </button>
-          </div>
-        )}
+        {/* User email */}
+        <span style={{
+          color: '#9ca3af',
+          fontSize: '0.95rem'
+        }}>
+          {user?.email}
+        </span>
+
+        {/* Sign out button */}
+        <button
+          onClick={logout}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#9ca3af',
+            cursor: 'pointer',
+            fontSize: '0.95rem',
+            transition: 'color 0.2s ease',
+            padding: 0
+          }}
+          onMouseOver={(e) => e.target.style.color = '#ef4444'}
+          onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+        >
+          Sign Out
+        </button>
       </div>
     </nav>
   )
