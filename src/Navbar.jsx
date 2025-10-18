@@ -47,6 +47,27 @@ export function Navbar({ onSignInClick }) {
         alignItems: 'center',
         gap: '1.5rem'
       }}>
+        {/* Pricing link - only show for unauthenticated users */}
+        {!user && (
+          <a
+            href="#pricing"
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-muted)',
+              cursor: 'pointer',
+              fontSize: '0.95rem',
+              transition: 'color 0.2s ease',
+              padding: 0,
+              textDecoration: 'none'
+            }}
+            onMouseOver={(e) => e.target.style.color = '#60a5fa'}
+            onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
+          >
+            Pricing
+          </a>
+        )}
+
         {/* Theme Toggle Switch */}
         <button
           onClick={toggleTheme}
