@@ -261,25 +261,30 @@ function PricingSection() {
             </ul>
           </div>
           
-          <button style={{
-            width: '100%',
-            padding: '0.75rem',
-            background: 'var(--bg-tertiary)',
-            color: 'var(--text-secondary)',
-            border: '2px solid var(--border-light)',
-            borderRadius: '6px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseOver={(e) => {
-            e.target.style.borderColor = '#60a5fa'
-            e.target.style.color = '#60a5fa'
-          }}
-          onMouseOut={(e) => {
-            e.target.style.borderColor = 'var(--border-light)'
-            e.target.style.color = 'var(--text-secondary)'
-          }}>
+          <button 
+            onClick={(e) => {
+              e.preventDefault()
+            }}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              background: 'var(--bg-tertiary)',
+              color: 'var(--text-secondary)',
+              border: '2px solid var(--border-light)',
+              borderRadius: '6px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              minHeight: '44px'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.borderColor = '#60a5fa'
+              e.target.style.color = '#60a5fa'
+            }}
+            onMouseOut={(e) => {
+              e.target.style.borderColor = 'var(--border-light)'
+              e.target.style.color = 'var(--text-secondary)'
+            }}>
             Get Started
           </button>
         </div>
@@ -440,23 +445,26 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
         bottom: 0,
         background: 'rgba(10, 14, 23, 0.7)',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         justifyContent: 'center',
         zIndex: 1000,
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
-        animation: 'fadeIn 0.3s ease-out'
+        animation: 'fadeIn 0.3s ease-out',
+        padding: '1rem',
+        cursor: 'pointer'
       }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          onClose()
-        }
-      }}
+      onClick={onClose}
     >
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
+        }
+        @media (min-width: 768px) {
+          .auth-modal-overlay {
+            align-items: center !important;
+          }
         }
       `}</style>
       <div 
@@ -465,13 +473,14 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           borderRadius: '12px',
-          padding: '2rem',
+          padding: '1.5rem',
           width: '100%',
           maxWidth: '400px',
           position: 'relative',
           boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
           border: '1px solid rgba(96, 165, 250, 0.1)',
-          transition: 'all 0.3s ease'
+          transition: 'all 0.3s ease',
+          cursor: 'auto'
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -480,15 +489,20 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
           onClick={onClose}
           style={{
             position: 'absolute',
-            top: '1.5rem',
-            right: '1.5rem',
+            top: '1rem',
+            right: '1rem',
             background: 'none',
             border: 'none',
             color: 'var(--text-muted)',
             cursor: 'pointer',
-            fontSize: '1.5rem',
+            fontSize: '1.75rem',
             transition: 'all 0.2s ease',
-            padding: 0
+            padding: '0.5rem',
+            minHeight: '44px',
+            minWidth: '44px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
           onMouseOver={(e) => {
             e.target.style.color = '#ef4444'
