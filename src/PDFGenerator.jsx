@@ -57,9 +57,9 @@ export function generateApplicationPackagePDF(application) {
     addWrappedText(application.jobDescription, 10, false)
   }
 
-  // Resume - NEW PAGE
+  // Resume - SAME PAGE (flows naturally)
   if (application.outputs?.resume) {
-    addSection('Optimized Resume', true)
+    addSection('Optimized Resume', false)
     addWrappedText(application.outputs.resume, 10, false)
   }
 
@@ -80,13 +80,6 @@ export function generateApplicationPackagePDF(application) {
     const linkedinContent = application.outputs.linkedin || application.outputs.linkedinProfile
     addSection('LinkedIn Profile Optimization', true)
     addWrappedText(linkedinContent, 10, false)
-  }
-
-  // Job Analysis - NEW PAGE
-  if (application.outputs?.jobAnalysis || application.outputs?.jobAnalyzer) {
-    const analysisContent = application.outputs.jobAnalysis || application.outputs.jobAnalyzer
-    addSection('Job Analysis', true)
-    addWrappedText(analysisContent, 10, false)
   }
 
   // Footer
