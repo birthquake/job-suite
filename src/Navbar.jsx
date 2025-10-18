@@ -1,9 +1,11 @@
 import { useContext, useState } from 'react'
 import { AuthContext } from './AuthContext'
+import { ThemeContext } from './ThemeContext'
 import { Help } from './Help'
 
 export function Navbar({ onSignInClick }) {
   const { user, signOut } = useContext(AuthContext)
+  const { theme, toggleTheme } = useContext(ThemeContext)
   const [showHelp, setShowHelp] = useState(false)
 
   if (showHelp) {
@@ -44,6 +46,25 @@ export function Navbar({ onSignInClick }) {
         alignItems: 'center',
         gap: '1.5rem'
       }}>
+        {/* Theme toggle button */}
+        <button
+          onClick={toggleTheme}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#9ca3af',
+            cursor: 'pointer',
+            fontSize: '1.2rem',
+            transition: 'color 0.2s ease',
+            padding: 0
+          }}
+          onMouseOver={(e) => e.target.style.color = '#60a5fa'}
+          onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        >
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+
         {/* Help button */}
         <button
           onClick={() => setShowHelp(true)}
