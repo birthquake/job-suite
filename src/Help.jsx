@@ -59,8 +59,11 @@ export function Help({ onBack }) {
               cursor: 'pointer',
               fontSize: '1rem',
               marginRight: '1rem',
-              padding: 0
+              padding: 0,
+              transition: 'color 0.2s ease'
             }}
+            onMouseOver={(e) => e.target.style.color = '#93c5fd'}
+            onMouseOut={(e) => e.target.style.color = '#60a5fa'}
           >
             ← Back
           </button>
@@ -70,55 +73,35 @@ export function Help({ onBack }) {
         </div>
 
         <div style={{ marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '1.5rem', color: '#60a5fa', marginBottom: '1.5rem' }}>
+          <h2 style={{ fontSize: '1.5rem', color: '#60a5fa', marginBottom: '1.5rem', fontWeight: '700' }}>
             Our Tools
           </h2>
 
           <div style={{ display: 'grid', gap: '1.5rem' }}>
-            <div style={{
-              background: '#0f1419',
-              border: '1px solid #1a1f2e',
-              borderRadius: '12px',
-              padding: '1.5rem'
-            }}>
-              <h3 style={{ color: '#ffffff', marginTop: 0 }}>Resume Optimizer</h3>
-              <p style={{ color: '#9ca3af', lineHeight: '1.6' }}>
+            <div className="step-card">
+              <h3 style={{ color: '#ffffff', marginTop: 0, marginBottom: '0.5rem' }}>Resume Optimizer</h3>
+              <p style={{ color: '#9ca3af', lineHeight: '1.6', margin: 0 }}>
                 Enhances your existing resume by improving language, clarity, and ATS compatibility. Uses stronger action verbs, better formatting, and proven resume strategies—but only enhances what you provide. Won't fabricate achievements or metrics.
               </p>
             </div>
 
-            <div style={{
-              background: '#0f1419',
-              border: '1px solid #1a1f2e',
-              borderRadius: '12px',
-              padding: '1.5rem'
-            }}>
-              <h3 style={{ color: '#ffffff', marginTop: 0 }}>Cover Letter Generator</h3>
-              <p style={{ color: '#9ca3af', lineHeight: '1.6' }}>
+            <div className="step-card">
+              <h3 style={{ color: '#ffffff', marginTop: 0, marginBottom: '0.5rem' }}>Cover Letter Generator</h3>
+              <p style={{ color: '#9ca3af', lineHeight: '1.6', margin: 0 }}>
                 Creates a personalized cover letter tailored to the specific job and your experience. Matches your resume to the job requirements and articulates why you're a good fit. Works best when your resume has relevant experience for the role.
               </p>
             </div>
 
-            <div style={{
-              background: '#0f1419',
-              border: '1px solid #1a1f2e',
-              borderRadius: '12px',
-              padding: '1.5rem'
-            }}>
-              <h3 style={{ color: '#ffffff', marginTop: 0 }}>Interview Prep</h3>
-              <p style={{ color: '#9ca3af', lineHeight: '1.6' }}>
+            <div className="step-card">
+              <h3 style={{ color: '#ffffff', marginTop: 0, marginBottom: '0.5rem' }}>Interview Prep</h3>
+              <p style={{ color: '#9ca3af', lineHeight: '1.6', margin: 0 }}>
                 Generates 10 interview questions tailored to the specific role with talking points based on your actual resume. Questions are realistic and designed to help you prepare authentic, experience-backed answers. May flag resume gaps as preparation feedback.
               </p>
             </div>
 
-            <div style={{
-              background: '#0f1419',
-              border: '1px solid #1a1f2e',
-              borderRadius: '12px',
-              padding: '1.5rem'
-            }}>
-              <h3 style={{ color: '#ffffff', marginTop: 0 }}>LinkedIn Optimizer</h3>
-              <p style={{ color: '#9ca3af', lineHeight: '1.6' }}>
+            <div className="step-card">
+              <h3 style={{ color: '#ffffff', marginTop: 0, marginBottom: '0.5rem' }}>LinkedIn Optimizer</h3>
+              <p style={{ color: '#9ca3af', lineHeight: '1.6', margin: 0 }}>
                 Generates a targeted headline and professional summary for this specific job opportunity. Also suggests 3-5 key skills to highlight on your profile. All content is drawn from your resume to maintain authenticity.
               </p>
             </div>
@@ -126,7 +109,7 @@ export function Help({ onBack }) {
         </div>
 
         <div style={{ marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '1.5rem', color: '#60a5fa', marginBottom: '1.5rem' }}>
+          <h2 style={{ fontSize: '1.5rem', color: '#60a5fa', marginBottom: '1.5rem', fontWeight: '700' }}>
             Best Practices
           </h2>
 
@@ -134,10 +117,11 @@ export function Help({ onBack }) {
             background: '#0f1419',
             border: '1px solid #1a1f2e',
             borderRadius: '12px',
-            padding: '1.5rem'
+            padding: '1.5rem',
+            boxShadow: 'var(--shadow-subtle)'
           }}>
-            <h4 style={{ color: '#ffffff', marginTop: 0 }}>Resume Tips</h4>
-            <ul style={{ color: '#9ca3af', lineHeight: '1.8', paddingLeft: '1.5rem', margin: 0 }}>
+            <h4 style={{ color: '#ffffff', marginTop: 0, marginBottom: '1rem', fontWeight: '600' }}>Resume Tips</h4>
+            <ul style={{ color: '#9ca3af', lineHeight: '1.8', paddingLeft: '1.5rem', margin: 0, marginBottom: '1.5rem' }}>
               <li>Include specific responsibilities and measurable achievements when possible</li>
               <li>List relevant technologies, tools, and methodologies you've used</li>
               <li>Describe responsibilities clearly—avoid vague phrases</li>
@@ -145,15 +129,15 @@ export function Help({ onBack }) {
               <li>Use industry terminology that matches the job posting</li>
             </ul>
 
-            <h4 style={{ color: '#ffffff', marginTop: '1.5rem' }}>Job Description Tips</h4>
-            <ul style={{ color: '#9ca3af', lineHeight: '1.8', paddingLeft: '1.5rem', margin: 0 }}>
+            <h4 style={{ color: '#ffffff', marginTop: '1.5rem', marginBottom: '1rem', fontWeight: '600' }}>Job Description Tips</h4>
+            <ul style={{ color: '#9ca3af', lineHeight: '1.8', paddingLeft: '1.5rem', margin: 0, marginBottom: '1.5rem' }}>
               <li>Paste the complete job description, not just the title</li>
               <li>Include requirements, responsibilities, and qualifications</li>
               <li>Clean up any formatting issues before pasting</li>
               <li>Use the exact posting to ensure accurate analysis</li>
             </ul>
 
-            <h4 style={{ color: '#ffffff', marginTop: '1.5rem' }}>General Tips</h4>
+            <h4 style={{ color: '#ffffff', marginTop: '1.5rem', marginBottom: '1rem', fontWeight: '600' }}>General Tips</h4>
             <ul style={{ color: '#9ca3af', lineHeight: '1.8', paddingLeft: '1.5rem', margin: 0 }}>
               <li>Review all outputs before submitting—customize as needed</li>
               <li>Use outputs as templates, not final documents</li>
@@ -164,7 +148,7 @@ export function Help({ onBack }) {
         </div>
 
         <div style={{ marginBottom: '3rem' }}>
-          <h2 style={{ fontSize: '1.5rem', color: '#60a5fa', marginBottom: '1.5rem' }}>
+          <h2 style={{ fontSize: '1.5rem', color: '#60a5fa', marginBottom: '1.5rem', fontWeight: '700' }}>
             Frequently Asked Questions
           </h2>
 
@@ -176,7 +160,9 @@ export function Help({ onBack }) {
                   background: '#0f1419',
                   border: '1px solid #1a1f2e',
                   borderRadius: '12px',
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  transition: 'var(--transition-smooth)',
+                  boxShadow: 'var(--shadow-subtle)'
                 }}
               >
                 <button
@@ -193,11 +179,14 @@ export function Help({ onBack }) {
                     cursor: 'pointer',
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    transition: 'color 0.2s ease'
                   }}
+                  onMouseOver={(e) => e.currentTarget.style.color = '#60a5fa'}
+                  onMouseOut={(e) => e.currentTarget.style.color = '#ffffff'}
                 >
                   {faq.question}
-                  <span style={{ color: '#60a5fa', fontSize: '1.25rem' }}>
+                  <span style={{ color: '#60a5fa', fontSize: '1.25rem', transition: 'color 0.2s ease' }}>
                     {expandedFAQ === index ? '−' : '+'}
                   </span>
                 </button>
@@ -206,7 +195,8 @@ export function Help({ onBack }) {
                     padding: '0 1.5rem 1.5rem 1.5rem',
                     borderTop: '1px solid #1a1f2e',
                     color: '#9ca3af',
-                    lineHeight: '1.6'
+                    lineHeight: '1.6',
+                    animation: 'slideDown 0.3s ease-out'
                   }}>
                     {faq.answer}
                   </div>
@@ -221,9 +211,10 @@ export function Help({ onBack }) {
           border: '1px solid #1a1f2e',
           borderRadius: '12px',
           padding: '1.5rem',
-          textAlign: 'center'
+          textAlign: 'center',
+          boxShadow: 'var(--shadow-subtle)'
         }}>
-          <h2 style={{ fontSize: '1.25rem', color: '#ffffff', marginTop: 0 }}>
+          <h2 style={{ fontSize: '1.25rem', color: '#ffffff', marginTop: 0, fontWeight: '700' }}>
             Still have questions?
           </h2>
           <p style={{ color: '#9ca3af', marginBottom: '1rem' }}>
@@ -239,15 +230,16 @@ export function Help({ onBack }) {
               borderRadius: '8px',
               textDecoration: 'none',
               fontWeight: '600',
-              transition: 'all 0.2s ease'
+              transition: 'var(--transition-smooth)',
+              boxShadow: '0 2px 8px rgba(96, 165, 250, 0.2)'
             }}
             onMouseOver={(e) => {
               e.target.style.transform = 'translateY(-2px)'
-              e.target.style.boxShadow = '0 4px 12px rgba(96, 165, 250, 0.3)'
+              e.target.style.boxShadow = '0 8px 20px rgba(96, 165, 250, 0.35)'
             }}
             onMouseOut={(e) => {
               e.target.style.transform = 'translateY(0)'
-              e.target.style.boxShadow = 'none'
+              e.target.style.boxShadow = '0 2px 8px rgba(96, 165, 250, 0.2)'
             }}
           >
             Email Support
