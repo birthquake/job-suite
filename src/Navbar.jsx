@@ -99,7 +99,7 @@ export function Navbar({ onSignInClick }) {
           )}
         </button>
 
-        {/* Help button */}
+        {/* Resources button */}
         <button
           onClick={() => setShowHelp(true)}
           style={{
@@ -114,7 +114,7 @@ export function Navbar({ onSignInClick }) {
           onMouseOver={(e) => e.target.style.color = '#60a5fa'}
           onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
         >
-          Help
+          Resources
         </button>
 
         {/* Conditional: Sign In or User Info + Sign Out */}
