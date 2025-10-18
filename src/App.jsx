@@ -240,7 +240,7 @@ function PricingSection() {
           <div className="price" style={{ fontSize: '2rem', margin: '1.5rem 0' }}>
             $0<span className="period" style={{ fontSize: '1rem' }}>/month</span>
           </div>
-          <p className="price-desc">Perfect for getting started</p>
+          <p className="price-desc">3-application trial</p>
           
           <div style={{
             flex: 1,
@@ -255,7 +255,7 @@ function PricingSection() {
               fontSize: '0.95rem',
               lineHeight: '1.8'
             }}>
-              <li>✓ 3 applications/month</li>
+              <li>✓ 3 applications total</li>
               <li>✓ All 4 tools included</li>
               <li>✓ Single PDF downloads</li>
               <li>✓ Community support</li>
@@ -371,7 +371,7 @@ function PricingSection() {
               <li>✓ All 4 tools included</li>
               <li>✓ Priority support</li>
               <li>✓ Cancel anytime</li>
-              <li>✓ Best value (save $35/year)</li>
+              <li>✓ Best value</li>
             </ul>
           </div>
           
