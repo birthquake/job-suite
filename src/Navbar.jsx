@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { Sun, Moon } from 'lucide-react'
 import { AuthContext } from './AuthContext'
 import { ThemeContext } from './ThemeContext'
 import { Help } from './Help'
@@ -46,23 +47,35 @@ export function Navbar({ onSignInClick }) {
         alignItems: 'center',
         gap: '1.5rem'
       }}>
-        {/* Theme toggle button */}
+        {/* Theme Toggle Switch */}
         <button
           onClick={toggleTheme}
           style={{
-            background: 'none',
-            border: 'none',
-            color: '#9ca3af',
+            background: theme === 'dark' ? 'rgba(96, 165, 250, 0.2)' : 'rgba(251, 146, 60, 0.2)',
+            border: `2px solid ${theme === 'dark' ? '#60a5fa' : '#fb923c'}`,
+            borderRadius: '20px',
+            padding: '0.5rem 0.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
             cursor: 'pointer',
-            fontSize: '1.2rem',
-            transition: 'color 0.2s ease',
-            padding: 0
+            transition: 'all 0.3s ease',
+            width: '60px',
+            justifyContent: theme === 'dark' ? 'flex-end' : 'flex-start'
           }}
-          onMouseOver={(e) => e.target.style.color = '#60a5fa'}
-          onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+          onMouseOver={(e) => {
+            e.currentTarget.style.boxShadow = `0 0 12px ${theme === 'dark' ? 'rgba(96, 165, 250, 0.3)' : 'rgba(251, 146, 60, 0.3)'}`
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.boxShadow = 'none'
+          }}
           title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
         >
-          {theme === 'dark' ? '☀️' : '🌙'}
+          {theme === 'dark' ? (
+            <Sun size={18} color="#60a5fa" strokeWidth={2.5} />
+          ) : (
+            <Moon size={18} color="#fb923c" strokeWidth={2.5} />
+          )}
         </button>
 
         {/* Help button */}
@@ -71,14 +84,14 @@ export function Navbar({ onSignInClick }) {
           style={{
             background: 'none',
             border: 'none',
-            color: '#9ca3af',
+            color: 'var(--text-muted)',
             cursor: 'pointer',
             fontSize: '0.95rem',
             transition: 'color 0.2s ease',
             padding: 0
           }}
           onMouseOver={(e) => e.target.style.color = '#60a5fa'}
-          onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+          onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
         >
           Help
         </button>
