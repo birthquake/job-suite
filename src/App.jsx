@@ -51,17 +51,6 @@ function LinkedInIcon() {
   )
 }
 
-function JobAnalyzerIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 21H3V3h18v18z" />
-      <path d="M3 12h18" />
-      <path d="M12 3v18" />
-      <circle cx="12" cy="12" r="2" />
-    </svg>
-  )
-}
-
 // Landing Page
 function LandingPage() {
   const { user } = useContext(AuthContext)
@@ -118,35 +107,24 @@ function LandingPage() {
             <div className="tool-icon"><ResumeIcon /></div>
             <h3>Resume Optimizer</h3>
             <p>Improve your resume for ATS and recruiter impact</p>
-            <div className="tool-cta">Learn more →</div>
           </div>
 
           <div className="tool-card">
             <div className="tool-icon"><CoverLetterIcon /></div>
             <h3>Cover Letter Generator</h3>
             <p>Create personalized cover letters for each role</p>
-            <div className="tool-cta">Learn more →</div>
           </div>
 
           <div className="tool-card">
             <div className="tool-icon"><InterviewPrepIcon /></div>
             <h3>Interview Prep</h3>
             <p>Get tailored interview questions and answers</p>
-            <div className="tool-cta">Learn more →</div>
           </div>
 
           <div className="tool-card">
             <div className="tool-icon"><LinkedInIcon /></div>
             <h3>LinkedIn Optimizer</h3>
             <p>Make your profile stand out to recruiters</p>
-            <div className="tool-cta">Learn more →</div>
-          </div>
-
-          <div className="tool-card">
-            <div className="tool-icon"><JobAnalyzerIcon /></div>
-            <h3>Job Analyzer</h3>
-            <p>Understand job requirements and keywords</p>
-            <div className="tool-cta">Learn more →</div>
           </div>
         </div>
       </section>
@@ -278,7 +256,7 @@ function PricingSection() {
               lineHeight: '1.8'
             }}>
               <li>✓ 3 applications/month</li>
-              <li>✓ All 5 tools included</li>
+              <li>✓ All 4 tools included</li>
               <li>✓ Single PDF downloads</li>
               <li>✓ Community support</li>
               <li>✗ No priority support</li>
@@ -333,7 +311,7 @@ function PricingSection() {
               lineHeight: '1.8'
             }}>
               <li>✓ $2.99 per application</li>
-              <li>✓ All 5 tools included</li>
+              <li>✓ All 4 tools included</li>
               <li>✓ No monthly commitment</li>
               <li>✓ Priority support</li>
               <li>✓ Cancel anytime</li>
@@ -390,7 +368,7 @@ function PricingSection() {
               lineHeight: '1.8'
             }}>
               <li>✓ Unlimited applications</li>
-              <li>✓ All 5 tools included</li>
+              <li>✓ All 4 tools included</li>
               <li>✓ Priority support</li>
               <li>✓ Cancel anytime</li>
               <li>✓ Best value (save $35/year)</li>
