@@ -77,9 +77,22 @@ export function Dashboard({ onStartApplication }) {
       console.log('=== FULL APP DATA ===', appData)
       console.log('=== OUTPUTS FIELD ===', appData.outputs)
 
-      // Just pass the app data directly with all fields
-      console.log('Calling PDF generator with:', appData)
-      generateApplicationPackagePDF(appData)
+      // Fix double-nesting: outputs.outputs contains the actual content
+      let normalizedOutputs = appData.outputs
+      if (appData.outputs?.outputs && typeof appData.outputs.outputs === 'object') {
+        normalizedOutputs = appData.outputs.outputs
+        console.log('Flattened nested outputs structure')
+      }
+
+      // Create final app object with flattened outputs
+      const finalAppData = {
+        ...appData,
+        outputs: normalizedOutputs
+      }
+
+      console.log('=== FINAL APP DATA FOR PDF ===', finalAppData)
+      console.log('Calling PDF generator with:', finalAppData)
+      generateApplicationPackagePDF(finalAppData)
       console.log('PDF generator called successfully')
       
     } catch (error) {
