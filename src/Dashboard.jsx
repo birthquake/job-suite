@@ -204,7 +204,7 @@ export function Dashboard({ onStartApplication }) {
         <div className="stats-row">
           {/* Total Applications */}
           <div className="stat-item">
-            <div className="stat-icon-container" style={{ background: 'rgba(96, 165, 250, 0.1)' }}>
+            <div style={{ marginBottom: '0.75rem' }}>
               <FileText size={24} color="#60a5fa" strokeWidth={1.5} />
             </div>
             <div className="stat-value">{displayedStats.apps}</div>
@@ -213,7 +213,7 @@ export function Dashboard({ onStartApplication }) {
 
           {/* Callbacks */}
           <div className="stat-item">
-            <div className="stat-icon-container" style={{ background: 'rgba(34, 197, 94, 0.1)' }}>
+            <div style={{ marginBottom: '0.75rem' }}>
               <MessageSquare size={24} color="#22c55e" strokeWidth={1.5} />
             </div>
             <div className="stat-value">{displayedStats.callbacks}</div>
@@ -222,7 +222,7 @@ export function Dashboard({ onStartApplication }) {
 
           {/* Success Rate */}
           <div className="stat-item">
-            <div className="stat-icon-container" style={{ background: 'rgba(168, 85, 247, 0.1)' }}>
+            <div style={{ marginBottom: '0.75rem' }}>
               <CheckCircle size={24} color="#a855f7" strokeWidth={1.5} />
             </div>
             <div className="stat-value">{successRate}%</div>
@@ -231,7 +231,7 @@ export function Dashboard({ onStartApplication }) {
 
           {/* Pending Responses */}
           <div className="stat-item">
-            <div className="stat-icon-container" style={{ background: 'rgba(251, 146, 60, 0.1)' }}>
+            <div style={{ marginBottom: '0.75rem' }}>
               <Hourglass size={24} color="#fb923c" strokeWidth={1.5} />
             </div>
             <div className="stat-value">{displayedStats.pending}</div>
