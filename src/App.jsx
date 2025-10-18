@@ -62,11 +62,10 @@ function JobAnalyzerIcon() {
   )
 }
 
-// Landing Page (for unauthenticated users)
+// Landing Page
 function LandingPage() {
   const { user } = useContext(AuthContext)
 
-  // Only show landing page if not logged in
   if (user) return null
 
   return (
@@ -77,10 +76,10 @@ function LandingPage() {
           <h1 style={{ fontSize: '3.5rem', marginBottom: '1.5rem', fontWeight: '700', lineHeight: '1.1' }}>
             Land Your Dream Job
           </h1>
-          <p style={{ fontSize: '1.25rem', color: '#d1d5db', marginBottom: '1rem', lineHeight: '1.6' }}>
+          <p style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: '1.6' }}>
             Professional application materials in minutes, not hours
           </p>
-          <p style={{ fontSize: '1.1rem', color: '#9ca3af', marginBottom: '2.5rem', lineHeight: '1.6' }}>
+          <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '2.5rem', lineHeight: '1.6' }}>
             AI-powered tools that elevate your job search from start to finish
           </p>
           <a
@@ -159,7 +158,7 @@ function LandingPage() {
           <div className="step">
             <div className="step-number">1</div>
             <h3 style={{ marginTop: '1rem' }}>Paste Your Info</h3>
-            <p style={{ fontSize: '0.9rem', color: '#9ca3af', marginTop: '0.5rem', maxWidth: '150px' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.5rem', maxWidth: '150px' }}>
               Job description and resume
             </p>
           </div>
@@ -167,7 +166,7 @@ function LandingPage() {
           <div className="step">
             <div className="step-number">2</div>
             <h3 style={{ marginTop: '1rem' }}>AI Optimizes</h3>
-            <p style={{ fontSize: '0.9rem', color: '#9ca3af', marginTop: '0.5rem', maxWidth: '150px' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.5rem', maxWidth: '150px' }}>
               15-30 seconds
             </p>
           </div>
@@ -175,7 +174,7 @@ function LandingPage() {
           <div className="step">
             <div className="step-number">3</div>
             <h3 style={{ marginTop: '1rem' }}>Download & Apply</h3>
-            <p style={{ fontSize: '0.9rem', color: '#9ca3af', marginTop: '0.5rem', maxWidth: '150px' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.5rem', maxWidth: '150px' }}>
               One complete PDF
             </p>
           </div>
@@ -237,14 +236,14 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
       backdropFilter: 'blur(4px)'
     }}>
       <div style={{
-        background: '#0f1419',
+        background: 'var(--bg-secondary)',
         borderRadius: '12px',
         padding: '2rem',
         width: '100%',
         maxWidth: '400px',
         position: 'relative',
         boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
-        border: '1px solid #1a1f2e'
+        border: '1px solid var(--border-light)'
       }}>
         {/* Close Button */}
         <button
@@ -255,14 +254,14 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
             right: '1.5rem',
             background: 'none',
             border: 'none',
-            color: '#9ca3af',
+            color: 'var(--text-muted)',
             cursor: 'pointer',
             fontSize: '1.5rem',
             transition: 'color 0.2s ease',
             padding: 0
           }}
           onMouseOver={(e) => e.target.style.color = '#ef4444'}
-          onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+          onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
         >
           ✕
         </button>
@@ -293,7 +292,7 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
   )
 }
 
-// App Component with Theme and Auth
+// Main App Content (with hooks)
 function AppContent() {
   const { user, loading } = useContext(AuthContext)
   const { theme } = useContext(ThemeContext)
@@ -306,12 +305,22 @@ function AppContent() {
     document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
 
-  // Default to light mode on landing page, dark mode when logged in
+  // Default to light mode on landing page
   useEffect(() => {
     if (!user) {
       localStorage.setItem('elevaitr-theme', 'light')
     }
   }, [user])
+
+  // Close auth modal when user state changes
+  useEffect(() => {
+    setShowAuthModal(false)
+  }, [user])
+
+  // Scroll to top on page changes
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [user, currentPage])
 
   if (loading) {
     return <div className="loading-container"><p>Loading...</p></div>
@@ -336,7 +345,7 @@ function AppContent() {
   // User is logged in - application workflow
   return (
     <div className="app-wrapper">
-      <Navbar />
+      <Navbar onSignInClick={() => setShowAuthModal(true)} />
       
       <div className="app">
         {currentPage === 'dashboard' && (
@@ -350,5 +359,14 @@ function AppContent() {
         )}
       </div>
     </div>
+  )
+}
+
+// Main App Component with Theme Provider
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   )
 }
