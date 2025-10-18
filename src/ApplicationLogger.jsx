@@ -96,16 +96,19 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
         await incrementUsage(user.uid)
       }
 
-      onApplicationCreated()
-      setStep('info')
-      setCompany('')
-      setJobTitle('')
-      setJobDescription('')
-      setResume('')
-    } catch (err) {
-      setError('Failed to create application: ' + err.message)
-    } finally {
+      // Brief success state before redirecting
       setLoading(false)
+      setTimeout(() => {
+        onApplicationCreated()
+        setStep('info')
+        setCompany('')
+        setJobTitle('')
+        setJobDescription('')
+        setResume('')
+      }, 500)
+    } catch (err) {
+      setLoading(false)
+      setError('Failed to create application: ' + err.message)
     }
   }
 
@@ -114,6 +117,80 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
       ? 'https://elevaitr.lemonsqueezy.com/checkout/monthly'
       : 'https://elevaitr.lemonsqueezy.com/checkout/pay-per-use'
   }
+
+  // Loading overlay component
+  const LoadingOverlay = () => (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'rgba(10, 14, 23, 0.9)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000,
+      backdropFilter: 'blur(4px)'
+    }}>
+      <div style={{
+        textAlign: 'center'
+      }}>
+        {/* Spinner */}
+        <div style={{
+          width: '50px',
+          height: '50px',
+          margin: '0 auto 1.5rem',
+          border: '3px solid rgba(96, 165, 250, 0.2)',
+          borderTop: '3px solid #60a5fa',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+          '@keyframes spin': {
+            '0%': { transform: 'rotate(0deg)' },
+            '100%': { transform: 'rotate(360deg)' }
+          }
+        }}>
+          <style>{`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}</style>
+        </div>
+
+        {/* Loading message */}
+        <h3 style={{
+          color: '#ffffff',
+          fontSize: '1.25rem',
+          fontWeight: '600',
+          margin: '0 0 0.5rem',
+          letterSpacing: '0.5px'
+        }}>
+          Creating your package...
+        </h3>
+
+        {/* Subtext */}
+        <p style={{
+          color: '#9ca3af',
+          fontSize: '0.95rem',
+          margin: '0.5rem 0 0',
+          maxWidth: '300px'
+        }}>
+          Generating optimized resume, cover letter, interview prep, and LinkedIn profile
+        </p>
+
+        {/* Estimated time */}
+        <p style={{
+          color: '#6b7280',
+          fontSize: '0.85rem',
+          margin: '1rem 0 0',
+          fontStyle: 'italic'
+        }}>
+          This typically takes 15-30 seconds
+        </p>
+      </div>
+    </div>
+  )
 
   if (showPaywall) {
     return (
@@ -126,6 +203,8 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
 
   return (
     <div className="logger-container">
+      {loading && <LoadingOverlay />}
+
       <div className="logger-header">
         <button className="back-button" onClick={onBack}>← Back</button>
         <h2>New Application</h2>
@@ -273,6 +352,10 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
               onClick={handleSaveApplication}
               disabled={loading}
               className="btn-primary"
+              style={{
+                opacity: loading ? 0.6 : 1,
+                cursor: loading ? 'not-allowed' : 'pointer'
+              }}
             >
               {loading ? 'Creating...' : 'Create Application'}
             </button>
