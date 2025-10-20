@@ -272,7 +272,7 @@ export function Navbar({ onSignInClick }) {
             Resources
           </button>
 
-          {/* Sign In / User Info Section */}
+          {/* Sign In Button */}
           {!user && (
             <button
               onClick={() => {
@@ -280,26 +280,26 @@ export function Navbar({ onSignInClick }) {
                 setShowMobileMenu(false)
               }}
               style={{
-                background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-                color: 'white',
+                background: 'none',
                 border: 'none',
-                padding: '0.75rem',
-                borderRadius: '6px',
+                color: 'var(--text-muted)',
                 cursor: 'pointer',
                 fontSize: '0.95rem',
-                fontWeight: '600',
+                padding: '0.75rem',
+                borderRadius: '6px',
                 transition: 'all 0.2s ease',
-                boxShadow: '0 2px 6px rgba(96, 165, 250, 0.2)',
+                textAlign: 'left',
                 minHeight: '44px',
-                marginTop: '0.5rem'
+                display: 'flex',
+                alignItems: 'center'
               }}
               onMouseOver={(e) => {
-                e.target.style.transform = 'translateY(-1px)'
-                e.target.style.boxShadow = '0 4px 12px rgba(96, 165, 250, 0.3)'
+                e.target.style.color = '#60a5fa'
+                e.target.style.background = 'rgba(96, 165, 250, 0.1)'
               }}
               onMouseOut={(e) => {
-                e.target.style.transform = 'translateY(0)'
-                e.target.style.boxShadow = '0 2px 6px rgba(96, 165, 250, 0.2)'
+                e.target.style.color = 'var(--text-muted)'
+                e.target.style.background = 'transparent'
               }}
             >
               Sign In
