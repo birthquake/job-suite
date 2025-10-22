@@ -18,13 +18,14 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
     <nav style={{
       position: 'sticky',
       top: 0,
-      background: '#0a0e17',
-      borderBottom: '1px solid #1a1f2e',
+      background: 'var(--bg-secondary)',
+      borderBottom: '1px solid var(--border-light)',
       padding: '1rem',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      zIndex: 100
+      zIndex: 100,
+      transition: 'background 0.3s ease, border-color 0.3s ease'
     }}>
       {/* Logo */}
       <div style={{
@@ -50,7 +51,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
             style={{
               background: 'none',
               border: 'none',
-              color: '#60a5fa',
+              color: 'var(--accent-primary)',
               cursor: 'pointer',
               fontSize: '0.95rem',
               transition: 'all 0.2s ease',
@@ -75,7 +76,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
           style={{
             background: 'none',
             border: 'none',
-            color: '#60a5fa',
+            color: 'var(--accent-primary)',
             cursor: 'pointer',
             fontSize: '0.95rem',
             padding: 0,
@@ -147,7 +148,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
             minWidth: '44px',
             transition: 'color 0.2s ease'
           }}
-          onMouseOver={(e) => e.currentTarget.style.color = '#60a5fa'}
+          onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-primary)'}
           onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
           className="mobile-menu-button"
         >
@@ -192,7 +193,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
           <>
             {/* User email - Desktop only */}
             <span style={{
-              color: '#9ca3af',
+              color: 'var(--text-muted)',
               fontSize: '0.9rem',
               display: 'none'
             }} className="desktop-email">
@@ -205,7 +206,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#9ca3af',
+                color: 'var(--text-muted)',
                 cursor: 'pointer',
                 fontSize: '0.9rem',
                 transition: 'color 0.2s ease',
@@ -214,7 +215,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
                 display: 'none'
               }}
               onMouseOver={(e) => e.target.style.color = '#ef4444'}
-              onMouseOut={(e) => e.target.style.color = '#9ca3af'}
+              onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
               className="desktop-sign-out"
             >
               Sign Out
@@ -230,13 +231,14 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
           top: '100%',
           left: 0,
           right: 0,
-          background: '#0f1419',
-          borderBottom: '1px solid #1a1f2e',
+          background: 'var(--bg-secondary)',
+          borderBottom: '1px solid var(--border-light)',
           display: 'flex',
           flexDirection: 'column',
           gap: '0.5rem',
           padding: '1rem',
-          zIndex: 99
+          zIndex: 99,
+          transition: 'background 0.3s ease, border-color 0.3s ease'
         }}>
           {/* Pricing Link */}
           {!user && (
@@ -248,7 +250,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#60a5fa',
+                color: 'var(--accent-primary)',
                 textDecoration: 'none',
                 fontSize: '0.95rem',
                 padding: '0.75rem',
@@ -262,12 +264,12 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
                 fontWeight: '600'
               }}
               onMouseOver={(e) => {
-                e.target.style.color = '#60a5fa'
+                e.target.style.color = 'var(--accent-primary)'
                 e.target.style.background = 'rgba(96, 165, 250, 0.1)'
                 e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8), 0 0 24px rgba(96, 165, 250, 0.6)'
               }}
               onMouseOut={(e) => {
-                e.target.style.color = '#60a5fa'
+                e.target.style.color = 'var(--accent-primary)'
                 e.target.style.background = 'transparent'
                 e.target.style.textShadow = 'none'
               }}
@@ -285,7 +287,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
             style={{
               background: 'none',
               border: 'none',
-              color: '#60a5fa',
+              color: 'var(--accent-primary)',
               cursor: 'pointer',
               fontSize: '0.95rem',
               padding: '0.75rem',
@@ -298,12 +300,12 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
               fontWeight: '600'
             }}
             onMouseOver={(e) => {
-              e.target.style.color = '#60a5fa'
+              e.target.style.color = 'var(--accent-primary)'
               e.target.style.background = 'rgba(96, 165, 250, 0.1)'
               e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8), 0 0 24px rgba(96, 165, 250, 0.6)'
             }}
             onMouseOut={(e) => {
-              e.target.style.color = '#60a5fa'
+              e.target.style.color = 'var(--accent-primary)'
               e.target.style.background = 'transparent'
               e.target.style.textShadow = 'none'
             }}
@@ -333,7 +335,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
                 alignItems: 'center'
               }}
               onMouseOver={(e) => {
-                e.target.style.color = '#60a5fa'
+                e.target.style.color = 'var(--accent-primary)'
                 e.target.style.background = 'rgba(96, 165, 250, 0.1)'
               }}
               onMouseOut={(e) => {
@@ -351,8 +353,9 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
                 color: 'var(--text-muted)',
                 fontSize: '0.9rem',
                 padding: '0.75rem',
-                borderTop: '1px solid #1a1f2e',
-                marginTop: '0.5rem'
+                borderTop: '1px solid var(--border-light)',
+                marginTop: '0.5rem',
+                transition: 'border-color 0.3s ease'
               }}>
                 {user?.email}
               </div>
