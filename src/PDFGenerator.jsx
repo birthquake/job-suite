@@ -26,6 +26,24 @@ export function generateApplicationPackagePDF(application) {
     doc.rect(0, 0, accentBorderWidth, pageHeight, 'F')
   }
 
+  // Helper function to add wrapped text with proper formatting
+  const addWrappedText = (text, fontSize = 10, isBold = false, textColor = colors.text) => {
+    doc.setFontSize(fontSize)
+    doc.setFont(undefined, isBold ? 'bold' : 'normal')
+    doc.setTextColor(...textColor)
+    
+    const lines = doc.splitTextToSize(text, contentWidth)
+    lines.forEach((line) => {
+      if (yPosition > pageHeight - margin - 8) {
+        doc.addPage()
+        addAccentBorder()
+        yPosition = margin
+      }
+      doc.text(line, margin + 2, yPosition)
+      yPosition += 5
+    })
+  }
+
   // Helper function to add formatted interview prep with bold questions and key points
   const addFormattedInterviewPrep = (text) => {
     const lines = text.split('\n')
