@@ -90,12 +90,28 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 1.5rem;
+  padding: 2rem;
   background: var(--bg-tertiary);
   border-radius: 10px;
   border: 1px solid var(--border-light);
   flex: 1;
-  max-width: 200px;
+  max-width: 240px;
+  transition: var(--transition-smooth);
+}
+
+.step:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 20px rgba(96, 165, 250, 0.15);
+  transform: translateY(-2px);
+}
+
+.step h3 {
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+.step p {
+  font-size: 0.95rem !important;
 }
 
 .step-number {
