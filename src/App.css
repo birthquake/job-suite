@@ -25,6 +25,15 @@
   }
 }
 
+.tools-section {
+  text-align: center;
+}
+
+.tools-section h2 {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .tools-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -48,6 +57,15 @@
   .tools-grid {
     grid-template-columns: repeat(4, 1fr);
   }
+}
+
+.how-section {
+  text-align: center;
+}
+
+.how-section h2 {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Steps Wrapper */
@@ -109,8 +127,8 @@
 /* ===== MICRO-INTERACTIONS: Enhanced Animations ===== */
 
 .tool-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.75rem;
+  margin-bottom: 0.75rem;
   color: var(--accent-primary);
 }
 
@@ -186,23 +204,22 @@
 }
 
 .tool-card {
-  background: var(--card-bg);
-  border: 2px solid var(--border-light);
-  border-radius: 12px;
-  padding: 1.5rem;
-  cursor: pointer;
-  transition: var(--transition-smooth);
+  background: rgba(26, 31, 46, 0.6);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 1rem;
   text-align: center;
-  box-shadow: var(--shadow-subtle);
+  box-shadow: none;
 }
 
-.tool-card:hover {
-  border-color: var(--accent-primary);
-  box-shadow: 0 20px 40px rgba(96, 165, 250, 0.2);
-  transform: var(--lift-medium);
-  background: var(--bg-tertiary);
-  position: relative;
-  z-index: 1;
+.tool-card h3 {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.tool-card p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
 }
 
 .checkbox-item {
