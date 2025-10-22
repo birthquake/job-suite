@@ -51,8 +51,16 @@ function LinkedInIcon() {
   )
 }
 
+// Scroll to section helper function
+function scrollToSection(sectionId) {
+  const element = document.getElementById(sectionId)
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
 // Landing Page
-function LandingPage() {
+function LandingPage({ onScrollToSection }) {
   const { user } = useContext(AuthContext)
 
   if (user) return null
@@ -71,15 +79,16 @@ function LandingPage() {
           <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', marginBottom: '2.5rem', lineHeight: '1.6' }}>
             AI-powered tools that elevate your job search from start to finish
           </p>
-          <a
-            href="#tools"
+          <button
+            onClick={() => onScrollToSection('tools')}
             style={{
               display: 'inline-block',
               background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
               color: 'white',
               padding: '1rem 2.5rem',
               borderRadius: '8px',
-              textDecoration: 'none',
+              border: 'none',
+              cursor: 'pointer',
               fontWeight: '600',
               fontSize: '1.1rem',
               transition: 'all 0.3s ease',
@@ -95,7 +104,7 @@ function LandingPage() {
             }}
           >
             Get Started Free
-          </a>
+          </button>
         </div>
       </section>
 
@@ -159,15 +168,16 @@ function LandingPage() {
         </div>
 
         <div style={{ marginTop: '3rem', textAlign: 'center' }}>
-          <a
-            href="#signup"
+          <button
+            onClick={() => onScrollToSection('pricing')}
             style={{
               display: 'inline-block',
               background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
               color: 'white',
               padding: '1rem 2.5rem',
               borderRadius: '8px',
-              textDecoration: 'none',
+              border: 'none',
+              cursor: 'pointer',
               fontWeight: '600',
               fontSize: '1.1rem',
               transition: 'all 0.3s ease',
@@ -183,7 +193,7 @@ function LandingPage() {
             }}
           >
             Start Free Today
-          </a>
+          </button>
         </div>
       </section>
 
@@ -236,55 +246,33 @@ function PricingSection() {
           display: 'flex',
           flexDirection: 'column'
         }}>
-          <h3 style={{ marginTop: 0 }}>Free</h3>
-          <div className="price" style={{ fontSize: '2rem', margin: '1.5rem 0' }}>
-            $0
-          </div>
-          <p className="price-desc">3-application trial</p>
+          <h3 style={{ marginBottom: '0.5rem' }}>Free</h3>
+          <p style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>$0</p>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>3-application trial</p>
           
-          <div style={{
-            flex: 1,
-            textAlign: 'left',
-            marginBottom: '1.5rem'
+          <ul style={{ flex: 1, marginBottom: '1.5rem', paddingLeft: 0, listStyle: 'none' }}>
+            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ 3 applications total</li>
+            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ All 4 tools included</li>
+            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ Single PDF downloads</li>
+          </ul>
+          
+          <button className="upgrade-btn" style={{
+            width: '100%',
+            padding: '0.75rem',
+            background: 'rgba(96, 165, 250, 0.1)',
+            color: '#60a5fa',
+            border: '1px solid #60a5fa',
+            borderRadius: '6px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseOver={(e) => {
+            e.target.style.background = 'rgba(96, 165, 250, 0.2)'
+          }}
+          onMouseOut={(e) => {
+            e.target.style.background = 'rgba(96, 165, 250, 0.1)'
           }}>
-            <ul style={{
-              listStyle: 'none',
-              padding: 0,
-              margin: 0,
-              color: 'var(--text-secondary)',
-              fontSize: '0.95rem',
-              lineHeight: '1.8'
-            }}>
-              <li>✓ 3 applications total</li>
-              <li>✓ All 4 tools included</li>
-              <li>✓ Single PDF downloads</li>
-            </ul>
-          </div>
-          
-          <button 
-            onClick={(e) => {
-              e.preventDefault()
-            }}
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              background: 'var(--bg-tertiary)',
-              color: 'var(--text-secondary)',
-              border: '2px solid var(--border-light)',
-              borderRadius: '6px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              minHeight: '44px'
-            }}
-            onMouseOver={(e) => {
-              e.target.style.borderColor = '#60a5fa'
-              e.target.style.color = '#60a5fa'
-            }}
-            onMouseOut={(e) => {
-              e.target.style.borderColor = 'var(--border-light)'
-              e.target.style.color = 'var(--text-secondary)'
-            }}>
             Get Started
           </button>
         </div>
@@ -294,51 +282,33 @@ function PricingSection() {
           display: 'flex',
           flexDirection: 'column'
         }}>
-          <h3 style={{ marginTop: 0 }}>Pay Per Use</h3>
-          <div className="price" style={{ fontSize: '2rem', margin: '1.5rem 0' }}>
-            $2.99<span className="period" style={{ fontSize: '1rem' }}>/app</span>
-          </div>
-          <p className="price-desc">Pay only for what you use</p>
+          <h3 style={{ marginBottom: '0.5rem' }}>Pay Per Use</h3>
+          <p style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>$2.99</p>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>per application</p>
           
-          <div style={{
-            flex: 1,
-            textAlign: 'left',
-            marginBottom: '1.5rem'
-          }}>
-            <ul style={{
-              listStyle: 'none',
-              padding: 0,
-              margin: 0,
-              color: 'var(--text-secondary)',
-              fontSize: '0.95rem',
-              lineHeight: '1.8'
-            }}>
-              <li>✓ $2.99 per application</li>
-              <li>✓ All 4 tools included</li>
-              <li>✓ No monthly commitment</li>
-              <li>✓ Cancel anytime</li>
-            </ul>
-          </div>
+          <ul style={{ flex: 1, marginBottom: '1.5rem', paddingLeft: 0, listStyle: 'none' }}>
+            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ $2.99 per application</li>
+            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ All 4 tools included</li>
+            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ No monthly commitment</li>
+            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ Cancel anytime</li>
+          </ul>
           
-          <button style={{
+          <button className="upgrade-btn" style={{
             width: '100%',
             padding: '0.75rem',
-            background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-            color: 'white',
-            border: 'none',
+            background: 'rgba(96, 165, 250, 0.1)',
+            color: '#60a5fa',
+            border: '1px solid #60a5fa',
             borderRadius: '6px',
             fontWeight: '600',
             cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            boxShadow: '0 4px 12px rgba(96, 165, 250, 0.2)'
+            transition: 'all 0.3s ease'
           }}
           onMouseOver={(e) => {
-            e.target.style.transform = 'translateY(-2px)'
-            e.target.style.boxShadow = '0 8px 20px rgba(96, 165, 250, 0.3)'
+            e.target.style.background = 'rgba(96, 165, 250, 0.2)'
           }}
           onMouseOut={(e) => {
-            e.target.style.transform = 'translateY(0)'
-            e.target.style.boxShadow = '0 4px 12px rgba(96, 165, 250, 0.2)'
+            e.target.style.background = 'rgba(96, 165, 250, 0.1)'
           }}>
             Get Started
           </button>
@@ -347,34 +317,32 @@ function PricingSection() {
         {/* Monthly Subscription Tier */}
         <div className="price-card featured" style={{
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          border: '2px solid #60a5fa'
         }}>
-          <div className="badge">BEST VALUE</div>
-          <h3 style={{ marginTop: '1rem' }}>Monthly Subscription</h3>
-          <div className="price" style={{ fontSize: '2rem', margin: '1.5rem 0' }}>
-            $4.99<span className="period" style={{ fontSize: '1rem' }}>/month</span>
-          </div>
-          <p className="price-desc">Unlimited applications</p>
-          
           <div style={{
-            flex: 1,
-            textAlign: 'left',
-            marginBottom: '1.5rem'
+            background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
+            color: 'white',
+            padding: '0.5rem 1rem',
+            borderRadius: '4px',
+            fontSize: '0.85rem',
+            fontWeight: '600',
+            marginBottom: '1rem',
+            textAlign: 'center'
           }}>
-            <ul style={{
-              listStyle: 'none',
-              padding: 0,
-              margin: 0,
-              color: 'var(--text-secondary)',
-              fontSize: '0.95rem',
-              lineHeight: '1.8'
-            }}>
-              <li>✓ Unlimited applications</li>
-              <li>✓ All 4 tools included</li>
-              <li>✓ Cancel anytime</li>
-              <li>✓ Best value</li>
-            </ul>
+            Most Popular
           </div>
+          
+          <h3 style={{ marginBottom: '0.5rem' }}>Monthly</h3>
+          <p style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>$4.99</p>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Unlimited applications</p>
+          
+          <ul style={{ flex: 1, marginBottom: '1.5rem', paddingLeft: 0, listStyle: 'none' }}>
+            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ Unlimited applications</li>
+            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ All 4 tools included</li>
+            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ Cancel anytime</li>
+            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ Best value</li>
+          </ul>
           
           <button className="upgrade-btn featured-btn" style={{
             width: '100%',
@@ -573,8 +541,11 @@ function AppContent() {
   if (!user) {
     return (
       <>
-        <Navbar onSignInClick={() => setShowAuthModal(true)} />
-        <LandingPage />
+        <Navbar 
+          onSignInClick={() => setShowAuthModal(true)}
+          onScrollToSection={scrollToSection}
+        />
+        <LandingPage onScrollToSection={scrollToSection} />
         <AuthModal
           isOpen={showAuthModal}
           authPage={authPage}
