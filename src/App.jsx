@@ -62,8 +62,12 @@ function scrollToSection(sectionId) {
 // Landing Page
 function LandingPage({ onScrollToSection }) {
   const { user } = useContext(AuthContext)
+  const { theme } = useContext(ThemeContext)
 
   if (user) return null
+
+  // Theme-aware SVG background colors
+  const bgFill = theme === 'dark' ? '#0a0e17' : '#ffffff'
 
   return (
     <div className="landing">
@@ -104,8 +108,8 @@ function LandingPage({ onScrollToSection }) {
             </radialGradient>
           </defs>
 
-          {/* Background base */}
-          <rect width="1200" height="900" fill="#0a0e17" />
+          {/* Background base - theme-aware */}
+          <rect width="1200" height="900" fill={bgFill} />
 
           {/* Blurred shapes - repositioned for viewport */}
           <circle cx="600" cy="150" r="400" fill="url(#grad1)" filter="url(#blur)" />
@@ -246,174 +250,161 @@ function LandingPage({ onScrollToSection }) {
       </section>
 
       {/* Pricing Section */}
-      <PricingSection />
-
-      {/* Footer */}
-      <footer className="footer" style={{ marginTop: '6rem', paddingTop: '2rem' }}>
-        <p>elevaitr © 2025 • Elevate your job search</p>
-      </footer>
-    </div>
-  )
-}
-
-// Pricing Section Component
-function PricingSection() {
-  return (
-    <section id="pricing" className="pricing-page" style={{ 
-      maxWidth: '1200px', 
-      margin: '4rem auto', 
-      padding: '0 2rem'
-    }}>
-      <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-        <h2 style={{ 
-          fontSize: '2.5rem', 
-          marginBottom: '1rem', 
-          color: 'var(--text-primary)'
-        }}>
-          Simple, Transparent Pricing
-        </h2>
-        <p style={{ 
-          fontSize: '1.1rem', 
-          color: 'var(--text-muted)', 
-          maxWidth: '600px', 
-          margin: '0 auto'
-        }}>
+      <section className="pricing-section" id="pricing" style={{ marginTop: '4rem', marginBottom: '4rem' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>Simple, Transparent Pricing</h2>
+        <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginBottom: '3rem' }}>
           Choose the plan that works for you. Upgrade or downgrade anytime.
         </p>
-      </div>
+        <div className="pricing-grid">
+          {/* Free Plan */}
+          <div className="pricing-wrapper">
+            <h3>Free</h3>
+            <div className="price"><span className="period">$</span>0<span className="period">/month</span></div>
+            <p className="price-desc">3 application trial</p>
 
-      {/* Pricing Cards */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '2rem',
-        marginBottom: '4rem'
-      }}>
-        {/* Free Tier */}
-        <div className="price-card" style={{
-          display: 'flex',
-          flexDirection: 'column'
-        }}>
-          <h3 style={{ marginBottom: '0.5rem' }}>Free</h3>
-          <p style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>$0</p>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>3-application trial</p>
-          
-          <ul style={{ flex: 1, marginBottom: '1.5rem', paddingLeft: 0, listStyle: 'none' }}>
-            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ 3 applications total</li>
-            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ All 4 tools included</li>
-            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ Single PDF downloads</li>
-          </ul>
-          
-          <button className="upgrade-btn" style={{
-            width: '100%',
-            padding: '0.75rem',
-            background: 'rgba(96, 165, 250, 0.1)',
-            color: '#60a5fa',
-            border: '1px solid #60a5fa',
-            borderRadius: '6px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseOver={(e) => {
-            e.target.style.background = 'rgba(96, 165, 250, 0.2)'
-          }}
-          onMouseOut={(e) => {
-            e.target.style.background = 'rgba(96, 165, 250, 0.1)'
-          }}>
-            Get Started
-          </button>
-        </div>
+            <div style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
+              <p style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center' }}>
+                ✓ <span style={{ marginLeft: '0.5rem' }}>3 applications total</span>
+              </p>
+              <p style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center' }}>
+                ✓ <span style={{ marginLeft: '0.5rem' }}>All 4 tools included</span>
+              </p>
+              <p style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center' }}>
+                ✓ <span style={{ marginLeft: '0.5rem' }}>Single PDF downloads</span>
+              </p>
+            </div>
 
-        {/* Pay Per Use Tier */}
-        <div className="price-card" style={{
-          display: 'flex',
-          flexDirection: 'column'
-        }}>
-          <h3 style={{ marginBottom: '0.5rem' }}>Pay Per Use</h3>
-          <p style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>$2.99</p>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>per application</p>
-          
-          <ul style={{ flex: 1, marginBottom: '1.5rem', paddingLeft: 0, listStyle: 'none' }}>
-            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ $2.99 per application</li>
-            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ All 4 tools included</li>
-            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ No monthly commitment</li>
-            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ Cancel anytime</li>
-          </ul>
-          
-          <button className="upgrade-btn" style={{
-            width: '100%',
-            padding: '0.75rem',
-            background: 'rgba(96, 165, 250, 0.1)',
-            color: '#60a5fa',
-            border: '1px solid #60a5fa',
-            borderRadius: '6px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease'
-          }}
-          onMouseOver={(e) => {
-            e.target.style.background = 'rgba(96, 165, 250, 0.2)'
-          }}
-          onMouseOut={(e) => {
-            e.target.style.background = 'rgba(96, 165, 250, 0.1)'
-          }}>
-            Get Started
-          </button>
-        </div>
-
-        {/* Monthly Subscription Tier */}
-        <div className="price-card featured" style={{
-          display: 'flex',
-          flexDirection: 'column',
-          border: '2px solid #60a5fa'
-        }}>
-          <div style={{
-            background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-            color: 'white',
-            padding: '0.5rem 1rem',
-            borderRadius: '4px',
-            fontSize: '0.85rem',
-            fontWeight: '600',
-            marginBottom: '1rem',
-            textAlign: 'center'
-          }}>
-            Most Popular
+            <button style={{
+              background: 'none',
+              border: '2px solid var(--accent-primary)',
+              color: 'var(--accent-primary)',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              width: '100%',
+              minHeight: '44px'
+            }}
+              onMouseOver={(e) => {
+                e.target.style.background = 'var(--accent-primary)'
+                e.target.style.color = 'white'
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = 'none'
+                e.target.style.color = 'var(--accent-primary)'
+              }}>
+              Get Started
+            </button>
           </div>
-          
-          <h3 style={{ marginBottom: '0.5rem' }}>Monthly</h3>
-          <p style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>$4.99</p>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Unlimited applications</p>
-          
-          <ul style={{ flex: 1, marginBottom: '1.5rem', paddingLeft: 0, listStyle: 'none' }}>
-            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ Unlimited applications</li>
-            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ All 4 tools included</li>
-            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ Cancel anytime</li>
-            <li style={{ marginBottom: '0.75rem', color: 'var(--text-muted)' }}>✓ Best value</li>
-          </ul>
-          
-          <button className="upgrade-btn featured-btn" style={{
-            width: '100%',
-            padding: '0.75rem',
-            background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            boxShadow: '0 4px 12px rgba(96, 165, 250, 0.2)'
-          }}
-          onMouseOver={(e) => {
-            e.target.style.transform = 'translateY(-2px)'
-            e.target.style.boxShadow = '0 8px 20px rgba(96, 165, 250, 0.3)'
-          }}
-          onMouseOut={(e) => {
-            e.target.style.transform = 'translateY(0)'
-            e.target.style.boxShadow = '0 4px 12px rgba(96, 165, 250, 0.2)'
-          }}>
-            Subscribe Now
-          </button>
+
+          {/* Pay Per Use Plan */}
+          <div className="pricing-wrapper">
+            <h3>Pay Per Use</h3>
+            <div className="price"><span className="period">$</span>2.99<span className="period">/application</span></div>
+            <p className="price-desc">Pay as you go</p>
+
+            <div style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
+              <p style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center' }}>
+                ✓ <span style={{ marginLeft: '0.5rem' }}>$2.99 per application</span>
+              </p>
+              <p style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center' }}>
+                ✓ <span style={{ marginLeft: '0.5rem' }}>All 4 tools included</span>
+              </p>
+              <p style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center' }}>
+                ✓ <span style={{ marginLeft: '0.5rem' }}>No monthly commitment</span>
+              </p>
+              <p style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center' }}>
+                ✓ <span style={{ marginLeft: '0.5rem' }}>Cancel anytime</span>
+              </p>
+            </div>
+
+            <button style={{
+              background: 'none',
+              border: '2px solid var(--accent-primary)',
+              color: 'var(--accent-primary)',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              width: '100%',
+              minHeight: '44px'
+            }}
+              onMouseOver={(e) => {
+                e.target.style.background = 'var(--accent-primary)'
+                e.target.style.color = 'white'
+              }}
+              onMouseOut={(e) => {
+                e.target.style.background = 'none'
+                e.target.style.color = 'var(--accent-primary)'
+              }}>
+              Get Started
+            </button>
+          </div>
+
+          {/* Monthly Plan */}
+          <div className="pricing-wrapper" style={{ borderColor: 'var(--accent-primary)', background: 'linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%)' }}>
+            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+              <span style={{
+                background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
+                color: 'white',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '20px',
+                fontSize: '0.7rem',
+                fontWeight: '600',
+                display: 'inline-block',
+                boxShadow: '0 4px 12px rgba(96, 165, 250, 0.3)'
+              }}>
+                Most Popular
+              </span>
+            </div>
+            <h3>Monthly</h3>
+            <div className="price"><span className="period">$</span>4.99<span className="period">/month</span></div>
+            <p className="price-desc">Unlimited applications</p>
+
+            <div style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
+              <p style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center' }}>
+                ✓ <span style={{ marginLeft: '0.5rem' }}>Unlimited applications</span>
+              </p>
+              <p style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center' }}>
+                ✓ <span style={{ marginLeft: '0.5rem' }}>All 4 tools included</span>
+              </p>
+              <p style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center' }}>
+                ✓ <span style={{ marginLeft: '0.5rem' }}>Cancel anytime</span>
+              </p>
+              <p style={{ color: 'var(--text-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center' }}>
+                ✓ <span style={{ marginLeft: '0.5rem' }}>Best value</span>
+              </p>
+            </div>
+
+            <button style={{
+              background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%)',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontWeight: '600',
+              fontSize: '1rem',
+              transition: 'all 0.3s ease',
+              width: '100%',
+              minHeight: '44px',
+              boxShadow: '0 4px 12px rgba(96, 165, 250, 0.2)'
+            }}
+              onMouseOver={(e) => {
+                e.target.style.transform = 'translateY(-2px)'
+                e.target.style.boxShadow = '0 8px 20px rgba(96, 165, 250, 0.3)'
+              }}
+              onMouseOut={(e) => {
+                e.target.style.transform = 'translateY(0)'
+                e.target.style.boxShadow = '0 4px 12px rgba(96, 165, 250, 0.2)'
+              }}>
+              Subscribe Now
+            </button>
+          </div>
         </div>
       </div>
 
@@ -449,7 +440,13 @@ function PricingSection() {
 
 // Auth Modal Component
 function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
+  const { theme } = useContext(ThemeContext)
+
   if (!isOpen) return null
+
+  // Theme-aware overlay background
+  const overlayBg = theme === 'dark' ? 'rgba(10, 14, 23, 0.7)' : 'rgba(15, 23, 42, 0.5)'
+  const modalBg = theme === 'dark' ? 'rgba(15, 20, 25, 0.8)' : 'rgba(255, 255, 255, 0.9)'
 
   return (
     <div 
@@ -459,7 +456,7 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
         left: 0,
         right: 0,
         bottom: 0,
-        background: 'rgba(10, 14, 23, 0.7)',
+        background: overlayBg,
         display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'center',
@@ -485,7 +482,7 @@ function AuthModal({ isOpen, authPage, onAuthPageChange, onClose }) {
       `}</style>
       <div 
         style={{
-          background: 'rgba(15, 20, 25, 0.8)',
+          background: modalBg,
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           borderRadius: '12px',
