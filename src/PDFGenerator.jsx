@@ -44,7 +44,7 @@ export function generateApplicationPackagePDF(application) {
     })
   }
 
-  // Helper function to add formatted interview prep with bold headers and normal response text
+  // Helper function to add formatted interview prep with bold headers and normal response text on same line
   const addFormattedInterviewPrep = (text) => {
     const lines = text.split('\n')
     
@@ -58,32 +58,51 @@ export function generateApplicationPackagePDF(application) {
       }
       
       // Check if this is a Question header
-      if (line.match(/^Question\s+\d+:/i)) {
+      const questionMatch = line.match(/^(Question\s+\d+:)\s*(.*)/i)
+      if (questionMatch) {
+        const header = questionMatch[1]
+        const content = questionMatch[2]
+        
         // Add space before question
         if (yPosition > margin) {
           yPosition += 3
         }
         
-        // Add bold header
+        // Render bold header
         doc.setFontSize(10)
         doc.setFont(undefined, 'bold')
         doc.setTextColor(...colors.text)
+        doc.text(header, margin + 2, yPosition)
         
-        const headerLines = doc.splitTextToSize(line, contentWidth)
-        headerLines.forEach((hLine) => {
-          if (yPosition > pageHeight - margin - 8) {
-            doc.addPage()
-            addAccentBorder()
-            yPosition = margin
-          }
-          doc.text(hLine, margin + 2, yPosition)
+        // Calculate header width to position content after it
+        const headerWidth = doc.getStringWidth(header)
+        const contentStartX = margin + 2 + headerWidth + 1 // +1 for spacing
+        
+        // Split content into lines based on remaining space
+        const remainingWidth = contentWidth - headerWidth - 1
+        const contentLines = doc.splitTextToSize(content, remainingWidth)
+        
+        // Render content in normal font
+        doc.setFont(undefined, 'normal')
+        
+        if (contentLines.length > 0) {
+          // First line on same row as header
+          doc.text(contentLines[0], contentStartX, yPosition)
           yPosition += 5
-        })
+          
+          // Remaining lines below
+          for (let j = 1; j < contentLines.length; j++) {
+            if (yPosition > pageHeight - margin - 8) {
+              doc.addPage()
+              addAccentBorder()
+              yPosition = margin
+            }
+            doc.text(contentLines[j], margin + 2, yPosition)
+            yPosition += 5
+          }
+        }
         
-        // Add line break after header
-        yPosition += 2
-        
-        // Process next lines as the response until we hit another header or empty line
+        // Process subsequent lines until we hit another header or empty line
         i++
         while (i < lines.length) {
           const nextLine = lines[i].trim()
@@ -99,7 +118,7 @@ export function generateApplicationPackagePDF(application) {
             break
           }
           
-          // Render response text in normal font
+          // Render additional response text in normal font
           doc.setFontSize(10)
           doc.setFont(undefined, 'normal')
           doc.setTextColor(...colors.text)
@@ -121,32 +140,51 @@ export function generateApplicationPackagePDF(application) {
       }
       
       // Check if this is a Key Points header
-      if (line.match(/^Key\s+Points?\s+(to\s+Mention)?:/i)) {
+      const keyPointMatch = line.match(/^(Key\s+Points?\s+(?:to\s+Mention)?:)\s*(.*)/i)
+      if (keyPointMatch) {
+        const header = keyPointMatch[1]
+        const content = keyPointMatch[2]
+        
         // Add space before key points
         if (yPosition > margin) {
           yPosition += 3
         }
         
-        // Add bold header
+        // Render bold header
         doc.setFontSize(10)
         doc.setFont(undefined, 'bold')
         doc.setTextColor(...colors.text)
+        doc.text(header, margin + 2, yPosition)
         
-        const headerLines = doc.splitTextToSize(line, contentWidth)
-        headerLines.forEach((hLine) => {
-          if (yPosition > pageHeight - margin - 8) {
-            doc.addPage()
-            addAccentBorder()
-            yPosition = margin
-          }
-          doc.text(hLine, margin + 2, yPosition)
+        // Calculate header width to position content after it
+        const headerWidth = doc.getStringWidth(header)
+        const contentStartX = margin + 2 + headerWidth + 1 // +1 for spacing
+        
+        // Split content into lines based on remaining space
+        const remainingWidth = contentWidth - headerWidth - 1
+        const contentLines = doc.splitTextToSize(content, remainingWidth)
+        
+        // Render content in normal font
+        doc.setFont(undefined, 'normal')
+        
+        if (contentLines.length > 0) {
+          // First line on same row as header
+          doc.text(contentLines[0], contentStartX, yPosition)
           yPosition += 5
-        })
+          
+          // Remaining lines below
+          for (let j = 1; j < contentLines.length; j++) {
+            if (yPosition > pageHeight - margin - 8) {
+              doc.addPage()
+              addAccentBorder()
+              yPosition = margin
+            }
+            doc.text(contentLines[j], margin + 2, yPosition)
+            yPosition += 5
+          }
+        }
         
-        // Add line break after header
-        yPosition += 2
-        
-        // Process next lines as the response until we hit another header or empty line
+        // Process subsequent lines until we hit another header or empty line
         i++
         while (i < lines.length) {
           const nextLine = lines[i].trim()
@@ -162,7 +200,7 @@ export function generateApplicationPackagePDF(application) {
             break
           }
           
-          // Render response text in normal font
+          // Render additional response text in normal font
           doc.setFontSize(10)
           doc.setFont(undefined, 'normal')
           doc.setTextColor(...colors.text)
