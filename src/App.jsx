@@ -429,6 +429,7 @@ function LandingPage({ onScrollToSection, onSignInClick }) {
         </div>
       </section>
     </div>
+    </div>
   )
 }
 
