@@ -67,6 +67,54 @@ function LandingPage({ onScrollToSection }) {
 
   return (
     <div className="landing">
+      {/* Fixed Background */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: -1,
+        pointerEvents: 'none',
+        overflow: 'hidden'
+      }}>
+        <svg
+          viewBox="0 0 1200 1600"
+          style={{
+            width: '100%',
+            height: '100%',
+            preserveAspectRatio: 'xMidYMid slice'
+          }}
+        >
+          <defs>
+            <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="80" />
+            </filter>
+            <radialGradient id="grad1" cx="30%" cy="20%">
+              <stop offset="0%" style={{ stopColor: '#60a5fa', stopOpacity: 0.3 }} />
+              <stop offset="100%" style={{ stopColor: '#3b82f6', stopOpacity: 0.05 }} />
+            </radialGradient>
+            <radialGradient id="grad2" cx="70%" cy="70%">
+              <stop offset="0%" style={{ stopColor: '#3b82f6', stopOpacity: 0.25 }} />
+              <stop offset="100%" style={{ stopColor: '#1e40af', stopOpacity: 0.05 }} />
+            </radialGradient>
+            <radialGradient id="grad3" cx="50%" cy="50%">
+              <stop offset="0%" style={{ stopColor: '#60a5fa', stopOpacity: 0.2 }} />
+              <stop offset="100%" style={{ stopColor: '#3b82f6', stopOpacity: 0.03 }} />
+            </radialGradient>
+          </defs>
+
+          {/* Background base */}
+          <rect width="1200" height="1600" fill="#0a0e17" />
+
+          {/* Blurred shapes */}
+          <circle cx="600" cy="200" r="400" fill="url(#grad1)" filter="url(#blur)" />
+          <circle cx="100" cy="600" r="350" fill="url(#grad2)" filter="url(#blur)" />
+          <circle cx="1100" cy="800" r="380" fill="url(#grad1)" filter="url(#blur)" />
+          <circle cx="400" cy="1200" r="320" fill="url(#grad3)" filter="url(#blur)" />
+          <circle cx="900" cy="1400" r="360" fill="url(#grad2)" filter="url(#blur)" />
+        </svg>
+      </div>
       {/* Hero Section */}
       <section className="hero-section" style={{ paddingTop: '8rem', paddingBottom: '6rem' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
