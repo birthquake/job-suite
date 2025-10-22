@@ -136,7 +136,30 @@ export function generateApplicationPackagePDF(application) {
     doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin - 15, pageHeight - 8, { align: 'right' })
   }
 
-  // Save the PDF
+  // Save the PDF with explicit blob download for better reliability
   const filename = `${application.company}-${application.jobTitle}-${new Date().toISOString().split('T')[0]}.pdf`
-  doc.save(filename)
+  
+  try {
+    // Create blob from PDF
+    const pdf = doc.output('blob')
+    
+    // Create download link
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(pdf)
+    link.download = filename
+    
+    // Trigger download
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    
+    // Clean up object URL
+    URL.revokeObjectURL(link.href)
+    
+    console.log('PDF downloaded successfully:', filename)
+  } catch (error) {
+    console.error('Error creating PDF blob:', error)
+    // Fallback to doc.save() if blob method fails
+    doc.save(filename)
+  }
 }
