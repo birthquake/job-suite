@@ -28,7 +28,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
     }}>
       {/* Logo */}
       <div style={{
-        fontSize: '1.25rem',
+        fontSize: '1.75rem',
         fontWeight: '700',
         background: 'linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%)',
         WebkitBackgroundClip: 'text',
@@ -50,15 +50,16 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
             style={{
               background: 'none',
               border: 'none',
-              color: 'var(--text-muted)',
+              color: '#60a5fa',
               cursor: 'pointer',
               fontSize: '0.95rem',
               transition: 'color 0.2s ease',
               padding: 0,
-              textDecoration: 'none'
+              textDecoration: 'none',
+              fontWeight: '600'
             }}
-            onMouseOver={(e) => e.target.style.color = '#60a5fa'}
-            onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
+            onMouseOver={(e) => e.target.style.color = '#3b82f6'}
+            onMouseOut={(e) => e.target.style.color = '#60a5fa'}
           >
             Pricing
           </button>
@@ -70,14 +71,15 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
           style={{
             background: 'none',
             border: 'none',
-            color: 'var(--text-muted)',
+            color: '#60a5fa',
             cursor: 'pointer',
             fontSize: '0.95rem',
             padding: 0,
-            transition: 'color 0.2s ease'
+            transition: 'color 0.2s ease',
+            fontWeight: '600'
           }}
-          onMouseOver={(e) => e.target.style.color = '#60a5fa'}
-          onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
+          onMouseOver={(e) => e.target.style.color = '#3b82f6'}
+          onMouseOut={(e) => e.target.style.color = '#60a5fa'}
         >
           Resources
         </button>
@@ -238,7 +240,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
               style={{
                 background: 'none',
                 border: 'none',
-                color: 'var(--text-muted)',
+                color: '#60a5fa',
                 textDecoration: 'none',
                 fontSize: '0.95rem',
                 padding: '0.75rem',
@@ -248,14 +250,15 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
                 minHeight: '44px',
                 display: 'flex',
                 alignItems: 'center',
-                textAlign: 'left'
+                textAlign: 'left',
+                fontWeight: '600'
               }}
               onMouseOver={(e) => {
-                e.target.style.color = '#60a5fa'
+                e.target.style.color = '#3b82f6'
                 e.target.style.background = 'rgba(96, 165, 250, 0.1)'
               }}
               onMouseOut={(e) => {
-                e.target.style.color = 'var(--text-muted)'
+                e.target.style.color = '#60a5fa'
                 e.target.style.background = 'transparent'
               }}
             >
@@ -272,7 +275,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
             style={{
               background: 'none',
               border: 'none',
-              color: 'var(--text-muted)',
+              color: '#60a5fa',
               cursor: 'pointer',
               fontSize: '0.95rem',
               padding: '0.75rem',
@@ -281,14 +284,15 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
               textAlign: 'left',
               minHeight: '44px',
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
+              fontWeight: '600'
             }}
             onMouseOver={(e) => {
-              e.target.style.color = '#60a5fa'
+              e.target.style.color = '#3b82f6'
               e.target.style.background = 'rgba(96, 165, 250, 0.1)'
             }}
             onMouseOut={(e) => {
-              e.target.style.color = 'var(--text-muted)'
+              e.target.style.color = '#60a5fa'
               e.target.style.background = 'transparent'
             }}
           >
