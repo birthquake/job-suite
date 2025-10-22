@@ -294,6 +294,8 @@ function LandingPage({ onScrollToSection, onSignInClick }) {
               }}>
               Get Started
             </button>
+          </div>
+
           <div className="pricing-wrapper">
             <h3>Pay Per Use</h3>
             <div className="price"><span className="period">$</span>2.99<span className="period">/application</span></div>
@@ -338,6 +340,8 @@ function LandingPage({ onScrollToSection, onSignInClick }) {
               }}>
               Get Started
             </button>
+          </div>
+
           <div className="pricing-wrapper" style={{ borderColor: 'var(--accent-primary)', background: 'linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%)' }}>
             <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
               <span style={{
