@@ -12,6 +12,9 @@ export function Dashboard({ onStartApplication }) {
   const [userTier, setUserTier] = useState('free')
   const [downloadingId, setDownloadingId] = useState(null)
   const [sortDirection, setSortDirection] = useState('desc') // 'asc' or 'desc'
+  const [sortBy, setSortBy] = useState('date') // 'date', 'company', or 'status'
+  const [statusFilter, setStatusFilter] = useState('all') // 'all', 'applied', 'interviewed', 'offer', 'rejected'
+  const [displayedCount, setDisplayedCount] = useState(5)
   const [displayedStats, setDisplayedStats] = useState({ apps: 0, callbacks: 0, pending: 0 })
 
   useEffect(() => {
@@ -98,22 +101,49 @@ export function Dashboard({ onStartApplication }) {
     }
   }
 
-  const handleSortByDate = () => {
-    setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')
+  const getFilteredAndSortedApplications = () => {
+    // First, filter by status
+    let filtered = applications
+    if (statusFilter !== 'all') {
+      filtered = applications.filter((app) => app.status === statusFilter)
+    }
+
+    // Then sort
+    const sorted = [...filtered].sort((a, b) => {
+      let comparison = 0
+
+      if (sortBy === 'date') {
+        const dateA = new Date(a.dateApplied)
+        const dateB = new Date(b.dateApplied)
+        comparison = dateA - dateB
+      } else if (sortBy === 'company') {
+        comparison = a.company.localeCompare(b.company)
+      } else if (sortBy === 'status') {
+        comparison = a.status.localeCompare(b.status)
+      }
+
+      return sortDirection === 'asc' ? comparison : -comparison
+    })
+
+    return sorted
   }
 
-  const getSortedApplications = () => {
-    const sorted = [...applications].sort((a, b) => {
-      const dateA = new Date(a.dateApplied)
-      const dateB = new Date(b.dateApplied)
-      
-      if (sortDirection === 'asc') {
-        return dateA - dateB
-      } else {
-        return dateB - dateA
-      }
-    })
-    return sorted
+  const handleSortByDate = () => {
+    if (sortBy === 'date') {
+      setSortDirection(sortDirection === 'desc' ? 'asc' : 'desc')
+    } else {
+      setSortBy('date')
+      setSortDirection('desc')
+    }
+  }
+
+  const handleSortByCompany = () => {
+    if (sortBy === 'company') {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortBy('company')
+      setSortDirection('asc')
+    }
   }
 
   const handleDownloadPackage = async (appId) => {
@@ -183,6 +213,10 @@ export function Dashboard({ onStartApplication }) {
   const callbacks = applications.filter((a) => a.callbackReceived).length
   const successRate = totalApps > 0 ? Math.round((callbacks / totalApps) * 100) : 0
   const pending = applications.filter((a) => a.status === 'applied').length
+
+  const filteredAndSortedApps = getFilteredAndSortedApplications()
+  const displayedApps = filteredAndSortedApps.slice(0, displayedCount)
+  const hasMoreApps = filteredAndSortedApps.length > displayedCount
 
   return (
     <div className="dashboard-container">
@@ -319,8 +353,73 @@ export function Dashboard({ onStartApplication }) {
         </div>
       ) : (
         <>
-          {/* Applications Table */}
+          {/* Applications Table Header with Filters */}
           <h3 style={{ marginTop: '2rem', marginBottom: '1rem', color: '#ffffff' }}>Your Applications</h3>
+          
+          {/* Filter and Sort Controls */}
+          <div style={{
+            display: 'flex',
+            gap: '1rem',
+            marginBottom: '1rem',
+            flexWrap: 'wrap',
+            alignItems: 'center'
+          }}>
+            {/* Status Filter */}
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <label style={{ color: '#9ca3af', fontSize: '0.9rem' }}>Filter by Status:</label>
+              <select
+                value={statusFilter}
+                onChange={(e) => {
+                  setStatusFilter(e.target.value)
+                  setDisplayedCount(5) // Reset pagination
+                }}
+                style={{
+                  background: '#1a1f2e',
+                  color: '#e5e7eb',
+                  border: '1px solid #2d3748',
+                  padding: '0.5rem 0.75rem',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem'
+                }}
+              >
+                <option value="all">All Statuses</option>
+                <option value="applied">Applied</option>
+                <option value="interviewed">Interviewed</option>
+                <option value="offer">Offer</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+
+            {/* Sort By */}
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <label style={{ color: '#9ca3af', fontSize: '0.9rem' }}>Sort by:</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                style={{
+                  background: '#1a1f2e',
+                  color: '#e5e7eb',
+                  border: '1px solid #2d3748',
+                  padding: '0.5rem 0.75rem',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem'
+                }}
+              >
+                <option value="date">Date Applied</option>
+                <option value="company">Company</option>
+                <option value="status">Status</option>
+              </select>
+            </div>
+
+            {/* Results count */}
+            <div style={{ color: '#9ca3af', fontSize: '0.9rem', marginLeft: 'auto' }}>
+              Showing {displayedApps.length} of {filteredAndSortedApps.length}
+            </div>
+          </div>
+
+          {/* Applications Table */}
           <div className="applications-table">
             <div className="table-header">
               <div>Company & Role</div>
@@ -332,14 +431,15 @@ export function Dashboard({ onStartApplication }) {
                   alignItems: 'center',
                   gap: '0.5rem',
                   userSelect: 'none',
-                  transition: 'color 0.2s ease'
+                  transition: 'color 0.2s ease',
+                  opacity: sortBy === 'date' ? 1 : 0.6
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.color = '#60a5fa'}
                 onMouseLeave={(e) => e.currentTarget.style.color = '#ffffff'}
               >
                 Date Applied
                 <span style={{ fontSize: '0.9rem', opacity: 0.7 }}>
-                  {sortDirection === 'desc' ? '↓' : '↑'}
+                  {sortBy === 'date' ? (sortDirection === 'desc' ? '↓' : '↑') : ''}
                 </span>
               </div>
               <div>Status</div>
@@ -347,7 +447,7 @@ export function Dashboard({ onStartApplication }) {
               <div>Actions</div>
             </div>
 
-            {getSortedApplications().map((app) => (
+            {displayedApps.map((app) => (
               <div key={app.id} className="table-row">
                 <div className="table-cell">
                   <div style={{ fontWeight: '600' }}>{app.company}</div>
@@ -395,6 +495,47 @@ export function Dashboard({ onStartApplication }) {
               </div>
             ))}
           </div>
+
+          {/* Load More Button */}
+          {hasMoreApps && (
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.5rem' }}>
+              <button
+                onClick={() => setDisplayedCount((prev) => prev + 5)}
+                style={{
+                  background: '#1a1f2e',
+                  color: '#60a5fa',
+                  border: '1px solid #2d3748',
+                  padding: '0.75rem 2rem',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  fontSize: '0.95rem',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.background = '#2d3748'
+                  e.target.style.borderColor = '#60a5fa'
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.background = '#1a1f2e'
+                  e.target.style.borderColor = '#2d3748'
+                }}
+              >
+                Load More ({filteredAndSortedApps.length - displayedCount} remaining)
+              </button>
+            </div>
+          )}
+
+          {/* No results message */}
+          {filteredAndSortedApps.length === 0 && (
+            <div style={{
+              textAlign: 'center',
+              padding: '2rem',
+              color: '#9ca3af'
+            }}>
+              No applications found with the selected filters.
+            </div>
+          )}
         </>
       )}
     </div>
