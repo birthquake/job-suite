@@ -12,7 +12,6 @@ export function LoginPage({ onSignUpClick }) {
     e.preventDefault()
     setLoading(true)
     setError('')
-
     try {
       await signInWithEmailAndPassword(auth, email, password)
     } catch (err) {
@@ -49,9 +48,7 @@ export function LoginPage({ onSignUpClick }) {
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
-
         {error && <div className="auth-error">{error}</div>}
-
         <p className="auth-toggle">
           Don't have an account?{' '}
           <button onClick={onSignUpClick} className="auth-link">
@@ -73,19 +70,15 @@ export function SignUpPage({ onLoginClick }) {
   const handleSignUp = async (e) => {
     e.preventDefault()
     setError('')
-
     if (password !== confirmPassword) {
       setError('Passwords do not match')
       return
     }
-
     if (password.length < 6) {
       setError('Password must be at least 6 characters')
       return
     }
-
     setLoading(true)
-
     try {
       await createUserWithEmailAndPassword(auth, email, password)
     } catch (err) {
@@ -130,9 +123,7 @@ export function SignUpPage({ onLoginClick }) {
             {loading ? 'Creating account...' : 'Create Account'}
           </button>
         </form>
-
         {error && <div className="auth-error">{error}</div>}
-
         <p className="auth-toggle">
           Already have an account?{' '}
           <button onClick={onLoginClick} className="auth-link">
