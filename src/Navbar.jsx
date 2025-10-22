@@ -53,13 +53,19 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
               color: '#60a5fa',
               cursor: 'pointer',
               fontSize: '0.95rem',
-              transition: 'color 0.2s ease',
+              transition: 'all 0.2s ease',
               padding: 0,
               textDecoration: 'none',
               fontWeight: '600'
             }}
-            onMouseOver={(e) => e.target.style.color = '#3b82f6'}
-            onMouseOut={(e) => e.target.style.color = '#60a5fa'}
+            onMouseOver={(e) => {
+              e.target.style.color = '#60a5fa'
+              e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8)'
+            }}
+            onMouseOut={(e) => {
+              e.target.style.color = '#60a5fa'
+              e.target.style.textShadow = 'none'
+            }}
           >
             Pricing
           </button>
@@ -75,11 +81,17 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
             cursor: 'pointer',
             fontSize: '0.95rem',
             padding: 0,
-            transition: 'color 0.2s ease',
+            transition: 'all 0.2s ease',
             fontWeight: '600'
           }}
-          onMouseOver={(e) => e.target.style.color = '#3b82f6'}
-          onMouseOut={(e) => e.target.style.color = '#60a5fa'}
+          onMouseOver={(e) => {
+            e.target.style.color = '#60a5fa'
+            e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8)'
+          }}
+          onMouseOut={(e) => {
+            e.target.style.color = '#60a5fa'
+            e.target.style.textShadow = 'none'
+          }}
         >
           Resources
         </button>
@@ -254,12 +266,14 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
                 fontWeight: '600'
               }}
               onMouseOver={(e) => {
-                e.target.style.color = '#3b82f6'
+                e.target.style.color = '#60a5fa'
                 e.target.style.background = 'rgba(96, 165, 250, 0.1)'
+                e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8)'
               }}
               onMouseOut={(e) => {
                 e.target.style.color = '#60a5fa'
                 e.target.style.background = 'transparent'
+                e.target.style.textShadow = 'none'
               }}
             >
               Pricing
@@ -288,12 +302,14 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
               fontWeight: '600'
             }}
             onMouseOver={(e) => {
-              e.target.style.color = '#3b82f6'
+              e.target.style.color = '#60a5fa'
               e.target.style.background = 'rgba(96, 165, 250, 0.1)'
+              e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8)'
             }}
             onMouseOut={(e) => {
               e.target.style.color = '#60a5fa'
               e.target.style.background = 'transparent'
+              e.target.style.textShadow = 'none'
             }}
           >
             Resources
