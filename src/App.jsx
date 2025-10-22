@@ -406,35 +406,35 @@ function LandingPage({ onScrollToSection }) {
             </button>
           </div>
         </div>
-      </div>
 
-      {/* FAQ Section */}
-      <div style={{
-        background: 'var(--bg-secondary)',
-        borderRadius: '12px',
-        padding: '2rem',
-        border: '1px solid var(--border-light)'
-      }}>
-        <h3 style={{ textAlign: 'center', marginTop: 0 }}>Frequently Asked Questions</h3>
-        
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div style={{ marginBottom: '2rem' }}>
-            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Can I change plans anytime?</h4>
-            <p style={{ color: 'var(--text-muted)', margin: 0 }}>Yes. Upgrade, downgrade, or cancel your subscription anytime with no penalty.</p>
-          </div>
+        {/* FAQ Section */}
+        <div style={{
+          background: 'var(--bg-secondary)',
+          borderRadius: '12px',
+          padding: '2rem',
+          border: '1px solid var(--border-light)',
+          marginTop: '4rem'
+        }}>
+          <h3 style={{ textAlign: 'center', marginTop: 0 }}>Frequently Asked Questions</h3>
           
-          <div style={{ marginBottom: '2rem' }}>
-            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Do I need a credit card for the free tier?</h4>
-            <p style={{ color: 'var(--text-muted)', margin: 0 }}>No credit card required. Start with 3 free applications.</p>
-          </div>
-          
-          <div style={{ marginBottom: '2rem' }}>
-            <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>What happens if I exceed my free applications?</h4>
-            <p style={{ color: 'var(--text-muted)', margin: 0 }}>You'll be prompted to upgrade. Your applications and progress are saved—no data loss.</p>
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <div style={{ marginBottom: '2rem' }}>
+              <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Can I change plans anytime?</h4>
+              <p style={{ color: 'var(--text-muted)', margin: 0 }}>Yes. Upgrade, downgrade, or cancel your subscription anytime with no penalty.</p>
+            </div>
+            
+            <div style={{ marginBottom: '2rem' }}>
+              <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Do I need a credit card for the free tier?</h4>
+              <p style={{ color: 'var(--text-muted)', margin: 0 }}>No credit card required. Start with 3 free applications.</p>
+            </div>
+            
+            <div style={{ marginBottom: '2rem' }}>
+              <h4 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>What happens if I exceed my free applications?</h4>
+              <p style={{ color: 'var(--text-muted)', margin: 0 }}>You'll be prompted to upgrade. Your applications and progress are saved—no data loss.</p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
   )
 }
 
