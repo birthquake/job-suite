@@ -435,6 +435,7 @@ function LandingPage({ onScrollToSection }) {
           </div>
         </div>
       </section>
+    </div>
   )
 }
 
