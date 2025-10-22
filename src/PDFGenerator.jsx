@@ -44,7 +44,7 @@ export function generateApplicationPackagePDF(application) {
     })
   }
 
-  // Helper function to add formatted interview prep with bold headers and normal response text
+  // Helper function to add formatted interview prep with bold headers inline
   const addFormattedInterviewPrep = (text) => {
     const lines = text.split('\n')
     
@@ -60,7 +60,7 @@ export function generateApplicationPackagePDF(application) {
       // Check if this is a Question header
       const questionMatch = line.match(/^(Question\s+\d+:)\s*(.*)/i)
       if (questionMatch) {
-        const header = questionMatch[1]
+        const header = questionMatch[1] + ' '
         const content = questionMatch[2]
         
         // Add space before question
@@ -68,36 +68,36 @@ export function generateApplicationPackagePDF(application) {
           yPosition += 3
         }
         
-        // Render bold header + normal content on same line using splitTextToSize
+        // Render header in bold
         doc.setFontSize(10)
-        doc.setTextColor(...colors.text)
-        
-        // Combine header and content, then split by full width
-        const fullText = header + ' ' + content
-        const fullLines = doc.splitTextToSize(fullText, contentWidth)
-        
-        // First line: render header part in bold
         doc.setFont(undefined, 'bold')
-        const firstLineText = fullLines[0]
+        doc.setTextColor(...colors.text)
+        doc.text(header, margin + 2, yPosition)
         
-        if (yPosition > pageHeight - margin - 8) {
-          doc.addPage()
-          addAccentBorder()
-          yPosition = margin
-        }
-        doc.text(firstLineText, margin + 2, yPosition)
-        yPosition += 5
+        // Estimate header width (each character ~2.3 units at font size 10)
+        const headerWidth = header.length * 2.3
+        const headerXEnd = margin + 2 + headerWidth
         
-        // Remaining lines in normal font
+        // Render content in normal font starting after header
         doc.setFont(undefined, 'normal')
-        for (let j = 1; j < fullLines.length; j++) {
-          if (yPosition > pageHeight - margin - 8) {
-            doc.addPage()
-            addAccentBorder()
-            yPosition = margin
-          }
-          doc.text(fullLines[j], margin + 2, yPosition)
+        const remainingWidth = contentWidth - headerWidth
+        const contentLines = doc.splitTextToSize(content, remainingWidth)
+        
+        if (contentLines.length > 0) {
+          // First line of content on same line as header
+          doc.text(contentLines[0], headerXEnd, yPosition)
           yPosition += 5
+          
+          // Subsequent content lines start at normal margin
+          for (let j = 1; j < contentLines.length; j++) {
+            if (yPosition > pageHeight - margin - 8) {
+              doc.addPage()
+              addAccentBorder()
+              yPosition = margin
+            }
+            doc.text(contentLines[j], margin + 2, yPosition)
+            yPosition += 5
+          }
         }
         
         // Process subsequent lines until we hit another header or empty line
@@ -107,7 +107,7 @@ export function generateApplicationPackagePDF(application) {
           
           // Stop if we hit another header
           if (nextLine.match(/^Question\s+\d+:/i) || nextLine.match(/^Key\s+Points?\s+(to\s+Mention)?:/i)) {
-            i-- // Back up to process this header in next iteration
+            i--
             break
           }
           
@@ -140,7 +140,7 @@ export function generateApplicationPackagePDF(application) {
       // Check if this is a Key Points header
       const keyPointMatch = line.match(/^(Key\s+Points?\s+(?:to\s+Mention)?:)\s*(.*)/i)
       if (keyPointMatch) {
-        const header = keyPointMatch[1]
+        const header = keyPointMatch[1] + ' '
         const content = keyPointMatch[2]
         
         // Add space before key points
@@ -148,36 +148,36 @@ export function generateApplicationPackagePDF(application) {
           yPosition += 3
         }
         
-        // Render bold header + normal content on same line using splitTextToSize
+        // Render header in bold
         doc.setFontSize(10)
-        doc.setTextColor(...colors.text)
-        
-        // Combine header and content, then split by full width
-        const fullText = header + ' ' + content
-        const fullLines = doc.splitTextToSize(fullText, contentWidth)
-        
-        // First line: render header part in bold
         doc.setFont(undefined, 'bold')
-        const firstLineText = fullLines[0]
+        doc.setTextColor(...colors.text)
+        doc.text(header, margin + 2, yPosition)
         
-        if (yPosition > pageHeight - margin - 8) {
-          doc.addPage()
-          addAccentBorder()
-          yPosition = margin
-        }
-        doc.text(firstLineText, margin + 2, yPosition)
-        yPosition += 5
+        // Estimate header width (each character ~2.3 units at font size 10)
+        const headerWidth = header.length * 2.3
+        const headerXEnd = margin + 2 + headerWidth
         
-        // Remaining lines in normal font
+        // Render content in normal font starting after header
         doc.setFont(undefined, 'normal')
-        for (let j = 1; j < fullLines.length; j++) {
-          if (yPosition > pageHeight - margin - 8) {
-            doc.addPage()
-            addAccentBorder()
-            yPosition = margin
-          }
-          doc.text(fullLines[j], margin + 2, yPosition)
+        const remainingWidth = contentWidth - headerWidth
+        const contentLines = doc.splitTextToSize(content, remainingWidth)
+        
+        if (contentLines.length > 0) {
+          // First line of content on same line as header
+          doc.text(contentLines[0], headerXEnd, yPosition)
           yPosition += 5
+          
+          // Subsequent content lines start at normal margin
+          for (let j = 1; j < contentLines.length; j++) {
+            if (yPosition > pageHeight - margin - 8) {
+              doc.addPage()
+              addAccentBorder()
+              yPosition = margin
+            }
+            doc.text(contentLines[j], margin + 2, yPosition)
+            yPosition += 5
+          }
         }
         
         // Process subsequent lines until we hit another header or empty line
@@ -187,7 +187,7 @@ export function generateApplicationPackagePDF(application) {
           
           // Stop if we hit another header
           if (nextLine.match(/^Question\s+\d+:/i) || nextLine.match(/^Key\s+Points?\s+(to\s+Mention)?:/i)) {
-            i-- // Back up to process this header in next iteration
+            i--
             break
           }
           
