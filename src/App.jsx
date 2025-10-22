@@ -60,7 +60,7 @@ function scrollToSection(sectionId) {
 }
 
 // Landing Page
-function LandingPage({ onScrollToSection }) {
+function LandingPage({ onScrollToSection, onSignInClick }) {
   const { user } = useContext(AuthContext)
   const { theme } = useContext(ThemeContext)
 
@@ -167,25 +167,21 @@ function LandingPage({ onScrollToSection }) {
           <div className="tool-card">
             <div className="tool-icon"><ResumeIcon /></div>
             <h3>Resume Optimizer</h3>
-            <p>Improve your resume for ATS and recruiter impact</p>
           </div>
 
           <div className="tool-card">
             <div className="tool-icon"><CoverLetterIcon /></div>
             <h3>Cover Letter Generator</h3>
-            <p>Create personalized cover letters for each role</p>
           </div>
 
           <div className="tool-card">
             <div className="tool-icon"><InterviewPrepIcon /></div>
             <h3>Interview Prep</h3>
-            <p>Get tailored interview questions and answers</p>
           </div>
 
           <div className="tool-card">
             <div className="tool-icon"><LinkedInIcon /></div>
             <h3>LinkedIn Optimizer</h3>
-            <p>Make your profile stand out to recruiters</p>
           </div>
         </div>
       </section>
@@ -287,6 +283,7 @@ function LandingPage({ onScrollToSection }) {
               width: '100%',
               minHeight: '44px'
             }}
+              onClick={onSignInClick}
               onMouseOver={(e) => {
                 e.target.style.background = 'var(--accent-primary)'
                 e.target.style.color = 'white'
@@ -297,9 +294,6 @@ function LandingPage({ onScrollToSection }) {
               }}>
               Get Started
             </button>
-          </div>
-
-          {/* Pay Per Use Plan */}
           <div className="pricing-wrapper">
             <h3>Pay Per Use</h3>
             <div className="price"><span className="period">$</span>2.99<span className="period">/application</span></div>
@@ -333,6 +327,7 @@ function LandingPage({ onScrollToSection }) {
               width: '100%',
               minHeight: '44px'
             }}
+              onClick={() => window.location.href = 'https://elevaitr.lemonsqueezy.com/buy/ea889fea-f2f7-4336-b79e-52801d78090f'}
               onMouseOver={(e) => {
                 e.target.style.background = 'var(--accent-primary)'
                 e.target.style.color = 'white'
@@ -343,9 +338,6 @@ function LandingPage({ onScrollToSection }) {
               }}>
               Get Started
             </button>
-          </div>
-
-          {/* Monthly Plan */}
           <div className="pricing-wrapper" style={{ borderColor: 'var(--accent-primary)', background: 'linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%)' }}>
             <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
               <span style={{
@@ -394,6 +386,7 @@ function LandingPage({ onScrollToSection }) {
               minHeight: '44px',
               boxShadow: '0 4px 12px rgba(96, 165, 250, 0.2)'
             }}
+              onClick={() => window.location.href = 'https://elevaitr.lemonsqueezy.com/buy/59ccedda-00b6-441c-95fa-480c56f0642d'}
               onMouseOver={(e) => {
                 e.target.style.transform = 'translateY(-2px)'
                 e.target.style.boxShadow = '0 8px 20px rgba(96, 165, 250, 0.3)'
@@ -591,7 +584,10 @@ function AppContent() {
           onSignInClick={() => setShowAuthModal(true)}
           onScrollToSection={scrollToSection}
         />
-        <LandingPage onScrollToSection={scrollToSection} />
+        <LandingPage 
+          onScrollToSection={scrollToSection}
+          onSignInClick={() => setShowAuthModal(true)}
+        />
         <AuthModal
           isOpen={showAuthModal}
           authPage={authPage}
