@@ -63,9 +63,27 @@ export function Navbar({ onSignInClick }) {
             Pricing
           </a>
         )}
+
+        {/* Resources Button - Desktop */}
+        <button
+          onClick={() => setShowHelp(true)}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'var(--text-muted)',
+            cursor: 'pointer',
+            fontSize: '0.95rem',
+            padding: 0,
+            transition: 'color 0.2s ease'
+          }}
+          onMouseOver={(e) => e.target.style.color = '#60a5fa'}
+          onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
+        >
+          Resources
+        </button>
       </div>
 
-      {/* Right side - Theme toggle, Resources, Sign In */}
+      {/* Right side - Theme toggle, Hamburger, Sign In */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -357,8 +375,6 @@ export function Navbar({ onSignInClick }) {
             display: flex !important;
             gap: 1.5rem;
             align-items: center;
-            flex: 1;
-            justify-content: center;
           }
           .desktop-sign-in {
             display: inline-block !important;
