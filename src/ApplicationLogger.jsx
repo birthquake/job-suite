@@ -363,7 +363,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
           {error && <div className="form-error">{error}</div>}
 
           <div className="button-group">
-            <button onClick={() => setStep('info')} className="btn-secondary">
+            <button onClick={() => setStep('info')} className="back-button">
               ← Back
             </button>
             <button
