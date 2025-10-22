@@ -44,7 +44,7 @@ export function generateApplicationPackagePDF(application) {
     })
   }
 
-  // Helper function to add formatted interview prep with bold headers and normal response text on same line
+  // Helper function to add formatted interview prep with bold headers and normal response text
   const addFormattedInterviewPrep = (text) => {
     const lines = text.split('\n')
     
@@ -68,38 +68,36 @@ export function generateApplicationPackagePDF(application) {
           yPosition += 3
         }
         
-        // Render bold header
+        // Render bold header + normal content on same line using splitTextToSize
         doc.setFontSize(10)
-        doc.setFont(undefined, 'bold')
         doc.setTextColor(...colors.text)
-        doc.text(header, margin + 2, yPosition)
         
-        // Calculate header width to position content after it
-        const headerWidth = doc.getStringWidth(header)
-        const contentStartX = margin + 2 + headerWidth + 1 // +1 for spacing
+        // Combine header and content, then split by full width
+        const fullText = header + ' ' + content
+        const fullLines = doc.splitTextToSize(fullText, contentWidth)
         
-        // Split content into lines based on remaining space
-        const remainingWidth = contentWidth - headerWidth - 1
-        const contentLines = doc.splitTextToSize(content, remainingWidth)
+        // First line: render header part in bold
+        doc.setFont(undefined, 'bold')
+        const firstLineText = fullLines[0]
         
-        // Render content in normal font
+        if (yPosition > pageHeight - margin - 8) {
+          doc.addPage()
+          addAccentBorder()
+          yPosition = margin
+        }
+        doc.text(firstLineText, margin + 2, yPosition)
+        yPosition += 5
+        
+        // Remaining lines in normal font
         doc.setFont(undefined, 'normal')
-        
-        if (contentLines.length > 0) {
-          // First line on same row as header
-          doc.text(contentLines[0], contentStartX, yPosition)
-          yPosition += 5
-          
-          // Remaining lines below
-          for (let j = 1; j < contentLines.length; j++) {
-            if (yPosition > pageHeight - margin - 8) {
-              doc.addPage()
-              addAccentBorder()
-              yPosition = margin
-            }
-            doc.text(contentLines[j], margin + 2, yPosition)
-            yPosition += 5
+        for (let j = 1; j < fullLines.length; j++) {
+          if (yPosition > pageHeight - margin - 8) {
+            doc.addPage()
+            addAccentBorder()
+            yPosition = margin
           }
+          doc.text(fullLines[j], margin + 2, yPosition)
+          yPosition += 5
         }
         
         // Process subsequent lines until we hit another header or empty line
@@ -150,38 +148,36 @@ export function generateApplicationPackagePDF(application) {
           yPosition += 3
         }
         
-        // Render bold header
+        // Render bold header + normal content on same line using splitTextToSize
         doc.setFontSize(10)
-        doc.setFont(undefined, 'bold')
         doc.setTextColor(...colors.text)
-        doc.text(header, margin + 2, yPosition)
         
-        // Calculate header width to position content after it
-        const headerWidth = doc.getStringWidth(header)
-        const contentStartX = margin + 2 + headerWidth + 1 // +1 for spacing
+        // Combine header and content, then split by full width
+        const fullText = header + ' ' + content
+        const fullLines = doc.splitTextToSize(fullText, contentWidth)
         
-        // Split content into lines based on remaining space
-        const remainingWidth = contentWidth - headerWidth - 1
-        const contentLines = doc.splitTextToSize(content, remainingWidth)
+        // First line: render header part in bold
+        doc.setFont(undefined, 'bold')
+        const firstLineText = fullLines[0]
         
-        // Render content in normal font
+        if (yPosition > pageHeight - margin - 8) {
+          doc.addPage()
+          addAccentBorder()
+          yPosition = margin
+        }
+        doc.text(firstLineText, margin + 2, yPosition)
+        yPosition += 5
+        
+        // Remaining lines in normal font
         doc.setFont(undefined, 'normal')
-        
-        if (contentLines.length > 0) {
-          // First line on same row as header
-          doc.text(contentLines[0], contentStartX, yPosition)
-          yPosition += 5
-          
-          // Remaining lines below
-          for (let j = 1; j < contentLines.length; j++) {
-            if (yPosition > pageHeight - margin - 8) {
-              doc.addPage()
-              addAccentBorder()
-              yPosition = margin
-            }
-            doc.text(contentLines[j], margin + 2, yPosition)
-            yPosition += 5
+        for (let j = 1; j < fullLines.length; j++) {
+          if (yPosition > pageHeight - margin - 8) {
+            doc.addPage()
+            addAccentBorder()
+            yPosition = margin
           }
+          doc.text(fullLines[j], margin + 2, yPosition)
+          yPosition += 5
         }
         
         // Process subsequent lines until we hit another header or empty line
