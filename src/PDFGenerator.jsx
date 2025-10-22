@@ -74,8 +74,8 @@ export function generateApplicationPackagePDF(application) {
         doc.setTextColor(...colors.text)
         doc.text(header, margin + 2, yPosition)
         
-        // Calculate header width more accurately (each character ~1.5 units at font size 10 bold)
-        const headerWidth = header.length * 1.5
+        // Calculate header width more accurately (each character ~1.8 units at font size 10 bold)
+        const headerWidth = header.length * 1.8
         const headerXEnd = margin + 2 + headerWidth
         
         // Render content in normal font starting after header
@@ -154,8 +154,8 @@ export function generateApplicationPackagePDF(application) {
         doc.setTextColor(...colors.text)
         doc.text(header, margin + 2, yPosition)
         
-        // Calculate header width more accurately (each character ~1.5 units at font size 10 bold)
-        const headerWidth = header.length * 1.5
+        // Calculate header width more accurately (each character ~1.8 units at font size 10 bold)
+        const headerWidth = header.length * 1.8
         const headerXEnd = margin + 2 + headerWidth
         
         // Render content in normal font starting after header
