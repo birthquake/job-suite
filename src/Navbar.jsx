@@ -59,11 +59,9 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
               fontWeight: '600'
             }}
             onMouseOver={(e) => {
-              e.target.style.color = '#60a5fa'
-              e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8)'
+              e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8), 0 0 24px rgba(96, 165, 250, 0.6)'
             }}
             onMouseOut={(e) => {
-              e.target.style.color = '#60a5fa'
               e.target.style.textShadow = 'none'
             }}
           >
@@ -85,11 +83,9 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
             fontWeight: '600'
           }}
           onMouseOver={(e) => {
-            e.target.style.color = '#60a5fa'
-            e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8)'
+            e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8), 0 0 24px rgba(96, 165, 250, 0.6)'
           }}
           onMouseOut={(e) => {
-            e.target.style.color = '#60a5fa'
             e.target.style.textShadow = 'none'
           }}
         >
@@ -268,7 +264,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
               onMouseOver={(e) => {
                 e.target.style.color = '#60a5fa'
                 e.target.style.background = 'rgba(96, 165, 250, 0.1)'
-                e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8)'
+                e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8), 0 0 24px rgba(96, 165, 250, 0.6)'
               }}
               onMouseOut={(e) => {
                 e.target.style.color = '#60a5fa'
@@ -304,7 +300,7 @@ export function Navbar({ onSignInClick, onScrollToSection }) {
             onMouseOver={(e) => {
               e.target.style.color = '#60a5fa'
               e.target.style.background = 'rgba(96, 165, 250, 0.1)'
-              e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8)'
+              e.target.style.textShadow = '0 0 12px rgba(96, 165, 250, 0.8), 0 0 24px rgba(96, 165, 250, 0.6)'
             }}
             onMouseOut={(e) => {
               e.target.style.color = '#60a5fa'
