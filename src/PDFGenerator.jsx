@@ -47,19 +47,24 @@ export function generateApplicationPackagePDF(application) {
   // Helper function to add formatted interview prep with bold headers and normal response text
   const addFormattedInterviewPrep = (text) => {
     const lines = text.split('\n')
-    let i = 0
     
-    while (i < lines.length) {
+    for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim()
+      
+      // Skip empty lines
+      if (line.length === 0) {
+        yPosition += 2
+        continue
+      }
       
       // Check if this is a Question header
       if (line.match(/^Question\s+\d+:/i)) {
-        // Add extra space before question
+        // Add space before question
         if (yPosition > margin) {
           yPosition += 3
         }
         
-        // Add bold header only
+        // Add bold header
         doc.setFontSize(10)
         doc.setFont(undefined, 'bold')
         doc.setTextColor(...colors.text)
@@ -78,37 +83,35 @@ export function generateApplicationPackagePDF(application) {
         // Add line break after header
         yPosition += 2
         
-        // Now render the question text (next non-empty line) in normal font
+        // Process next lines as the response until we hit another header or empty line
         i++
         while (i < lines.length) {
           const nextLine = lines[i].trim()
           
           // Stop if we hit another header
           if (nextLine.match(/^Question\s+\d+:/i) || nextLine.match(/^Key\s+Points?\s+(to\s+Mention)?:/i)) {
-            i-- // Back up so we process this header next iteration
+            i-- // Back up to process this header in next iteration
             break
           }
           
-          // Stop if we hit an empty line followed by a header
+          // Stop if we hit an empty line
           if (nextLine.length === 0) {
-            yPosition += 2
-            i++
             break
           }
           
-          // Render question text in normal font
+          // Render response text in normal font
           doc.setFontSize(10)
           doc.setFont(undefined, 'normal')
           doc.setTextColor(...colors.text)
           
-          const questionLines = doc.splitTextToSize(nextLine, contentWidth)
-          questionLines.forEach((qLine) => {
+          const textLines = doc.splitTextToSize(nextLine, contentWidth)
+          textLines.forEach((tLine) => {
             if (yPosition > pageHeight - margin - 8) {
               doc.addPage()
               addAccentBorder()
               yPosition = margin
             }
-            doc.text(qLine, margin + 2, yPosition)
+            doc.text(tLine, margin + 2, yPosition)
             yPosition += 5
           })
           
@@ -119,6 +122,12 @@ export function generateApplicationPackagePDF(application) {
       
       // Check if this is a Key Points header
       if (line.match(/^Key\s+Points?\s+(to\s+Mention)?:/i)) {
+        // Add space before key points
+        if (yPosition > margin) {
+          yPosition += 3
+        }
+        
+        // Add bold header
         doc.setFontSize(10)
         doc.setFont(undefined, 'bold')
         doc.setTextColor(...colors.text)
@@ -137,37 +146,35 @@ export function generateApplicationPackagePDF(application) {
         // Add line break after header
         yPosition += 2
         
-        // Now render the key points text in normal font
+        // Process next lines as the response until we hit another header or empty line
         i++
         while (i < lines.length) {
           const nextLine = lines[i].trim()
           
           // Stop if we hit another header
           if (nextLine.match(/^Question\s+\d+:/i) || nextLine.match(/^Key\s+Points?\s+(to\s+Mention)?:/i)) {
-            i-- // Back up so we process this header next iteration
+            i-- // Back up to process this header in next iteration
             break
           }
           
           // Stop if we hit an empty line
           if (nextLine.length === 0) {
-            yPosition += 2
-            i++
             break
           }
           
-          // Render key points text in normal font
+          // Render response text in normal font
           doc.setFontSize(10)
           doc.setFont(undefined, 'normal')
           doc.setTextColor(...colors.text)
           
-          const pointLines = doc.splitTextToSize(nextLine, contentWidth)
-          pointLines.forEach((pLine) => {
+          const textLines = doc.splitTextToSize(nextLine, contentWidth)
+          textLines.forEach((tLine) => {
             if (yPosition > pageHeight - margin - 8) {
               doc.addPage()
               addAccentBorder()
               yPosition = margin
             }
-            doc.text(pLine, margin + 2, yPosition)
+            doc.text(tLine, margin + 2, yPosition)
             yPosition += 5
           })
           
@@ -175,13 +182,6 @@ export function generateApplicationPackagePDF(application) {
         }
         continue
       }
-      
-      // Empty lines
-      if (line.length === 0) {
-        yPosition += 2
-      }
-      
-      i++
     }
   }
 
