@@ -26,25 +26,82 @@ export function generateApplicationPackagePDF(application) {
     doc.rect(0, 0, accentBorderWidth, pageHeight, 'F')
   }
 
-  // Helper function to add text with automatic line breaking
-  const addWrappedText = (text, fontSize, isBold = false, color = colors.text) => {
-    doc.setFontSize(fontSize)
-    doc.setTextColor(...color)
-    if (isBold) {
-      doc.setFont(undefined, 'bold')
-    } else {
-      doc.setFont(undefined, 'normal')
-    }
-    const lines = doc.splitTextToSize(text, contentWidth)
-    lines.forEach((line) => {
-      if (yPosition > pageHeight - margin - 8) {
-        doc.addPage()
-        addAccentBorder()
-        yPosition = margin
+  // Helper function to add formatted interview prep with bold questions and key points
+  const addFormattedInterviewPrep = (text) => {
+    const lines = text.split('\n')
+    let i = 0
+    
+    while (i < lines.length) {
+      const line = lines[i].trim()
+      
+      // Check if this is a Question line
+      if (line.match(/^Question\s+\d+:/i)) {
+        // Add extra space before question
+        if (yPosition > margin) {
+          yPosition += 3
+        }
+        
+        // Add bold question
+        doc.setFontSize(10)
+        doc.setFont(undefined, 'bold')
+        doc.setTextColor(...colors.text)
+        
+        const questionLines = doc.splitTextToSize(line, contentWidth)
+        questionLines.forEach((qLine) => {
+          if (yPosition > pageHeight - margin - 8) {
+            doc.addPage()
+            addAccentBorder()
+            yPosition = margin
+          }
+          doc.text(qLine, margin + 2, yPosition)
+          yPosition += 5
+        })
+        
+        yPosition += 2 // Extra space after question
+      } 
+      // Check if this is a Key Points line
+      else if (line.match(/^Key\s+Points?\s+(to\s+Mention)?:/i)) {
+        doc.setFontSize(10)
+        doc.setFont(undefined, 'bold')
+        doc.setTextColor(...colors.text)
+        
+        const keyPointLines = doc.splitTextToSize(line, contentWidth)
+        keyPointLines.forEach((kLine) => {
+          if (yPosition > pageHeight - margin - 8) {
+            doc.addPage()
+            addAccentBorder()
+            yPosition = margin
+          }
+          doc.text(kLine, margin + 2, yPosition)
+          yPosition += 5
+        })
+        
+        yPosition += 1
       }
-      doc.text(line, margin + 2, yPosition)
-      yPosition += 5
-    })
+      // Regular text lines
+      else if (line.length > 0) {
+        doc.setFontSize(10)
+        doc.setFont(undefined, 'normal')
+        doc.setTextColor(...colors.text)
+        
+        const textLines = doc.splitTextToSize(line, contentWidth)
+        textLines.forEach((textLine) => {
+          if (yPosition > pageHeight - margin - 8) {
+            doc.addPage()
+            addAccentBorder()
+            yPosition = margin
+          }
+          doc.text(textLine, margin + 2, yPosition)
+          yPosition += 5
+        })
+      } 
+      // Empty lines
+      else {
+        yPosition += 2
+      }
+      
+      i++
+    }
   }
 
   // Helper function to add a section with improved design
@@ -126,7 +183,7 @@ export function generateApplicationPackagePDF(application) {
   // ========== INTERVIEW PREP ==========
   if (application.outputs?.interviewPrep) {
     addSection('Interview Preparation', true, 3)
-    addWrappedText(application.outputs.interviewPrep, 10, false, colors.text)
+    addFormattedInterviewPrep(application.outputs.interviewPrep)
   }
 
   // ========== LINKEDIN ==========
