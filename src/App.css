@@ -1,5 +1,30 @@
 /* ===== MOBILE-FIRST RESPONSIVE DESIGN ===== */
 
+/* Section Containers */
+.hero-section,
+.tools-section,
+.how-section,
+.pricing-section,
+.stats-section,
+.faq-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .hero-section,
+  .tools-section,
+  .how-section,
+  .pricing-section,
+  .stats-section,
+  .faq-section {
+    padding: 0 2rem;
+  }
+}
+
 .tools-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -25,9 +50,96 @@
   }
 }
 
+/* Steps Wrapper */
+.steps-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 768px) {
+  .steps-wrapper {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+  }
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem;
+  background: rgba(26, 31, 46, 0.6);
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  flex: 1;
+  max-width: 200px;
+}
+
+.step-number {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+
+.step-connector {
+  display: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  align-self: center;
+}
+
+@media (min-width: 768px) {
+  .step-connector {
+    display: block;
+  }
+}
+
 /* ===== MICRO-INTERACTIONS: Enhanced Animations ===== */
 
-/* Glassmorphism Effect */
+.tool-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--accent-primary);
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .pricing-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.stats-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 768px) {
+  .stats-wrapper {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
 .glassmorphic {
   background: rgba(15, 20, 25, 0.7);
   backdrop-filter: blur(10px);
@@ -116,14 +228,17 @@
   z-index: 1;
 }
 
-.price-card {
-  border: 2px solid var(--border-light);
-  border-radius: 10px;
-  padding: 1.5rem;
-  text-align: center;
-  transition: var(--transition-smooth);
-  background: var(--bg-tertiary);
-  box-shadow: var(--shadow-subtle);
+.pricing-wrapper {
+  background: rgba(26, 31, 46, 0.6);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  border: 1px solid var(--border-light);
+}
+
+@media (min-width: 768px) {
+  .pricing-wrapper {
+    padding: 3rem 2rem;
+  }
 }
 
 .price-card:hover {
