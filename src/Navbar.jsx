@@ -4,7 +4,7 @@ import { AuthContext } from './AuthContext'
 import { ThemeContext } from './ThemeContext'
 import { Help } from './Help'
 
-export function Navbar({ onSignInClick }) {
+export function Navbar({ onSignInClick, onScrollToSection }) {
   const { user, signOut } = useContext(AuthContext)
   const { theme, toggleTheme } = useContext(ThemeContext)
   const [showHelp, setShowHelp] = useState(false)
@@ -45,8 +45,8 @@ export function Navbar({ onSignInClick }) {
         display: 'none'
       }} className="desktop-nav">
         {!user && (
-          <a
-            href="#pricing"
+          <button
+            onClick={() => onScrollToSection('pricing')}
             style={{
               background: 'none',
               border: 'none',
@@ -61,7 +61,7 @@ export function Navbar({ onSignInClick }) {
             onMouseOut={(e) => e.target.style.color = 'var(--text-muted)'}
           >
             Pricing
-          </a>
+          </button>
         )}
 
         {/* Resources Button - Desktop */}
@@ -230,10 +230,14 @@ export function Navbar({ onSignInClick }) {
         }}>
           {/* Pricing Link */}
           {!user && (
-            <a
-              href="#pricing"
-              onClick={() => setShowMobileMenu(false)}
+            <button
+              onClick={() => {
+                onScrollToSection('pricing')
+                setShowMobileMenu(false)
+              }}
               style={{
+                background: 'none',
+                border: 'none',
                 color: 'var(--text-muted)',
                 textDecoration: 'none',
                 fontSize: '0.95rem',
@@ -243,7 +247,8 @@ export function Navbar({ onSignInClick }) {
                 cursor: 'pointer',
                 minHeight: '44px',
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                textAlign: 'left'
               }}
               onMouseOver={(e) => {
                 e.target.style.color = '#60a5fa'
@@ -255,7 +260,7 @@ export function Navbar({ onSignInClick }) {
               }}
             >
               Pricing
-            </a>
+            </button>
           )}
 
           {/* Resources Button */}
