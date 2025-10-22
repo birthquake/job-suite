@@ -44,7 +44,7 @@ export function generateApplicationPackagePDF(application) {
     })
   }
 
-  // Helper function to add formatted interview prep with bold questions and key points
+  // Helper function to add formatted interview prep with bold headers and normal response text
   const addFormattedInterviewPrep = (text) => {
     const lines = text.split('\n')
     let i = 0
@@ -52,69 +52,132 @@ export function generateApplicationPackagePDF(application) {
     while (i < lines.length) {
       const line = lines[i].trim()
       
-      // Check if this is a Question line
+      // Check if this is a Question header
       if (line.match(/^Question\s+\d+:/i)) {
         // Add extra space before question
         if (yPosition > margin) {
           yPosition += 3
         }
         
-        // Add bold question
+        // Add bold header only
         doc.setFontSize(10)
         doc.setFont(undefined, 'bold')
         doc.setTextColor(...colors.text)
         
-        const questionLines = doc.splitTextToSize(line, contentWidth)
-        questionLines.forEach((qLine) => {
+        const headerLines = doc.splitTextToSize(line, contentWidth)
+        headerLines.forEach((hLine) => {
           if (yPosition > pageHeight - margin - 8) {
             doc.addPage()
             addAccentBorder()
             yPosition = margin
           }
-          doc.text(qLine, margin + 2, yPosition)
+          doc.text(hLine, margin + 2, yPosition)
           yPosition += 5
         })
         
-        yPosition += 2 // Extra space after question
-      } 
-      // Check if this is a Key Points line
-      else if (line.match(/^Key\s+Points?\s+(to\s+Mention)?:/i)) {
-        doc.setFontSize(10)
-        doc.setFont(undefined, 'bold')
-        doc.setTextColor(...colors.text)
+        // Add line break after header
+        yPosition += 2
         
-        const keyPointLines = doc.splitTextToSize(line, contentWidth)
-        keyPointLines.forEach((kLine) => {
-          if (yPosition > pageHeight - margin - 8) {
-            doc.addPage()
-            addAccentBorder()
-            yPosition = margin
+        // Now render the question text (next non-empty line) in normal font
+        i++
+        while (i < lines.length) {
+          const nextLine = lines[i].trim()
+          
+          // Stop if we hit another header
+          if (nextLine.match(/^Question\s+\d+:/i) || nextLine.match(/^Key\s+Points?\s+(to\s+Mention)?:/i)) {
+            i-- // Back up so we process this header next iteration
+            break
           }
-          doc.text(kLine, margin + 2, yPosition)
-          yPosition += 5
-        })
-        
-        yPosition += 1
+          
+          // Stop if we hit an empty line followed by a header
+          if (nextLine.length === 0) {
+            yPosition += 2
+            i++
+            break
+          }
+          
+          // Render question text in normal font
+          doc.setFontSize(10)
+          doc.setFont(undefined, 'normal')
+          doc.setTextColor(...colors.text)
+          
+          const questionLines = doc.splitTextToSize(nextLine, contentWidth)
+          questionLines.forEach((qLine) => {
+            if (yPosition > pageHeight - margin - 8) {
+              doc.addPage()
+              addAccentBorder()
+              yPosition = margin
+            }
+            doc.text(qLine, margin + 2, yPosition)
+            yPosition += 5
+          })
+          
+          i++
+        }
+        continue
       }
-      // Regular text lines
-      else if (line.length > 0) {
+      
+      // Check if this is a Key Points header
+      if (line.match(/^Key\s+Points?\s+(to\s+Mention)?:/i)) {
         doc.setFontSize(10)
-        doc.setFont(undefined, 'normal')
+        doc.setFont(undefined, 'bold')
         doc.setTextColor(...colors.text)
         
-        const textLines = doc.splitTextToSize(line, contentWidth)
-        textLines.forEach((textLine) => {
+        const headerLines = doc.splitTextToSize(line, contentWidth)
+        headerLines.forEach((hLine) => {
           if (yPosition > pageHeight - margin - 8) {
             doc.addPage()
             addAccentBorder()
             yPosition = margin
           }
-          doc.text(textLine, margin + 2, yPosition)
+          doc.text(hLine, margin + 2, yPosition)
           yPosition += 5
         })
-      } 
+        
+        // Add line break after header
+        yPosition += 2
+        
+        // Now render the key points text in normal font
+        i++
+        while (i < lines.length) {
+          const nextLine = lines[i].trim()
+          
+          // Stop if we hit another header
+          if (nextLine.match(/^Question\s+\d+:/i) || nextLine.match(/^Key\s+Points?\s+(to\s+Mention)?:/i)) {
+            i-- // Back up so we process this header next iteration
+            break
+          }
+          
+          // Stop if we hit an empty line
+          if (nextLine.length === 0) {
+            yPosition += 2
+            i++
+            break
+          }
+          
+          // Render key points text in normal font
+          doc.setFontSize(10)
+          doc.setFont(undefined, 'normal')
+          doc.setTextColor(...colors.text)
+          
+          const pointLines = doc.splitTextToSize(nextLine, contentWidth)
+          pointLines.forEach((pLine) => {
+            if (yPosition > pageHeight - margin - 8) {
+              doc.addPage()
+              addAccentBorder()
+              yPosition = margin
+            }
+            doc.text(pLine, margin + 2, yPosition)
+            yPosition += 5
+          })
+          
+          i++
+        }
+        continue
+      }
+      
       // Empty lines
-      else {
+      if (line.length === 0) {
         yPosition += 2
       }
       
