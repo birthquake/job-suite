@@ -180,7 +180,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
           margin: '0.75rem 0 1.5rem',
           lineHeight: '1.5'
         }}>
-          Generating optimized resume, cover letter, interview prep, and LinkedIn profile
+          Your application package is being created. You'll be able to download it from your dashboard in a moment.
         </p>
         {/* Progress indicator */}
         <div style={{
