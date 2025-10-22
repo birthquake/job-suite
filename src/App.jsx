@@ -561,6 +561,11 @@ function AppContent() {
   const [authPage, setAuthPage] = useState('login')
   const [showAuthModal, setShowAuthModal] = useState(false)
 
+  // Set document title
+  useEffect(() => {
+    document.title = 'elevaitr - AI-Powered Job Application Platform'
+  }, [])
+
   // Set theme attribute on document root
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
