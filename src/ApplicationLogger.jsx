@@ -163,7 +163,6 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
           borderRadius: '50%',
           animation: 'spin 1.2s linear infinite'
         }}></div>
-
         {/* Loading message */}
         <h3 style={{
           color: '#ffffff',
@@ -174,7 +173,6 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
         }}>
           Creating your package
         </h3>
-
         {/* Subtext */}
         <p style={{
           color: '#9ca3af',
@@ -184,7 +182,6 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
         }}>
           Generating optimized resume, cover letter, interview prep, and LinkedIn profile
         </p>
-
         {/* Progress indicator */}
         <div style={{
           width: '100%',
@@ -201,7 +198,6 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
             animation: 'progressPulse 2s ease-in-out infinite'
           }}></div>
         </div>
-
         {/* Estimated time */}
         <p style={{
           color: '#6b7280',
@@ -227,7 +223,6 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
   return (
     <div className="logger-container">
       {loading && <LoadingOverlay />}
-
       <div className="logger-header">
         <button className="back-button" onClick={onBack}>← Back</button>
         <h2>New Application</h2>
@@ -369,7 +364,7 @@ export function ApplicationLogger({ onBack, onApplicationCreated }) {
 
           <div className="button-group">
             <button onClick={() => setStep('info')} className="btn-secondary">
-              Back
+              ← Back
             </button>
             <button
               onClick={handleSaveApplication}
