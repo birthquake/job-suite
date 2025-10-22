@@ -79,7 +79,7 @@ function LandingPage({ onScrollToSection }) {
         overflow: 'hidden'
       }}>
         <svg
-          viewBox="0 0 1200 1600"
+          viewBox="0 0 1200 900"
           style={{
             width: '100%',
             height: '100%',
@@ -105,14 +105,14 @@ function LandingPage({ onScrollToSection }) {
           </defs>
 
           {/* Background base */}
-          <rect width="1200" height="1600" fill="#0a0e17" />
+          <rect width="1200" height="900" fill="#0a0e17" />
 
-          {/* Blurred shapes */}
-          <circle cx="600" cy="200" r="400" fill="url(#grad1)" filter="url(#blur)" />
-          <circle cx="100" cy="600" r="350" fill="url(#grad2)" filter="url(#blur)" />
-          <circle cx="1100" cy="800" r="380" fill="url(#grad1)" filter="url(#blur)" />
-          <circle cx="400" cy="1200" r="320" fill="url(#grad3)" filter="url(#blur)" />
-          <circle cx="900" cy="1400" r="360" fill="url(#grad2)" filter="url(#blur)" />
+          {/* Blurred shapes - repositioned for viewport */}
+          <circle cx="600" cy="150" r="400" fill="url(#grad1)" filter="url(#blur)" />
+          <circle cx="100" cy="400" r="350" fill="url(#grad2)" filter="url(#blur)" />
+          <circle cx="1100" cy="500" r="380" fill="url(#grad1)" filter="url(#blur)" />
+          <circle cx="400" cy="750" r="320" fill="url(#grad3)" filter="url(#blur)" />
+          <circle cx="900" cy="850" r="360" fill="url(#grad2)" filter="url(#blur)" />
         </svg>
       </div>
       {/* Hero Section */}
