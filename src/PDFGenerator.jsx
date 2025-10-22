@@ -6,6 +6,7 @@ export function generateApplicationPackagePDF(application) {
   const pageHeight = doc.internal.pageSize.getHeight()
   const margin = 15
   const contentWidth = pageWidth - 2 * margin
+  const accentBorderWidth = 4
   let yPosition = margin
 
   // Color scheme
@@ -15,7 +16,14 @@ export function generateApplicationPackagePDF(application) {
     text: [30, 30, 30],           // Dark text
     lightText: [100, 100, 100],   // Gray text
     divider: [200, 200, 200],     // Light gray
-    accentBg: [245, 248, 255]     // Very light blue background
+    accentBg: [245, 248, 255],    // Very light blue background
+    subtleGray: [248, 248, 248]   // Subtle gray for alternating sections
+  }
+
+  // Add left accent border on all pages
+  const addAccentBorder = () => {
+    doc.setFillColor(...colors.primary)
+    doc.rect(0, 0, accentBorderWidth, pageHeight, 'F')
   }
 
   // Helper function to add text with automatic line breaking
@@ -29,111 +37,125 @@ export function generateApplicationPackagePDF(application) {
     }
     const lines = doc.splitTextToSize(text, contentWidth)
     lines.forEach((line) => {
-      if (yPosition > pageHeight - margin - 5) {
+      if (yPosition > pageHeight - margin - 8) {
         doc.addPage()
+        addAccentBorder()
         yPosition = margin
       }
-      doc.text(line, margin, yPosition)
+      doc.text(line, margin + 2, yPosition)
       yPosition += 5
     })
   }
 
   // Helper function to add a section with improved design
-  const addSection = (title, startNewPage = false) => {
+  const addSection = (title, startNewPage = false, sectionIndex = 0) => {
     if (startNewPage) {
       doc.addPage()
+      addAccentBorder()
       yPosition = margin + 5
     } else {
-      yPosition += 8
+      yPosition += 12
     }
 
-    // Section background
-    doc.setFillColor(...colors.accentBg)
-    doc.rect(margin - 2, yPosition - 4, contentWidth + 4, 8, 'F')
+    // Alternate subtle background for visual separation
+    if (sectionIndex % 2 === 1) {
+      doc.setFillColor(...colors.subtleGray)
+      doc.rect(margin - 2, yPosition - 5, contentWidth + 4, 28, 'F')
+    }
 
-    // Section title
-    doc.setFontSize(14)
+    // Section title - larger and more prominent
+    doc.setFontSize(16)
     doc.setFont(undefined, 'bold')
     doc.setTextColor(...colors.primary)
-    doc.text(title, margin, yPosition + 2)
+    doc.text(title, margin + 2, yPosition + 2)
 
     // Divider line below title
     doc.setDrawColor(...colors.divider)
     doc.setLineWidth(0.5)
-    doc.line(margin, yPosition + 5, pageWidth - margin, yPosition + 5)
+    doc.line(margin, yPosition + 6, pageWidth - margin, yPosition + 6)
 
-    yPosition += 8
+    yPosition += 12
   }
 
+  // Initial page setup
+  addAccentBorder()
+
   // ========== COVER PAGE ==========
-  doc.setFontSize(24)
+  doc.setFontSize(28)
   doc.setFont(undefined, 'bold')
   doc.setTextColor(...colors.primary)
-  doc.text('elevaitr', margin, yPosition)
-  yPosition += 10
+  doc.text('elevaitr', margin + 2, yPosition)
+  yPosition += 12
 
-  doc.setFontSize(12)
+  doc.setFontSize(13)
   doc.setFont(undefined, 'bold')
   doc.setTextColor(...colors.text)
-  doc.text(`${application.company} — ${application.jobTitle}`, margin, yPosition)
-  yPosition += 6
+  doc.text(`${application.company} — ${application.jobTitle}`, margin + 2, yPosition)
+  yPosition += 7
 
   doc.setFontSize(10)
   doc.setFont(undefined, 'normal')
   doc.setTextColor(...colors.lightText)
-  doc.text(`Application Package • Generated ${new Date(application.dateApplied).toLocaleDateString()}`, margin, yPosition)
+  doc.text(`Application Package • Generated ${new Date(application.dateApplied).toLocaleDateString()}`, margin + 2, yPosition)
   
   // Divider
   doc.setDrawColor(...colors.divider)
-  doc.setLineWidth(1)
-  yPosition += 10
+  doc.setLineWidth(1.5)
+  yPosition += 12
   doc.line(margin, yPosition, pageWidth - margin, yPosition)
-  yPosition += 10
+  yPosition += 14
 
   // ========== JOB DESCRIPTION ==========
   if (application.jobDescription) {
-    addSection('Job Description', false)
+    addSection('Job Description', false, 0)
     addWrappedText(application.jobDescription, 10, false, colors.text)
   }
 
   // ========== RESUME ==========
   if (application.outputs?.resume) {
-    addSection('Optimized Resume', false)
+    addSection('Optimized Resume', false, 1)
     addWrappedText(application.outputs.resume, 10, false, colors.text)
   }
 
   // ========== COVER LETTER ==========
   if (application.outputs?.coverLetter) {
-    addSection('Cover Letter', true)
+    addSection('Cover Letter', true, 2)
     addWrappedText(application.outputs.coverLetter, 10, false, colors.text)
   }
 
   // ========== INTERVIEW PREP ==========
   if (application.outputs?.interviewPrep) {
-    addSection('Interview Preparation', true)
+    addSection('Interview Preparation', true, 3)
     addWrappedText(application.outputs.interviewPrep, 10, false, colors.text)
   }
 
   // ========== LINKEDIN ==========
   if (application.outputs?.linkedin || application.outputs?.linkedinProfile) {
     const linkedinContent = application.outputs.linkedin || application.outputs.linkedinProfile
-    addSection('LinkedIn Profile Optimization', true)
+    addSection('LinkedIn Profile Optimization', true, 4)
     addWrappedText(linkedinContent, 10, false, colors.text)
   }
 
   // ========== FOOTER ==========
-  doc.setFontSize(8)
-  doc.setTextColor(...colors.lightText)
-  doc.text('elevaitr • AI-Powered Job Application Platform', margin, pageHeight - 8)
-  doc.text(`Generated on ${new Date().toLocaleString()}`, margin, pageHeight - 4)
-
-  // Right-aligned page number
   const pageCount = doc.getNumberOfPages()
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i)
+    
+    // Footer divider line
+    doc.setDrawColor(...colors.divider)
+    doc.setLineWidth(0.5)
+    doc.line(margin, pageHeight - 14, pageWidth - margin, pageHeight - 14)
+    
+    // Footer text
     doc.setFontSize(8)
     doc.setTextColor(...colors.lightText)
-    doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin - 15, pageHeight - 8, { align: 'right' })
+    doc.text('elevaitr • AI-Powered Job Application Platform', margin + 2, pageHeight - 10)
+    doc.text(`Generated on ${new Date().toLocaleString()}`, margin + 2, pageHeight - 6)
+
+    // Page number - right aligned
+    doc.setFontSize(8)
+    doc.setTextColor(...colors.lightText)
+    doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin - 2, pageHeight - 10, { align: 'right' })
   }
 
   // Save the PDF with explicit blob download for better reliability
