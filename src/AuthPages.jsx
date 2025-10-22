@@ -24,7 +24,6 @@ export function LoginPage({ onSignUpClick }) {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h1>elevaitr</h1>
         <h2>Sign In</h2>
         
         <form onSubmit={handleLogin}>
@@ -91,7 +90,6 @@ export function SignUpPage({ onLoginClick }) {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h1>elevaitr</h1>
         <h2>Create Account</h2>
         
         <form onSubmit={handleSignUp}>
