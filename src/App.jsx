@@ -88,19 +88,19 @@ function LandingPage({ onScrollToSection }) {
         >
           <defs>
             <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="40" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="30" />
             </filter>
             <radialGradient id="grad1" cx="30%" cy="20%">
-              <stop offset="0%" style={{ stopColor: '#60a5fa', stopOpacity: 0.6 }} />
-              <stop offset="100%" style={{ stopColor: '#3b82f6', stopOpacity: 0.15 }} />
+              <stop offset="0%" style={{ stopColor: '#60a5fa', stopOpacity: 1 }} />
+              <stop offset="100%" style={{ stopColor: '#3b82f6', stopOpacity: 0.3 }} />
             </radialGradient>
             <radialGradient id="grad2" cx="70%" cy="70%">
-              <stop offset="0%" style={{ stopColor: '#3b82f6', stopOpacity: 0.5 }} />
-              <stop offset="100%" style={{ stopColor: '#1e40af', stopOpacity: 0.1 }} />
+              <stop offset="0%" style={{ stopColor: '#3b82f6', stopOpacity: 0.8 }} />
+              <stop offset="100%" style={{ stopColor: '#1e40af', stopOpacity: 0.2 }} />
             </radialGradient>
             <radialGradient id="grad3" cx="50%" cy="50%">
-              <stop offset="0%" style={{ stopColor: '#60a5fa', stopOpacity: 0.55 }} />
-              <stop offset="100%" style={{ stopColor: '#3b82f6', stopOpacity: 0.12 }} />
+              <stop offset="0%" style={{ stopColor: '#60a5fa', stopOpacity: 0.9 }} />
+              <stop offset="100%" style={{ stopColor: '#3b82f6', stopOpacity: 0.2 }} />
             </radialGradient>
           </defs>
 
